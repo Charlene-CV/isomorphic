@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import Router, { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { SubmitHandler } from 'react-hook-form';
 import { PiArrowRightBold } from 'react-icons/pi';
@@ -9,6 +10,7 @@ import { Checkbox, Password, Button, Input, Text } from 'rizzui';
 import { Form } from '@ui/form';
 import { routes } from '@/config/routes';
 import { loginSchema, LoginSchema } from '@/validators/login.schema';
+import axios from 'axios';
 
 const initialValues: LoginSchema = {
   email: '',
@@ -19,12 +21,28 @@ const initialValues: LoginSchema = {
 export default function SignInForm() {
   //TODO: why we need to reset it here
   const [reset, setReset] = useState({});
-
-  const onSubmit: SubmitHandler<LoginSchema> = (data) => {
+  const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     console.log(data);
-    signIn('credentials', {
-      ...data,
-    });
+    // signIn('credentials', {
+    //   ...data,
+    // });
+
+    const content = {
+      email: data?.email,
+      password: data?.password
+    };
+    const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
+    console.log(response)
+    const responseData = response?.data?.data;
+    const user = {
+      id: responseData?.user?.uuid,
+      name: responseData?.user?.firstName + " " + responseData?.user?.lastName,
+      email: responseData?.user?.email,
+      image: "",
+      token: responseData?.token
+    }
+    console.log({ user: user})
+
   };
 
   return (
