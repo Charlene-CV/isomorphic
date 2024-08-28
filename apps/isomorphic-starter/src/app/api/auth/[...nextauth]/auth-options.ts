@@ -20,14 +20,14 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          id: token.idToken as string,
+          accessToken: token.accessToken,
         },
       };
     },
     async jwt({ token, user }) {
       if (user) {
         // return user as JWT
-        token.user = user;
+        token.accessToken = user.token;
       }
       return token;
     },
@@ -55,13 +55,17 @@ export const authOptions: NextAuthOptions = {
           email: credentials?.email,
           password: credentials?.password
         };
+        alert("F")
+        console.log("hhh")
         const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
+        console.log(response)
         const responseData = response?.data?.data;
         const user = {
-          name: responseData.user.firstName + " " + responseData.user.lastName,
-          email: responseData.user.email,
+          id: responseData?.user?.uuid,
+          name: responseData?.user?.firstName + " " + responseData?.user?.lastName,
+          email: responseData?.user?.email,
           image: "",
-          token: responseData.token
+          token: responseData?.token
         }
         return user || null;
       },

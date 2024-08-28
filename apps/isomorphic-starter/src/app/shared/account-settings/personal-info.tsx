@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
-import { SubmitHandler, Controller } from 'react-hook-form';
+import { SubmitHandler, Controller, useForm } from 'react-hook-form';
 import { PiClock, PiEnvelopeSimple } from 'react-icons/pi';
 import { Form } from '@ui/form';
 import { Loader, Text, Input } from 'rizzui';
@@ -12,6 +12,9 @@ import UploadZone from '@ui/file-upload/upload-zone';
 import { countries, roles, timezones } from '@/data/forms/my-details';
 import AvatarUpload from '@ui/file-upload/avatar-upload';
 import { PersonalInfoFormTypes, personalInfoFormSchema, defaultValues } from '@/validators/personal-info.schema';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
 
 const Select = dynamic(() => import('rizzui').then((mod) => mod.Select), {
   ssr: false,
@@ -26,6 +29,7 @@ const QuillEditor = dynamic(() => import('@ui/quill-editor'), {
   ssr: false,
 });
 
+
 export default function PersonalInfoView() {
   const onSubmit: SubmitHandler<PersonalInfoFormTypes> = (data) => {
     toast.success(<Text as="b">Successfully added!</Text>);
@@ -33,6 +37,32 @@ export default function PersonalInfoView() {
       ...data,
     });
   };
+  const { control, handleSubmit, reset, register, setValue, getValues, watch, formState: { errors, isDirty, isValid } } = useForm<PersonalInfoFormTypes>({
+    mode: 'onChange',
+    defaultValues,
+  });
+``
+  // const { data: session, status } = useSession();
+  //fetch existing data
+  useEffect(() => {
+    // console.log({session})
+    async function fetchExistingData() {
+      // if (status === "authenticated" && session?.user) {
+        try {
+          const response = await axios.get(`http://192.168.0.146:8080/api/v1/users/find-one/e6d1aa98-306e-4839-95ea-608605691c78`); //${session?.user?.id}
+          console.log(response)
+          // const fields: (keyof PersonalInfoFormTypes)[] = ['firstName', 'lastName', 'email', 'phone'];
+          // const defaults = { firstName: "First Name", lastName: "Last Name", email: "example@123.com", phone: 'XXX-XXX-XXXX' }
+          // fields.forEach(field => setValue(field, response.data[field] || defaults[field]));
+
+        } catch (error) {
+          console.error("Failed to fetch existing data:", error);
+        }
+      // }
+    }
+
+    fetchExistingData();
+  }, [setValue, status]); //session
 
   return (
     <Form<PersonalInfoFormTypes>
@@ -61,14 +91,14 @@ export default function PersonalInfoView() {
               >
                 <Input
                   placeholder="First Name"
-                  {...register('first_name')}
-                  error={errors.first_name?.message}
+                  {...register('firstName')}
+                  error={errors.firstName?.message}
                   className="flex-grow"
                 />
                 <Input
                   placeholder="Last Name"
-                  {...register('last_name')}
-                  error={errors.last_name?.message}
+                  {...register('lastName')}
+                  error={errors.lastName?.message}
                   className="flex-grow"
                 />
               </FormGroup>
@@ -83,20 +113,20 @@ export default function PersonalInfoView() {
                     <PiEnvelopeSimple className="h-6 w-6 text-gray-500" />
                   }
                   type="email"
-                  placeholder="georgia.young@example.com"
+                  placeholder="example@123.com"
                   {...register('email')}
                   error={errors.email?.message}
                 />
               </FormGroup>
-              
+
               <FormGroup
                 title="Phone Number"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
                 <Input
-                  placeholder="First Name"
-                  {...register('first_name')}
-                  error={errors.first_name?.message}
+                  placeholder="XXX-XXX-XXXX"
+                  {...register('firstName')}
+                  error={errors.firstName?.message}
                   className="flex-grow"
                 />
               </FormGroup>
@@ -117,7 +147,7 @@ export default function PersonalInfoView() {
                 </div>
               </FormGroup> */}
 
-              <FormGroup
+              {/* <FormGroup
                 title="Role"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
@@ -141,8 +171,8 @@ export default function PersonalInfoView() {
                     />
                   )}
                 />
-              </FormGroup>
-{/* 
+              </FormGroup> */}
+              {/* 
               <FormGroup
                 title="Country"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
@@ -170,7 +200,7 @@ export default function PersonalInfoView() {
                 />
               </FormGroup> */}
 
-              <FormGroup
+              {/* <FormGroup
                 title="Timezone"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
@@ -196,7 +226,7 @@ export default function PersonalInfoView() {
                     />
                   )}
                 />
-              </FormGroup>
+              </FormGroup> */}
 
               {/* <FormGroup
                 title="Bio"

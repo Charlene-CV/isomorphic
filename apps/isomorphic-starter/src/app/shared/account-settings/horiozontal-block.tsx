@@ -23,7 +23,7 @@ export default function HorizontalFormBlockWrapper({
         className
       )}
     >
-      <div className="col-span-2 mb-6 @5xl:mb-0">
+      <div className="mb-6 @5xl:mb-0">
         <Title
           as="h5"
           className={cn('mb-2 text-[17px] font-semibold', titleClassName)}

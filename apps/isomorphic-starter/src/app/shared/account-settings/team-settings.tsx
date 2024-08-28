@@ -9,8 +9,8 @@ import TeamsIcon from '@components/icons/teams';
 import FigmaIcon from '@components/icons/figma';
 import AddTeamMemberModalView from '@/app/shared/account-settings/modal/add-team-member';
 import { useModal } from '@/app/shared/modal-views/use-modal';
-// import { loggedInDeviceData } from '@/data/logged-in-device';
 import { PiPlusBold } from 'react-icons/pi';
+import { loggedInDeviceData } from '@/data/logged-in-device';
 
 const currentActiveTeams = [
   {
@@ -48,6 +48,7 @@ export default function TeamSettingsView() {
                 view: <AddTeamMemberModalView />,
               })
             }
+            className='bg-[#a5a234]'
           >
             <PiPlusBold className="me-1.5 h-4 w-4" />
             Add Member
@@ -95,18 +96,16 @@ export default function TeamSettingsView() {
         })}
       </HorizontalFormBlockWrapper> */}
 
-      {/* <HorizontalFormBlockWrapper
+      <HorizontalFormBlockWrapper
         childrenWrapperClassName="gap-0 @lg:gap-0"
-        title="Where you’re logged in"
-        description="We’ll alert you via olivia@untitledui.com if there is any unusual activity on your account."
-        descriptionClassName="max-w-[352px]"
+        title="My Team"
         className="border-0 pb-0"
       >
         <LoggedInDevices
           data={loggedInDeviceData}
           className="@xs:col-span-full"
         />
-      </HorizontalFormBlockWrapper> */}
+      </HorizontalFormBlockWrapper>
     </div>
   );
 }

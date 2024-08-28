@@ -94,42 +94,6 @@ export const getColumns = ({
   {
     title: (
       <HeaderCell
-        title="Status"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('status'),
-    dataIndex: 'status',
-    key: 'status',
-    width: 200,
-    render: (status: any) => {
-      return (
-        <>
-          {status === 'Offline' ? (
-            <div className="inline-flex items-center justify-center gap-2 rounded-full bg-gray-100/80 px-2.5 py-1">
-              <Badge renderAsDot />
-              <span className="text-xs font-semibold text-gray-900">
-                {status}
-              </span>
-            </div>
-          ) : (
-            <div className="inline-flex items-center justify-center gap-2 rounded-full bg-green-lighter px-2.5 py-1">
-              <Badge renderAsDot color={statusColors[status] as any} />
-              <span className="text-xs font-semibold text-green-dark">
-                {status}
-              </span>
-            </div>
-          )}
-        </>
-      );
-    },
-  },
-  {
-    title: (
-      <HeaderCell
         title={<span className="whitespace-nowrap">Email Address</span>}
       />
     ),

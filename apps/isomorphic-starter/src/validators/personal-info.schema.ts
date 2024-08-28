@@ -4,28 +4,18 @@ import { fileSchema, validateEmail } from './common-rules';
 
 // form zod validation schema
 export const personalInfoFormSchema = z.object({
-  first_name: z.string().min(1, { message: messages.firstNameRequired }),
-  last_name: z.string().optional(),
+  firstName: z.string().min(1, { message: messages.firstNameRequired }),
+  lastName: z.string().optional(),
   email: validateEmail,
-  avatar: fileSchema.optional(),
-  role: z.string().optional(),
-  country: z.string().optional(),
-  timezone: z.string().optional(),
-  bio: z.string().optional(),
-  portfolios: z.array(fileSchema).optional(),
+  phone: z.string().regex(/^\d{3}-\d{3}-\d{4}$/, "Phone number must be in the format XXX-XXX-XXXX")
 });
 
 // generate form types from zod validation schema
 export type PersonalInfoFormTypes = z.infer<typeof personalInfoFormSchema>;
 
 export const defaultValues = {
-  first_name: '',
-  last_name: undefined,
+  firstName: '',
+  lastName: undefined,
   email: '',
-  avatar: undefined,
-  role: undefined,
-  country: undefined,
-  timezone: undefined,
-  bio: undefined,
-  portfolios: undefined,
+  phone: undefined
 };

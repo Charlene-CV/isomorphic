@@ -110,7 +110,7 @@ export default function PasswordSettingsView({
                   <Button type="button" variant="outline">
                     Cancel
                   </Button>
-                  <Button type="submit" variant="solid" isLoading={isLoading}>
+                  <Button type="submit" variant="solid" isLoading={isLoading} className='bg-[#a5a234]'>
                     Update Password
                   </Button>
                 </div>
