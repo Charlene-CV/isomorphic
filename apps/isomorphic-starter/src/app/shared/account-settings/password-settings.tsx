@@ -12,26 +12,59 @@ import {
   passwordFormSchema,
   PasswordFormTypes,
 } from '@/validators/password-settings.schema';
+// @ts-ignore
+import Cookies from "js-cookie";
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function PasswordSettingsView({
   settings,
 }: {
   settings?: PasswordFormTypes;
 }) {
+
+  type PassData = {
+    currentPassword: string,
+    newPassword: string,
+    confirmedPassword: string
+  }
+
+  const [passData, setPassData] = useState<PassData>({
+    currentPassword: '',
+    newPassword: '',
+    confirmedPassword: ''
+  });
+
   const [isLoading, setLoading] = useState(false);
   const [reset, setReset] = useState({});
 
-  const onSubmit: SubmitHandler<PasswordFormTypes> = (data) => {
+  const onSubmit: SubmitHandler<PasswordFormTypes> = async (data) => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      console.log('Password settings data ->', data);
-      setReset({
-        currentPassword: '',
-        newPassword: '',
-        confirmedPassword: '',
-      });
-    }, 600);
+    setPassData(data);
+    try {
+      const user = JSON.parse(Cookies.get("user"));
+      const token = user.token;
+      console.log({data: data})
+      const response = await axios.put(
+        `http://192.168.0.146:8080/api/v1/users/change-password`,
+        {
+          oldPassword: data.currentPassword,
+          password: data.newPassword,
+          confPassword: data.confirmedPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const responseData = response?.data?.data;
+      if (response.status === 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Failed to change password: ", error);
+    }
   };
 
   return (
@@ -63,7 +96,7 @@ export default function PasswordSettingsView({
                 >
                   <Password
                     {...register('currentPassword')}
-                    placeholder="Enter your password"
+                    placeholder="Current Password"
                     error={errors.currentPassword?.message}
                   />
                 </HorizontalFormBlockWrapper>
@@ -77,7 +110,7 @@ export default function PasswordSettingsView({
                     name="newPassword"
                     render={({ field: { onChange, value } }) => (
                       <Password
-                        placeholder="Enter your password"
+                        placeholder="New Password"
                         helperText={
                           getValues().newPassword.length < 8 &&
                           'Your current password must be more than 8 characters'
@@ -98,7 +131,7 @@ export default function PasswordSettingsView({
                     name="confirmedPassword"
                     render={({ field: { onChange, value } }) => (
                       <Password
-                        placeholder="Enter your password"
+                        placeholder="Confirm New Password"
                         onChange={onChange}
                         error={errors.confirmedPassword?.message}
                       />

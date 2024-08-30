@@ -30,7 +30,7 @@ export default function SignInForm() {
         email: data?.email,
         password: data?.password
       };
-      const response = await axios.post('http://localhost:3000/api/v1/auth/logIn', content);
+      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
       const responseData = response?.data?.data;
       if (responseData?.token) {
         Cookies.set('user', JSON.stringify({
@@ -40,9 +40,13 @@ export default function SignInForm() {
           token: responseData.token,
         }), { expires: 7 });
         const user = JSON.parse(Cookies.get('user'));
-        console.log({ user: user})
-        reset();
-        router.push('/profile');
+        if (user) {
+          console.log({ user: user })
+          reset();
+          router.push('/profile');
+        } else {
+          router.push('/signin');
+        }
       }
     } catch (error) {
       console.error("Error logging in: ", error);
@@ -93,7 +97,7 @@ export default function SignInForm() {
                 Forgot Password?
               </Link>
             </div>
-            <Button className="w-full" type="submit" size="lg" style={{color:"#a5a234"}}
+            <Button className="w-full" type="submit" size="lg" style={{ color: "#a5a234" }}
             >
               <span>Sign in</span>{' '}
               <PiArrowRightBold className="ms-2 mt-0.5 h-5 w-5" />

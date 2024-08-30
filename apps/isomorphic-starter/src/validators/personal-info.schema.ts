@@ -4,9 +4,9 @@ import { fileSchema, validateEmail } from './common-rules';
 
 // form zod validation schema
 export const personalInfoFormSchema = z.object({
-  firstName: z.string().min(1, { message: messages.firstNameRequired }),
-  lastName: z.string().optional(),
-  email: validateEmail,
+  firstName: z.string().min(2, { message: messages.firstNameRequired }),
+  lastName: z.string(),
+  email: validateEmail.optional(),
   phone: z.string().regex(/^\d{3}-\d{3}-\d{4}$/, "Phone number must be in the format XXX-XXX-XXXX")
 });
 

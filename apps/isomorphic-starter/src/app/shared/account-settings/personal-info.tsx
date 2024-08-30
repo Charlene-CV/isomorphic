@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
-import { SubmitHandler, Controller, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { PiClock, PiEnvelopeSimple } from "react-icons/pi";
 import { Form } from "@ui/form";
 import { Loader, Text, Input } from "rizzui";
@@ -16,7 +16,7 @@ import {
   personalInfoFormSchema,
   defaultValues,
 } from "@/validators/personal-info.schema";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 // @ts-ignore
 import Cookies from "js-cookie";
@@ -35,11 +35,40 @@ const QuillEditor = dynamic(() => import("@ui/quill-editor"), {
 });
 
 export default function PersonalInfoView() {
-  const onSubmit: SubmitHandler<PersonalInfoFormTypes> = (data) => {
+
+  type UserData = {
+    firstName: string,
+    lastName: string,
+    email?: string,
+    phone: string,
+  }
+
+  const [userData, setUserData] = useState<UserData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+  });
+
+  const onSubmit: SubmitHandler<PersonalInfoFormTypes> = async (data) => {
     toast.success(<Text as="b">Successfully added!</Text>);
-    console.log("Profile settings data ->", {
-      ...data,
-    });
+    setUserData(data);
+    const user = JSON.parse(Cookies.get("user"));
+    const uuid = user.id;
+    const token = user.token;
+    const response = await axios.put(`http://192.168.0.146:8080/api/v1/users/update/${uuid}`,
+      {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        phone: userData.phone
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
   };
   const {
     control,
@@ -52,7 +81,7 @@ export default function PersonalInfoView() {
     formState: { errors, isDirty, isValid },
   } = useForm<PersonalInfoFormTypes>({
     mode: "onChange",
-    defaultValues,
+    defaultValues
   });
   ``;
 
@@ -61,10 +90,9 @@ export default function PersonalInfoView() {
       try {
         const user = JSON.parse(Cookies.get("user"));
         const uuid = user.id;
-        console.log(user);
         const token = user.token;
         const response = await axios.get(
-          `http://localhost:3000/api/v1/users/find-one/${uuid}`,
+          `http://192.168.0.146:8080/api/v1/users/find-one/${uuid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -72,29 +100,25 @@ export default function PersonalInfoView() {
           }
         );
         const responseData = response?.data?.data;
-        if (responseData) {
-          const fields: (keyof PersonalInfoFormTypes)[] = [
-            "firstName",
-            "lastName",
-            "email",
-            "phone",
-          ];
-          const defaults = {
-            firstName: "First",
-            lastName: "Last Name",
-            email: "example@123.com",
-            phone: "XXX-XXX-XXXX",
-          };
-          fields.forEach((field) =>
-            setValue(field, responseData[field] || defaults[field])
-          );
-        }
+        console.log({ responseData: responseData })
+        setUserData({
+          firstName: responseData.firstName || '',
+          lastName: responseData.lastName || '',
+          email: responseData.email || '',
+          phone: responseData.phone || '',
+        });
+        reset({
+          firstName: responseData.firstName,
+          lastName: responseData.lastName,
+          email: responseData.email,
+          phone: responseData.phone,
+        });
       } catch (error) {
         console.error("Failed to fetch existing data:", error);
       }
     }
     fetchExistingData();
-  }, [setValue]); //session
+  }, [reset]);
 
   return (
     <Form<PersonalInfoFormTypes>
@@ -123,11 +147,15 @@ export default function PersonalInfoView() {
               >
                 <Input
                   {...register("firstName")}
+                  placeholder='First Name'
+                  defaultValue={userData.firstName}
                   error={errors.firstName?.message}
                   className="flex-grow"
                 />
                 <Input
                   {...register("lastName")}
+                  placeholder='Last Name'
+                  defaultValue={userData.lastName}
                   error={errors.lastName?.message}
                   className="flex-grow"
                 />
@@ -144,6 +172,8 @@ export default function PersonalInfoView() {
                   }
                   type="email"
                   {...register("email")}
+                  placeholder='example@123.com'
+                  defaultValue={userData.email}
                   error={errors.email?.message}
                 />
               </FormGroup>
@@ -154,7 +184,9 @@ export default function PersonalInfoView() {
               >
                 <Input
                   {...register("phone")}
-                  error={errors.firstName?.message}
+                  error={errors.phone?.message}
+                  placeholder='XXX-XXX-XXXX'
+                  defaultValue={userData.phone}
                   className="flex-grow"
                 />
               </FormGroup>
