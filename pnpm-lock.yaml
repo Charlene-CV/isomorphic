@@ -808,6 +808,9 @@ importers:
       jotai:
         specifier: 2.9.0
         version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      js-cookie:
+        specifier: ^3.0.5
+        version: 3.0.5
       lodash:
         specifier: ^4.17.21
         version: 4.17.21

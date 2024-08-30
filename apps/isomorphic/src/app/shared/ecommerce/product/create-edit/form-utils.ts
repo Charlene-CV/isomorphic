@@ -101,7 +101,7 @@ export const productData = {
   pageTitle: 'apple',
   metaDescription: 'apple',
   metaKeywords: 'grocery, foods',
-  productUrl: 'http://localhost:3000/',
+  productUrl: 'http://localhost:3001/',
   isPurchaseSpecifyDate: true,
   isLimitDate: true,
   dateFieldName: 'Date Field',

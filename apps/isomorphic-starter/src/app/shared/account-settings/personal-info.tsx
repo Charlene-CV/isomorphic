@@ -1,22 +1,27 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import toast from 'react-hot-toast';
-import { SubmitHandler, Controller, useForm } from 'react-hook-form';
-import { PiClock, PiEnvelopeSimple } from 'react-icons/pi';
-import { Form } from '@ui/form';
-import { Loader, Text, Input } from 'rizzui';
-import FormGroup from '@/app/shared/form-group';
-import FormFooter from '@components/form-footer';
-import UploadZone from '@ui/file-upload/upload-zone';
-import { countries, roles, timezones } from '@/data/forms/my-details';
-import AvatarUpload from '@ui/file-upload/avatar-upload';
-import { PersonalInfoFormTypes, personalInfoFormSchema, defaultValues } from '@/validators/personal-info.schema';
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import axios from 'axios';
+import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
+import { SubmitHandler, Controller, useForm } from "react-hook-form";
+import { PiClock, PiEnvelopeSimple } from "react-icons/pi";
+import { Form } from "@ui/form";
+import { Loader, Text, Input } from "rizzui";
+import FormGroup from "@/app/shared/form-group";
+import FormFooter from "@components/form-footer";
+import UploadZone from "@ui/file-upload/upload-zone";
+import { countries, roles, timezones } from "@/data/forms/my-details";
+import AvatarUpload from "@ui/file-upload/avatar-upload";
+import {
+  PersonalInfoFormTypes,
+  personalInfoFormSchema,
+  defaultValues,
+} from "@/validators/personal-info.schema";
+import { useEffect } from "react";
+import axios from "axios";
+// @ts-ignore
+import Cookies from "js-cookie";
 
-const Select = dynamic(() => import('rizzui').then((mod) => mod.Select), {
+const Select = dynamic(() => import("rizzui").then((mod) => mod.Select), {
   ssr: false,
   loading: () => (
     <div className="grid h-10 place-content-center">
@@ -25,44 +30,71 @@ const Select = dynamic(() => import('rizzui').then((mod) => mod.Select), {
   ),
 });
 
-const QuillEditor = dynamic(() => import('@ui/quill-editor'), {
+const QuillEditor = dynamic(() => import("@ui/quill-editor"), {
   ssr: false,
 });
-
 
 export default function PersonalInfoView() {
   const onSubmit: SubmitHandler<PersonalInfoFormTypes> = (data) => {
     toast.success(<Text as="b">Successfully added!</Text>);
-    console.log('Profile settings data ->', {
+    console.log("Profile settings data ->", {
       ...data,
     });
   };
-  const { control, handleSubmit, reset, register, setValue, getValues, watch, formState: { errors, isDirty, isValid } } = useForm<PersonalInfoFormTypes>({
-    mode: 'onChange',
+  const {
+    control,
+    handleSubmit,
+    reset,
+    register,
+    setValue,
+    getValues,
+    watch,
+    formState: { errors, isDirty, isValid },
+  } = useForm<PersonalInfoFormTypes>({
+    mode: "onChange",
     defaultValues,
   });
-``
-  // const { data: session, status } = useSession();
-  //fetch existing data
+  ``;
+
   useEffect(() => {
-    // console.log({session})
     async function fetchExistingData() {
-      // if (status === "authenticated" && session?.user) {
-        try {
-          const response = await axios.get(`http://192.168.0.146:8080/api/v1/users/find-one/e6d1aa98-306e-4839-95ea-608605691c78`); //${session?.user?.id}
-          console.log(response)
-          // const fields: (keyof PersonalInfoFormTypes)[] = ['firstName', 'lastName', 'email', 'phone'];
-          // const defaults = { firstName: "First Name", lastName: "Last Name", email: "example@123.com", phone: 'XXX-XXX-XXXX' }
-          // fields.forEach(field => setValue(field, response.data[field] || defaults[field]));
-
-        } catch (error) {
-          console.error("Failed to fetch existing data:", error);
+      try {
+        const user = JSON.parse(Cookies.get("user"));
+        const uuid = user.id;
+        console.log(user);
+        const token = user.token;
+        const response = await axios.get(
+          `http://localhost:3000/api/v1/users/find-one/${uuid}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const responseData = response?.data?.data;
+        if (responseData) {
+          const fields: (keyof PersonalInfoFormTypes)[] = [
+            "firstName",
+            "lastName",
+            "email",
+            "phone",
+          ];
+          const defaults = {
+            firstName: "First",
+            lastName: "Last Name",
+            email: "example@123.com",
+            phone: "XXX-XXX-XXXX",
+          };
+          fields.forEach((field) =>
+            setValue(field, responseData[field] || defaults[field])
+          );
         }
-      // }
+      } catch (error) {
+        console.error("Failed to fetch existing data:", error);
+      }
     }
-
     fetchExistingData();
-  }, [setValue, status]); //session
+  }, [setValue]); //session
 
   return (
     <Form<PersonalInfoFormTypes>
@@ -71,7 +103,7 @@ export default function PersonalInfoView() {
       onSubmit={onSubmit}
       className="@container"
       useFormProps={{
-        mode: 'onChange',
+        mode: "onChange",
         defaultValues,
       }}
     >
@@ -90,14 +122,12 @@ export default function PersonalInfoView() {
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
                 <Input
-                  placeholder="First Name"
-                  {...register('firstName')}
+                  {...register("firstName")}
                   error={errors.firstName?.message}
                   className="flex-grow"
                 />
                 <Input
-                  placeholder="Last Name"
-                  {...register('lastName')}
+                  {...register("lastName")}
                   error={errors.lastName?.message}
                   className="flex-grow"
                 />
@@ -113,8 +143,7 @@ export default function PersonalInfoView() {
                     <PiEnvelopeSimple className="h-6 w-6 text-gray-500" />
                   }
                   type="email"
-                  placeholder="example@123.com"
-                  {...register('email')}
+                  {...register("email")}
                   error={errors.email?.message}
                 />
               </FormGroup>
@@ -124,13 +153,11 @@ export default function PersonalInfoView() {
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
                 <Input
-                  placeholder="XXX-XXX-XXXX"
-                  {...register('firstName')}
+                  {...register("phone")}
                   error={errors.firstName?.message}
                   className="flex-grow"
                 />
               </FormGroup>
-
 
               {/* <FormGroup
                 title="Your Photo"

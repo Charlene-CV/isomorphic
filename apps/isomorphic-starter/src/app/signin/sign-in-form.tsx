@@ -2,15 +2,17 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { PiArrowRightBold } from 'react-icons/pi';
 import { Checkbox, Password, Button, Input, Text } from 'rizzui';
 import { Form } from '@ui/form';
 import { routes } from '@/config/routes';
 import { loginSchema, LoginSchema } from '@/validators/login.schema';
 import axios from 'axios';
+// @ts-ignore
+import Cookies from 'js-cookie';
 
 const initialValues: LoginSchema = {
   email: '',
@@ -20,29 +22,31 @@ const initialValues: LoginSchema = {
 
 export default function SignInForm() {
   //TODO: why we need to reset it here
-  const [reset, setReset] = useState({});
+  const router = useRouter();
+  const { register, handleSubmit, reset } = useForm();
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-    console.log(data);
-    // signIn('credentials', {
-    //   ...data,
-    // });
-
-    const content = {
-      email: data?.email,
-      password: data?.password
-    };
-    const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
-    console.log(response)
-    const responseData = response?.data?.data;
-    const user = {
-      id: responseData?.user?.uuid,
-      name: responseData?.user?.firstName + " " + responseData?.user?.lastName,
-      email: responseData?.user?.email,
-      image: "",
-      token: responseData?.token
+    try {
+      const content = {
+        email: data?.email,
+        password: data?.password
+      };
+      const response = await axios.post('http://localhost:3000/api/v1/auth/logIn', content);
+      const responseData = response?.data?.data;
+      if (responseData?.token) {
+        Cookies.set('user', JSON.stringify({
+          id: responseData.user.uuid,
+          name: `${responseData.user.firstName} ${responseData.user.lastName}`,
+          email: responseData.user.email,
+          token: responseData.token,
+        }), { expires: 7 });
+        const user = JSON.parse(Cookies.get('user'));
+        console.log({ user: user})
+        reset();
+        router.push('/profile');
+      }
+    } catch (error) {
+      console.error("Error logging in: ", error);
     }
-    console.log({ user: user})
-
   };
 
   return (
