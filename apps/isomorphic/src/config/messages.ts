@@ -35,7 +35,7 @@ export const messages = {
   cardNumberIsRequired: 'Card Number is required',
   cardExpireIsRequired: 'Expire Date is required',
   cvcNumberIsRequired: 'CVC Number is required',
-  catNameIsRequired: 'Category name is required',
+  tagNameIsRequired: 'Tag name is required',
   slugIsRequired: 'Slug is required',
   addressIsRequired: 'Address is required',
   createDateIsRequired: 'Create Date is required',

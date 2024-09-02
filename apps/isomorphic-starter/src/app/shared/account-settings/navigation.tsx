@@ -28,6 +28,10 @@ const menuItems = [
     value: '/profile/notification',
   },
   {
+    label: 'Management',
+    value: '/profile/management',
+  },
+  {
     label: 'Integrations',
     value: '/profile/integration',
   },

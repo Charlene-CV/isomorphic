@@ -7,6 +7,8 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+// @ts-ignore
+import Cookies from 'js-cookie';
 
 export default function ProfileMenu({
   buttonClassName,
@@ -74,11 +76,7 @@ const menuItems = [
   {
     name: "Account Settings",
     href: routes.forms.profileSettings,
-  },
-  {
-    name: "Activity Log",
-    href: "#",
-  },
+  }
 ];
 
 function DropdownMenu() {
@@ -94,9 +92,9 @@ function DropdownMenu() {
             as="h6"
             className="font-semibold"
           >
-            Albert Flores
+            {(JSON.parse(Cookies.get('user'))).name}
           </Title>
-          <Text className="text-gray-600">flores@doe.io</Text>
+          <Text className="text-gray-600">{(JSON.parse(Cookies.get('user'))).email}</Text>
         </div>
       </div>
       <div className="grid px-3.5 py-3.5 font-medium text-gray-700">
