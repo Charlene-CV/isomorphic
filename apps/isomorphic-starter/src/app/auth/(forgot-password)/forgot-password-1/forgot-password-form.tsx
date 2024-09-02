@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Text, Input, Password } from 'rizzui';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form } from '@ui/form';
 import { routes } from '@/config/routes';
 import {
@@ -11,6 +11,7 @@ import {
   ResetPasswordSchema,
 } from '@/validators/reset-password.schema';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const initialValues = {
   email: '',
@@ -19,24 +20,25 @@ const initialValues = {
 };
 
 export default function ForgotPasswordForm() {
-  const [reset, setReset] = useState({});
+  const { reset } = useForm();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<ResetPasswordSchema> = async (data) => {
     try {
-      const content = {
-        email: data?.email,
-        password: data?.password,
-        confirmPassword: data?.confirmPassword
-      };
-      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/resetPass', content);
-      const responseData = response?.data?.data;
-      const user = {
-        name: responseData.user.firstName + " " + responseData.user.lastName,
-        email: responseData.user.email,
-        image: "",
-        token: responseData.token
+      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/resetPass',
+        {
+          email: data?.email,
+          password: data?.password,
+          confPass: data?.confirmPassword
+        }
+      );
+      if (response.status === 200) {
+        reset();
+        router.push('/signin');
+      } else {
+        reset();
+        router.push('/auth/forgot-password-1');
       }
-      return user || null;
     } catch (error) {
       console.error("Error resetting password: ", error);
     }
@@ -84,7 +86,7 @@ export default function ForgotPasswordForm() {
               {...register('confirmPassword')}
               error={errors.confirmPassword?.message}
             />
-            <Button className="mt-2 w-full" type="submit" size="lg" style={{color:"#a5a234"}}>
+            <Button className="mt-2 w-full" type="submit" size="lg" style={{ color: "#a5a234" }}>
               Reset Password
             </Button>
           </div>

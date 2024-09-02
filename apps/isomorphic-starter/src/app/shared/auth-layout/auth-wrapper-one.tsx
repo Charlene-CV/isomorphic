@@ -77,8 +77,8 @@ export default function AuthWrapperOne({
             </div>
             {isSocialLoginActive ? (
               <>
-                <div className="flex flex-col pb-5">
-                  {/* <Button
+                {/* <div className="flex flex-col pb-5">
+                  <Button
                     onClick={() =>
                       // it should be signIn('apple')
                       handleSignIn()
@@ -88,7 +88,7 @@ export default function AuthWrapperOne({
                   >
                     <PiAppleLogoFill className="me-2 h-4 w-4 shrink-0" />
                     <span className="truncate">Signin With Apple</span>
-                  </Button> */}
+                  </Button>
                   <Button
                     variant="outline"
                     onClick={() =>
@@ -102,7 +102,7 @@ export default function AuthWrapperOne({
                     <span className="truncate">Sign In With Google</span>
                   </Button>
                 </div>
-                <OrSeparation title="OR" className="mb-5 2xl:mb-7" isCenter />
+                <OrSeparation title="OR" className="mb-5 2xl:mb-7" isCenter /> */}
               </>
             ):<></>}
 
