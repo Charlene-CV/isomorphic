@@ -5,8 +5,11 @@ import NextProgress from "@components/next-progress";
 import { ThemeProvider, JotaiProvider } from "@/app/shared/theme-provider";
 import GlobalDrawer from "@/app/shared/drawer-views/container";
 import GlobalModal from "@/app/shared/modal-views/container";
+import { toast } from "react-toastify";
 
 import "./globals.css";
+import { Toast } from "node_modules/react-toastify/dist/components";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "TDS",
@@ -28,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
           <NextProgress />
           <JotaiProvider>
             {children}
+            <Toaster position="top-right"/>
             <GlobalDrawer />
             <GlobalModal />
           </JotaiProvider>

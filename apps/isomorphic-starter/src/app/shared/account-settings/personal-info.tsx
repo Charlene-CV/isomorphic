@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { PiClock, PiEnvelopeSimple } from "react-icons/pi";
 import { Form } from "@ui/form";
@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // @ts-ignore
 import Cookies from "js-cookie";
+// import { toast } from "react-toastify";
 
 const Select = dynamic(() => import("rizzui").then((mod) => mod.Select), {
   ssr: false,
@@ -35,40 +36,43 @@ const QuillEditor = dynamic(() => import("@ui/quill-editor"), {
 });
 
 export default function PersonalInfoView() {
-
   type UserData = {
-    firstName: string,
-    lastName: string,
-    email?: string,
-    phone: string,
-  }
+    firstName: string;
+    lastName: string;
+    email?: string;
+    phone: string;
+  };
 
-  const [userData, setUserData] = useState<UserData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-  });
+  // const [userData, setUserData] = useState<UserData>({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   phone: "",
+  // });
 
   const onSubmit: SubmitHandler<PersonalInfoFormTypes> = async (data) => {
-    toast.success(<Text as="b">Successfully added!</Text>);
-    setUserData(data);
+    // setUserData(data) ;
+    const userr: UserData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone,
+    };
     const user = JSON.parse(Cookies.get("user"));
     const uuid = user.id;
     const token = user.token;
-    const response = await axios.put(`http://192.168.0.146:8080/api/v1/users/update/${uuid}`,
-      {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        phone: userData.phone
-      },
+    const response = await axios.put(
+      `http://localhost:3000/api/v1/users/update/${uuid}`,
+      userr,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-    )
+    );
+    if (response.status === 200) {
+      toast.success(<Text>Profile updated successfully!</Text>);
+    }
   };
   const {
     control,
@@ -81,9 +85,8 @@ export default function PersonalInfoView() {
     formState: { errors, isDirty, isValid },
   } = useForm<PersonalInfoFormTypes>({
     mode: "onChange",
-    defaultValues
+    defaultValues,
   });
-  ``;
 
   useEffect(() => {
     async function fetchExistingData() {
@@ -92,7 +95,7 @@ export default function PersonalInfoView() {
         const uuid = user.id;
         const token = user.token;
         const response = await axios.get(
-          `http://192.168.0.146:8080/api/v1/users/find-one/${uuid}`,
+          `http://localhost:3000/api/v1/users/find-one/${uuid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -100,19 +103,16 @@ export default function PersonalInfoView() {
           }
         );
         const responseData = response?.data?.data;
-        console.log({ responseData: responseData })
-        setUserData({
-          firstName: responseData.firstName || '',
-          lastName: responseData.lastName || '',
-          email: responseData.email || '',
-          phone: responseData.phone || '',
-        });
         reset({
-          firstName: responseData.firstName,
-          lastName: responseData.lastName,
-          email: responseData.email,
-          phone: responseData.phone,
+          firstName: responseData.firstName || "",
+          lastName: responseData.lastName || "",
+          email: responseData.email || "",
+          phone: responseData.phone || "",
         });
+        // setValue("firstName", responseData.firstName);
+        // setValue("lastName", responseData.lastName);
+        // setValue("email", responseData.email);
+        // setValue("phone", responseData.phone);
       } catch (error) {
         console.error("Failed to fetch existing data:", error);
       }
@@ -121,77 +121,136 @@ export default function PersonalInfoView() {
   }, [reset]);
 
   return (
-    <Form<PersonalInfoFormTypes>
-      validationSchema={personalInfoFormSchema}
-      // resetValues={reset}
-      onSubmit={onSubmit}
-      className="@container"
-      useFormProps={{
-        mode: "onChange",
-        defaultValues,
-      }}
-    >
-      {({ register, control, setValue, getValues, formState: { errors } }) => {
-        return (
-          <>
-            <FormGroup
-              title="Personal Info"
-              description="Update your personal details here"
-              className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-            />
+    <form onSubmit={handleSubmit(onSubmit)}>
+  <>
+    <FormGroup
+      title="Personal Info"
+      description="Update your personal details here"
+      className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+    />
 
-            <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
-              <FormGroup
-                title="Name"
-                className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-              >
-                <Input
-                  {...register("firstName")}
-                  placeholder='First Name'
-                  defaultValue={userData.firstName}
-                  error={errors.firstName?.message}
-                  className="flex-grow"
-                />
-                <Input
-                  {...register("lastName")}
-                  placeholder='Last Name'
-                  defaultValue={userData.lastName}
-                  error={errors.lastName?.message}
-                  className="flex-grow"
-                />
-              </FormGroup>
+    <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
+      <FormGroup
+        title="Name"
+        className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+      >
+        <Input
+          {...register("firstName")}
+          placeholder="First Name"
+          error={errors.firstName?.message}
+          className="flex-grow"
+        />
+        <Input
+          {...register("lastName")}
+          placeholder="Last Name"
+          error={errors.lastName?.message}
+          className="flex-grow"
+        />
+      </FormGroup>
 
-              <FormGroup
-                title="Email Address"
-                className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-              >
-                <Input
-                  className="col-span-full"
-                  prefix={
-                    <PiEnvelopeSimple className="h-6 w-6 text-gray-500" />
-                  }
-                  type="email"
-                  {...register("email")}
-                  placeholder='example@123.com'
-                  defaultValue={userData.email}
-                  error={errors.email?.message}
-                />
-              </FormGroup>
+      <FormGroup
+        title="Email Address"
+        className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+      >
+        <Input
+          className="col-span-full"
+          prefix={<PiEnvelopeSimple className="h-6 w-6 text-gray-500" />}
+          type="email"
+          {...register("email")}
+          placeholder="example@123.com"
+          error={errors.email?.message}
+        />
+      </FormGroup>
 
-              <FormGroup
-                title="Phone Number"
-                className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-              >
-                <Input
-                  {...register("phone")}
-                  error={errors.phone?.message}
-                  placeholder='XXX-XXX-XXXX'
-                  defaultValue={userData.phone}
-                  className="flex-grow"
-                />
-              </FormGroup>
+      <FormGroup
+        title="Phone Number"
+        className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+      >
+        <Input
+          {...register("phone")}
+          error={errors.phone?.message}
+          placeholder="XXX-XXX-XXXX"
+          className="flex-grow"
+        />
+      </FormGroup>
+    </div>
 
-              {/* <FormGroup
+    <FormFooter
+      altBtnText="Cancel"
+      submitBtnText="Save"
+    />
+  </>
+</form>
+  );
+}
+
+// return (
+//   <Form<PersonalInfoFormTypes>
+//     validationSchema={personalInfoFormSchema}
+//     resetValues={reset}
+//     onSubmit={onSubmit}
+//     useFormProps={{
+//       defaultValues, // Ensuring that default values are correctly passed
+//     }}
+//   >
+//     {({ register, control, setValue, getValues, formState: { errors } }) => {
+//       return (
+//         <>
+//           <FormGroup
+//             title="Personal Info"
+//             description="Update your personal details here"
+//             className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+//           />
+
+//           <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
+//             <FormGroup
+//               title="Name"
+//               className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+//             >
+//               <Input
+//                 {...register("firstName")}
+//                 placeholder="First Name"
+//                 error={errors.firstName?.message}
+//                 className="flex-grow"
+//               />
+//               <Input
+//                 {...register("lastName")}
+//                 placeholder="Last Name"
+//                 error={errors.lastName?.message}
+//                 className="flex-grow"
+//               />
+//             </FormGroup>
+
+//             <FormGroup
+//               title="Email Address"
+//               className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+//             >
+//               <Input
+//                 className="col-span-full"
+//                 prefix={
+//                   <PiEnvelopeSimple className="h-6 w-6 text-gray-500" />
+//                 }
+//                 type="email"
+//                 {...register("email")}
+//                 placeholder="example@123.com"
+//                 error={errors.email?.message}
+//               />
+//             </FormGroup>
+
+//             <FormGroup
+//               title="Phone Number"
+//               className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+//             >
+//               <Input
+//                 {...register("phone")}
+//                 error={errors.phone?.message}
+//                 placeholder="XXX-XXX-XXXX"
+//                 className="flex-grow"
+//               />
+//             </FormGroup>
+
+{
+  /* <FormGroup
                 title="Your Photo"
                 description="This will be displayed on your profile."
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
@@ -204,9 +263,11 @@ export default function PersonalInfoView() {
                     error={errors?.avatar?.message as string}
                   />
                 </div>
-              </FormGroup> */}
+              </FormGroup> */
+}
 
-              {/* <FormGroup
+{
+  /* <FormGroup
                 title="Role"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
@@ -230,8 +291,10 @@ export default function PersonalInfoView() {
                     />
                   )}
                 />
-              </FormGroup> */}
-              {/* 
+              </FormGroup> */
+}
+{
+  /* 
               <FormGroup
                 title="Country"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
@@ -257,9 +320,11 @@ export default function PersonalInfoView() {
                     />
                   )}
                 />
-              </FormGroup> */}
+              </FormGroup> */
+}
 
-              {/* <FormGroup
+{
+  /* <FormGroup
                 title="Timezone"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
@@ -285,9 +350,11 @@ export default function PersonalInfoView() {
                     />
                   )}
                 />
-              </FormGroup> */}
+              </FormGroup> */
+}
 
-              {/* <FormGroup
+{
+  /* <FormGroup
                 title="Bio"
                 className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
               >
@@ -318,17 +385,18 @@ export default function PersonalInfoView() {
                     error={errors?.portfolios?.message as string}
                   />
                 </div>
-              </FormGroup> */}
-            </div>
-
-            <FormFooter
-              // isLoading={isLoading}
-              altBtnText="Cancel"
-              submitBtnText="Save"
-            />
-          </>
-        );
-      }}
-    </Form>
-  );
+              </FormGroup> */
 }
+//             </div>
+
+//             <FormFooter
+//               // isLoading={isLoading}
+//               altBtnText="Cancel"
+//               submitBtnText="Save"
+//             />
+//           </>
+//         );
+//       }}
+//     </Form>
+//   );
+// }
