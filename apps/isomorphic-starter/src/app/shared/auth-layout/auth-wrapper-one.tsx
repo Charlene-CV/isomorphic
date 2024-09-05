@@ -45,13 +45,13 @@ export default function AuthWrapperOne({
         className="sticky start-0 top-0 z-20 flex items-center justify-center bg-black p-3.5 text-sm font-medium text-white md:p-4 lg:hidden"
       ></Link>
 
-      <div className="min-h-screen justify-between gap-x-8 px-4 py-8 pt-10 md:pt-12 lg:flex lg:p-6 xl:gap-x-10 xl:p-7 2xl:p-10 2xl:pt-10 [&>div]:min-h-[calc(100vh-80px)]">
-        <div className="flex justify-center mb-7 px-6 pt-3 text-center md:pt-0 lg:px-0 xl:mb-8 2xl:mb-10">
+      <div className="min-h-screen justify-start gap-x-8 px-4 py-8 pt-10 md:pt-12 lg:flex lg:p-6 xl:gap-x-10 xl:p-7 2xl:p-10 2xl:pt-10 [&>div]:min-h-[calc(100vh-80px)]">
+        <div className="flex justify-center mr-60 mb-7 px-6 pt-3 text-center md:pt-0 lg:px-0 xl:mb-8 2xl:mb-10">
           <Link
             href={"/"}
             className="mb-6 flex justify-center max-w-[168px] xl:mb-8"
           >
-            <Logo className="" />
+            <Logo className="pl-80" />
           </Link>
           {/* <Title
                 as="h2"
