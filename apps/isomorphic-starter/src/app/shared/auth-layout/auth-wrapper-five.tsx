@@ -67,8 +67,6 @@ export default function AuthWrapperFive({
             backHomeClassName
           )}
         >
-          <PiArrowLeftBold />
-          <span className="ms-1 font-medium">Back to home</span>
         </div>
       </Link>
       <div className="flex min-h-screen flex-col items-center justify-center p-4 lg:p-5 2xl:p-10">

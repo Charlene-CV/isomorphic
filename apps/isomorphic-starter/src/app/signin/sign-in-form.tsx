@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -40,7 +40,8 @@ export default function SignInForm() {
           token: responseData.token,
         }), { expires: 7 });
         const user = JSON.parse(Cookies.get('user'));
-        if (user) {
+        if (user && response.status === 200) {
+          toast.success(<Text>Signing in...</Text>, { duration: 5000 });
           reset();
           router.push('/profile');
         } else {

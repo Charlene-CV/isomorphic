@@ -176,7 +176,6 @@ export default function PersonalInfoView() {
     </div>
 
     <FormFooter
-      altBtnText="Cancel"
       submitBtnText="Save"
     />
   </>

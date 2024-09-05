@@ -117,6 +117,7 @@ export const routes = {
   emailTemplates: "/email-templates",
   profile: "/profile",
   management: "/management",
+  tags: "/profile/management/tags",
   welcome: "/welcome",
   comingSoon: "/coming-soon",
   accessDenied: "/access-denied",
