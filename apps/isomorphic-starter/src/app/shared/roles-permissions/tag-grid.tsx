@@ -1,4 +1,4 @@
-import RoleCard from '@/app/shared/roles-permissions/role-card';
+import TagCard from '@/app/shared/roles-permissions/tag-card';
 import { rolesList } from '@/data/roles-permissions';
 import cn from '@utils/class-names';
 import axios from 'axios';
@@ -9,7 +9,7 @@ interface RolesGridProps {
 }
 
 export async function getTags() {
-  const response = await axios.
+  // const response = await axios.
 }
 
 export default function RolesGrid({
@@ -25,7 +25,7 @@ export default function RolesGrid({
         )}
       >
         {rolesList.map((role) => (
-          <RoleCard key={role.name} {...role} />
+          <TagCard key={role.name} {...role} />
         ))}
       </div>
     </div>

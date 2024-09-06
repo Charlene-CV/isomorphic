@@ -28,7 +28,7 @@ export default function ManagementSettingsView() {
 
   return (
     <>
-      <div className="flex flex-row justify-between py-10 px-10">
+      <div className="flex flex-row justify-between py-10 px-10 border-b border-dashed border-muted">
         <h4 className="text-base font-medium">Tags</h4>
         <div>
           <Link href={routes.tags}>

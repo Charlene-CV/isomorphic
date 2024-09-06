@@ -8,7 +8,7 @@ import UserCog from '@components/icons/user-cog';
 import { ROLES } from '@/config/constants';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import ModalButton from '@/app/shared/modal-button';
-import EditRole from '@/app/shared/roles-permissions/edit-role';
+import EditTag from '@/app/shared/roles-permissions/edit-tag';
 
 type User = {
   id: number;
@@ -16,7 +16,7 @@ type User = {
   avatar: string;
 };
 
-interface RoleCardProps {
+interface TagCardProps {
   name: string;
   color?: string;
   className?: string;
@@ -24,12 +24,12 @@ interface RoleCardProps {
   users: User[];
 }
 
-export default function RoleCard({
+export default function TagCard({
   name,
   color,
   users,
   className,
-}: RoleCardProps) {
+}: TagCardProps) {
   const { openModal } = useModal();
   return (
     <div className={cn('rounded-lg border border-muted p-6', className)}>
@@ -93,36 +93,17 @@ export default function RoleCard({
               Rename
             </Dropdown.Item>
             <Dropdown.Item className="gap-2 text-xs sm:text-sm">
-              Remove Role
+              Remove Tag
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </header>
 
-      <div className="mt-4 flex items-center gap-2">
-        <div className="flex items-center">
-          {users?.slice(0, 4).map((user) => (
-            <figure
-              key={user.id}
-              className="relative z-10 -ml-1.5 h-8 w-8 rounded-full border-2 border-white"
-            >
-              <Image
-                src={user.avatar}
-                alt="user avatar"
-                fill
-                className="rounded-full"
-              />
-            </figure>
-          ))}
-        </div>
-        <span>Total {users.length} users</span>
-      </div>
       <ModalButton
-        customSize="700px"
         variant="outline"
-        label="Edit Role"
+        label="Edit Tag"
         icon={<UserCog className="h-5 w-5" />}
-        view={<EditRole />}
+        view={<EditTag />}
         className="items-center gap-1 text-gray-800 @lg:w-full lg:mt-6"
       />
     </div>

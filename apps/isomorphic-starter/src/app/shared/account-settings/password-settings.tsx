@@ -46,7 +46,7 @@ export default function PasswordSettingsView({
       const token = user.token;
       console.log({data: data})
       const response = await axios.put(
-        `http://localhost:3000/api/v1/users/change-password`,
+        `http://192.168.0.146:8080/api/v1/users/change-password`,
         {
           oldPassword: data.currentPassword,
           password: data.newPassword,
@@ -114,7 +114,7 @@ export default function PasswordSettingsView({
                         placeholder="New Password"
                         helperText={
                           getValues().newPassword.length < 8 &&
-                          'Your current password must be more than 8 characters'
+                          'Your current password consist of more than 8 characters'
                         }
                         onChange={onChange}
                         error={errors.newPassword?.message}

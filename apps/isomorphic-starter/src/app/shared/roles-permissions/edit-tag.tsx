@@ -18,7 +18,7 @@ import {
   RolePermissionInput,
   rolePermissionSchema,
 } from '@/validators/edit-role.schema';
-export default function EditRole() {
+export default function EditTag() {
   const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
 
@@ -55,7 +55,7 @@ export default function EditRole() {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Edit Role
+                Edit Tag
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
@@ -63,10 +63,7 @@ export default function EditRole() {
             </div>
 
             <div className="grid gap-4 divide-y divide-y-reverse divide-gray-200">
-              <Title as="h5" className="mb-2 text-base font-semibold">
-                Role Access
-              </Title>
-              {roles.map(({ label, value }) => {
+              {/* {roles.map(({ label, value }) => {
                 const parent = value.toLowerCase();
                 return (
                   <div
@@ -106,7 +103,7 @@ export default function EditRole() {
                     />
                   </div>
                 );
-              })}
+              })} */}
             </div>
 
             <div className="col-span-full flex items-center justify-end gap-4">

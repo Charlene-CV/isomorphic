@@ -1,39 +1,32 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { PiClock, PiEnvelopeSimple } from "react-icons/pi";
-import { Form } from "@ui/form";
-import { Loader, Text, Input } from "rizzui";
+import { PiEnvelopeSimple } from "react-icons/pi";
+import { Text, Input } from "rizzui";
 import FormGroup from "@/app/shared/form-group";
 import FormFooter from "@components/form-footer";
-import UploadZone from "@ui/file-upload/upload-zone";
-import { countries, roles, timezones } from "@/data/forms/my-details";
-import AvatarUpload from "@ui/file-upload/avatar-upload";
 import {
   PersonalInfoFormTypes,
-  personalInfoFormSchema,
   defaultValues,
 } from "@/validators/personal-info.schema";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 // @ts-ignore
 import Cookies from "js-cookie";
-// import { toast } from "react-toastify";
 
-const Select = dynamic(() => import("rizzui").then((mod) => mod.Select), {
-  ssr: false,
-  loading: () => (
-    <div className="grid h-10 place-content-center">
-      <Loader variant="spinner" />
-    </div>
-  ),
-});
+// const Select = dynamic(() => import("rizzui").then((mod) => mod.Select), {
+//   ssr: false,
+//   loading: () => (
+//     <div className="grid h-10 place-content-center">
+//       <Loader variant="spinner" />
+//     </div>
+//   ),
+// });
 
-const QuillEditor = dynamic(() => import("@ui/quill-editor"), {
-  ssr: false,
-});
+// const QuillEditor = dynamic(() => import("@ui/quill-editor"), {
+//   ssr: false,
+// });
 
 export default function PersonalInfoView() {
   type UserData = {
@@ -62,7 +55,7 @@ export default function PersonalInfoView() {
     const uuid = user.id;
     const token = user.token;
     const response = await axios.put(
-      `http://localhost:3000/api/v1/users/update/${uuid}`,
+      `http://192.168.0.146:8080/api/v1/users/update/${uuid}`,
       userr,
       {
         headers: {
@@ -72,6 +65,8 @@ export default function PersonalInfoView() {
     );
     if (response.status === 200) {
       toast.success(<Text>Profile updated successfully!</Text>);
+    } else {
+      toast.error(<Text>Error updating profile...</Text>);
     }
   };
   const {
@@ -95,7 +90,7 @@ export default function PersonalInfoView() {
         const uuid = user.id;
         const token = user.token;
         const response = await axios.get(
-          `http://localhost:3000/api/v1/users/find-one/${uuid}`,
+          `http://192.168.0.146:8080/api/v1/users/find-one/${uuid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
