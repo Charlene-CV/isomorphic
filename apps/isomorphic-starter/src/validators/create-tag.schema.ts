@@ -3,7 +3,7 @@ import { z } from 'zod';
 // form zod validation schema
 export const tagFormSchema = z.object({
   name: z.string().min(1, { message: "Tag name is required." }),
-  icon: z.string().optional(),
+  icon: z.string(),
   // isActive: z.boolean()
 });
 

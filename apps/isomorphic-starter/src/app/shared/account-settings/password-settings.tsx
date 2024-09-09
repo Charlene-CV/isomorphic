@@ -42,7 +42,7 @@ export default function PasswordSettingsView({
     setLoading(true);
     setPassData(data);
     try {
-      const user = JSON.parse(Cookies.get("user"));
+      const user: any = JSON.parse(Cookies.get("user"));
       const token = user.token;
       console.log({data: data})
       const response = await axios.put(
@@ -114,7 +114,7 @@ export default function PasswordSettingsView({
                         placeholder="New Password"
                         helperText={
                           getValues().newPassword.length < 8 &&
-                          'Your current password consist of more than 8 characters'
+                          'Your password should consist of more than 8 characters.'
                         }
                         onChange={onChange}
                         error={errors.newPassword?.message}

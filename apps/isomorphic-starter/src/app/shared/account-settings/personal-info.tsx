@@ -51,7 +51,7 @@ export default function PersonalInfoView() {
       email: data.email,
       phone: data.phone,
     };
-    const user = JSON.parse(Cookies.get("user"));
+    const user: any = JSON.parse(Cookies.get("user"));
     const uuid = user.id;
     const token = user.token;
     const response = await axios.put(
@@ -86,7 +86,7 @@ export default function PersonalInfoView() {
   useEffect(() => {
     async function fetchExistingData() {
       try {
-        const user = JSON.parse(Cookies.get("user"));
+        const user: any = JSON.parse(Cookies.get("user"));
         const uuid = user.id;
         const token = user.token;
         const response = await axios.get(
@@ -98,6 +98,7 @@ export default function PersonalInfoView() {
           }
         );
         const responseData = response?.data?.data;
+        console.log({responseData});
         reset({
           firstName: responseData.firstName || "",
           lastName: responseData.lastName || "",
@@ -117,64 +118,67 @@ export default function PersonalInfoView() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-  <>
-    <FormGroup
-      title="Personal Info"
-      description="Update your personal details here"
-      className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-    />
-
-    <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
-      <FormGroup
-        title="Name"
-        className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-      >
-        <Input
-          {...register("firstName")}
-          placeholder="First Name"
-          error={errors.firstName?.message}
-          className="flex-grow"
+      <>
+        <FormGroup
+          title="Personal Info"
+          description="Update your personal details here"
+          className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
         />
-        <Input
-          {...register("lastName")}
-          placeholder="Last Name"
-          error={errors.lastName?.message}
-          className="flex-grow"
-        />
-      </FormGroup>
 
-      <FormGroup
-        title="Email Address"
-        className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-      >
-        <Input
-          className="col-span-full"
-          prefix={<PiEnvelopeSimple className="h-6 w-6 text-gray-500" />}
-          type="email"
-          {...register("email")}
-          placeholder="example@123.com"
-          error={errors.email?.message}
-        />
-      </FormGroup>
+        <div className="mb-10 grid gap-7 divide-y divide-dashed divide-gray-200 @2xl:gap-9 @3xl:gap-11">
+          <FormGroup
+            title="Name"
+            className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+          >
+            <Input
+              {...register("firstName")}
+              placeholder="First Name"
+              error={errors.firstName?.message}
+              className="flex max-w-[400px] w-full"
+            />
+            <Input
+              {...register("lastName")}
+              placeholder="Last Name"
+              error={errors.lastName?.message}
+              className="flex max-w-[400px] w-full"
+            />
+          </FormGroup>
 
-      <FormGroup
-        title="Phone Number"
-        className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
-      >
-        <Input
-          {...register("phone")}
-          error={errors.phone?.message}
-          placeholder="XXX-XXX-XXXX"
-          className="flex-grow"
-        />
-      </FormGroup>
-    </div>
+          <FormGroup
+            title="Email Address"
+            className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+          >
+            <Input
+              className="flex max-w-[500px] w-full"
+              prefix={<PiEnvelopeSimple className="h-6 w-6 text-gray-500" />}
+              type="email"
+              {...register("email")}
+              placeholder="example@123.com"
+              error={errors.email?.message}
+            />
+          </FormGroup>
 
-    <FormFooter
-      submitBtnText="Save"
-    />
-  </>
-</form>
+          <FormGroup
+            title="Phone Number"
+            className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
+          >
+            <Input
+              {...register("phone")}
+              error={errors.phone?.message}
+              placeholder="XXX-XXX-XXXX"
+              className="flex max-w-[500px] w-full"
+            />
+          </FormGroup>
+        </div>
+
+        <div className="flex justify-end">
+          <FormFooter
+            submitBtnText="Save"
+            className="w-full max-w-[300px]"
+          />
+        </div>
+      </>
+    </form>
   );
 }
 

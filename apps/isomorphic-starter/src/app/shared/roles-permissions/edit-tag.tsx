@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PiCheckBold, PiXBold } from 'react-icons/pi';
-import { Controller, SubmitHandler } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { permissions, roles } from '@/app/shared/roles-permissions/utils';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import {
@@ -11,49 +11,43 @@ import {
   Title,
   Button,
   CheckboxGroup,
+  Input,
 } from 'rizzui';
-import { PERMISSIONS } from '@/data/users-data';
 import { Form } from '@ui/form';
-import {
-  RolePermissionInput,
-  rolePermissionSchema,
-} from '@/validators/edit-role.schema';
-export default function EditTag() {
+import { TagFormInput, tagFormSchema } from '@/validators/create-tag.schema';
+
+export default function EditTag(tag: TagFormInput) {
+   const defaultValues = {
+    name: tag.name || '',
+    icon: tag.icon || ''
+  };
   const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
 
-  const onSubmit: SubmitHandler<RolePermissionInput> = (data) => {
+  const {
+    reset,
+    handleSubmit,
+    register,
+    formState: { errors, isDirty, isValid },
+  } = useForm<TagFormInput>({
+    mode: "onChange",
+    defaultValues,
+  });
+
+  useEffect(() => {
+    console.log(tag.name)
+    reset({ name: tag.name, icon: tag.icon });
+  }, []);
+
+  const onSubmit: SubmitHandler<TagFormInput> = (data) => {
     // set timeout ony required to display loading state of the create category button
-    setLoading(true);
-    setTimeout(() => {
-      console.log('data', data);
-      setLoading(false);
-      closeModal();
-    }, 600);
+    
   };
 
   return (
-    <Form<RolePermissionInput>
-      onSubmit={onSubmit}
-      validationSchema={rolePermissionSchema}
-      useFormProps={{
-        defaultValues: {
-          administrator: [PERMISSIONS.Read],
-          manager: [PERMISSIONS.Write],
-          sales: [PERMISSIONS.Delete],
-          support: [PERMISSIONS.Read],
-          developer: [PERMISSIONS.Write],
-          hrd: [PERMISSIONS.Delete],
-          restricteduser: [PERMISSIONS.Write],
-          customer: [PERMISSIONS.Read],
-        },
-      }}
-      className="grid grid-cols-1 gap-6 p-6  @container [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
-    >
-      {({ register, control, watch, formState: { errors } }) => {
-        return (
-          <>
-            <div className="col-span-full flex items-center justify-between">
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <>
+            <div className="flex items-center justify-between">
               <Title as="h4" className="font-semibold">
                 Edit Tag
               </Title>
@@ -61,52 +55,24 @@ export default function EditTag() {
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
             </div>
-
-            <div className="grid gap-4 divide-y divide-y-reverse divide-gray-200">
-              {/* {roles.map(({ label, value }) => {
-                const parent = value.toLowerCase();
-                return (
-                  <div
-                    key={value}
-                    className="flex flex-col gap-3 pb-4 md:flex-row md:items-center md:justify-between"
-                  >
-                    <Title
-                      as="h6"
-                      className="font-medium text-gray-700 2xl:text-sm"
-                    >
-                      {label}
-                    </Title>
-                    <Controller
-                      // @ts-ignore
-                      name={value.toLowerCase()}
-                      control={control}
-                      render={({ field: { onChange, value } }) => (
-                        <CheckboxGroup
-                          values={value as string[]}
-                          setValues={onChange}
-                          className="grid grid-cols-3 gap-4 md:flex"
-                        >
-                          {permissions.map(({ value, label }) => (
-                            <AdvancedCheckbox
-                              key={value}
-                              name={`${parent}.${value.toLowerCase()}`}
-                              value={value}
-                              inputClassName="[&:checked~span>.icon]:block"
-                              contentClassName="flex items-center justify-center"
-                            >
-                              <PiCheckBold className="icon me-1 hidden h-[14px] w-[14px] md:h-4 md:w-4" />
-                              <span className="font-medium">{label}</span>
-                            </AdvancedCheckbox>
-                          ))}
-                        </CheckboxGroup>
-                      )}
-                    />
-                  </div>
-                );
-              })} */}
-            </div>
-
-            <div className="col-span-full flex items-center justify-end gap-4">
+            <Input
+              label="Tag Name"
+              placeholder="Tag Name"
+              {...register('name')}
+              error={errors.name?.message}
+            />
+            <Input
+              label="Tag Icon"
+              placeholder="Tag Icon"
+              {...register('icon')}
+              error={errors.icon?.message}
+            />
+            {/* <Switch
+              label="Active"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+            /> */}
+            <div className="flex items-center justify-end gap-4">
               <Button
                 variant="outline"
                 onClick={closeModal}
@@ -117,14 +83,71 @@ export default function EditTag() {
               <Button
                 type="submit"
                 isLoading={isLoading}
-                className="w-full @xl:w-auto"
+                className="w-full @xl:w-auto bg-[#a5a234]"
               >
                 Save
               </Button>
             </div>
           </>
-        );
-      }}
-    </Form>
+    </form>
   );
+
+  // return (
+  //   <Form<TagFormInput>
+  //     resetValues={reset}
+  //     onSubmit={onSubmit}
+  //     validationSchema={tagFormSchema}
+  //     className="flex flex-grow flex-col gap-6 p-6 @container [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
+  //   >
+  //     {({ register, formState: { errors }, setValue }) => {
+  //       return (
+  //         <>
+  //           <div className="flex items-center justify-between">
+  //             <Title as="h4" className="font-semibold">
+  //               Edit Tag
+  //             </Title>
+  //             <ActionIcon size="sm" variant="text" onClick={closeModal}>
+  //               <PiXBold className="h-auto w-5" />
+  //             </ActionIcon>
+  //           </div>
+  //           <Input
+  //             label="Tag Name"
+  //             placeholder="Tag Name"
+  //             {...register('name')}
+  //             error={errors.name?.message}
+  //           />
+  //           <Input
+  //             label="Tag Icon"
+  //             placeholder="Tag Icon"
+  //             {...register('icon')}
+  //             error={errors.icon?.message}
+  //           />
+  //           {/* <Switch
+  //             label="Active"
+  //             checked={isActive}
+  //             onChange={(e) => setIsActive(e.target.checked)}
+  //           /> */}
+  //           <div className="flex items-center justify-end gap-4">
+  //             <Button
+  //               variant="outline"
+  //               onClick={closeModal}
+  //               className="w-full @xl:w-auto"
+  //             >
+  //               Cancel
+  //             </Button>
+  //             <Button
+  //               type="submit"
+  //               isLoading={isLoading}
+  //               className="w-full @xl:w-auto bg-[#a5a234]"
+  //             >
+  //               Save
+  //             </Button>
+  //           </div>
+  //         </>
+  //       );
+  //     }}
+  //   </Form>
+  // );
 }
+
+

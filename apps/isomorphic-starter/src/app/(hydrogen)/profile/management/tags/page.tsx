@@ -1,6 +1,6 @@
 import PageHeader from '@/app/shared/page-header';
 import ModalButton from '@/app/shared/modal-button';
-import RolesGrid from '@/app/shared/roles-permissions/tag-grid';
+import TagsGrid from '@/app/shared/roles-permissions/tag-grid';
 import CreateTag from '@/app/shared/roles-permissions/create-tag';
 
 const pageHeader = {
@@ -21,7 +21,7 @@ export default function BlankPage() {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <ModalButton label="Add New Tag" view={<CreateTag />} className='bg-[#a5a234]'/>
       </PageHeader>
-      <RolesGrid />
+      <TagsGrid />
     </>
   );
 }

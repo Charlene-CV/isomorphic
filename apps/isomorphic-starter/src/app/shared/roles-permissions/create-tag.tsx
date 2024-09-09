@@ -16,7 +16,6 @@ import { Text } from "rizzui";
 import { routes } from '@/config/routes';
 import { Switch } from 'rizzui';
 
-// main category form component for create and update category
 export default function CreateTag() {
   const { closeModal } = useModal();
   const [reset, setReset] = useState({});
@@ -36,17 +35,18 @@ export default function CreateTag() {
     //   });
     //   closeModal();
     // }, 600);
-    const tag: TagFormInput = {
-      name: data.name,
-      icon: data.icon,
-      // isActive: isActive
-    };
-    console.log({isActive})
-    const user = JSON.parse(Cookies.get("user"));
+    console.log("Hiiii");
+    const user: any = JSON.parse(Cookies.get("user"));
     const token = user.token;
+    const tagData = { 
+      name: data?.name, 
+      icon: data?.icon,
+      // isActive: data?.isActive
+     };
+    console.log(tagData);
     const response = await axios.post(
       `http://192.168.0.146:8080/api/v1/tags/create`,
-      tag,
+      tagData,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -55,6 +55,7 @@ export default function CreateTag() {
     );
     if (response.status === 200) {
       closeModal();
+      window.location.reload();
       toast.success(<Text>Tag added successfully!</Text>);
     } else {
       toast.error(<Text>Error adding tag...</Text>);
@@ -68,7 +69,7 @@ export default function CreateTag() {
       validationSchema={tagFormSchema}
       className="flex flex-grow flex-col gap-6 p-6 @container [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
-      {({ register, formState: { errors } }) => {
+      {({ register, formState: { errors }, setValue }) => {
         return (
           <>
             <div className="flex items-center justify-between">
@@ -92,12 +93,9 @@ export default function CreateTag() {
               error={errors.icon?.message}
             />
             {/* <Switch
-              label={isActive}
-              variant="flat"
+              label="Active"
               checked={isActive}
-              onChange={() => setIsActive(!isActive)}
-              labelClassName="font-medium text-sm text-gray-900"
-              switchClassName='peer-checked/switch:bg-[#a5a234] peer-checked/switch:border-[#a5a234]'
+              onChange={(e) => setIsActive(e.target.checked)}
             /> */}
             <div className="flex items-center justify-end gap-4">
               <Button
@@ -110,7 +108,7 @@ export default function CreateTag() {
               <Button
                 type="submit"
                 isLoading={isLoading}
-                className="w-full @xl:w-auto"
+                className="w-full @xl:w-auto bg-[#a5a234]"
               >
                 Create Tag
               </Button>

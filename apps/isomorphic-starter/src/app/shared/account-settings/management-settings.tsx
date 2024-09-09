@@ -33,7 +33,27 @@ export default function ManagementSettingsView() {
         <div>
           <Link href={routes.tags}>
             <Button type="submit" variant="solid" className="bg-[#a5a234]">
-              Manage Tags
+              Manage
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <div className="flex flex-row justify-between py-10 px-10 border-b border-dashed border-muted">
+        <h4 className="text-base font-medium">Equipment</h4>
+        <div>
+          <Link href={routes.tags}>
+            <Button type="submit" variant="solid" className="bg-[#a5a234]">
+              Manage
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <div className="flex flex-row justify-between py-10 px-10 border-b border-dashed border-muted">
+        <h4 className="text-base font-medium">Accessorials</h4>
+        <div>
+          <Link href={routes.tags}>
+            <Button type="submit" variant="solid" className="bg-[#a5a234]">
+              Manage
             </Button>
           </Link>
         </div>

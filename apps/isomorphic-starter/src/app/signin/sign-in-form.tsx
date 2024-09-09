@@ -6,13 +6,14 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { PiArrowRightBold } from 'react-icons/pi';
-import { Checkbox, Password, Button, Input, Text } from 'rizzui';
+import { Checkbox, Password, Button, Input, Text, Title } from 'rizzui';
 import { Form } from '@ui/form';
 import { routes } from '@/config/routes';
 import { loginSchema, LoginSchema } from '@/validators/login.schema';
 import axios from 'axios';
 // @ts-ignore
 import Cookies from 'js-cookie';
+import UnderlineShape from '@components/shape/underline';
 
 const initialValues: LoginSchema = {
   email: '',
@@ -45,6 +46,7 @@ export default function SignInForm() {
           reset();
           router.push('/profile');
         } else {
+          toast.error(<Text>Error signing in.</Text>, { duration: 5000 });
           router.push('/signin');
         }
       }
@@ -55,6 +57,23 @@ export default function SignInForm() {
 
   return (
     <>
+      <div>
+        <Title
+          as="h2"
+          className="mb-5 text-[26px] leading-snug md:text-3xl md:!leading-normal lg:mb-7 lg:pe-16 lg:text-[28px] xl:text-3xl 2xl:pe-8 2xl:text-4xl"
+        >
+          {
+            <>
+              Please{' '}
+              <span className="relative inline-block">
+                Sign In Below To
+                <UnderlineShape className="absolute -bottom-2 start-0 h-2.5 w-24 text-blue md:w-28 xl:-bottom-1.5 xl:w-36" />
+              </span>{' '}
+              Continue.
+            </>
+          }
+        </Title>
+      </div>
       <Form<LoginSchema>
         validationSchema={loginSchema}
         resetValues={reset}

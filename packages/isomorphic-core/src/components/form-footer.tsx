@@ -25,7 +25,7 @@ export default function FormFooter({
         negMargin
       )}
     >
-      <Button type="submit" isLoading={isLoading} className="w-full @xl:w-auto bg-[#a5a234]">
+      <Button type="submit" isLoading={isLoading} className="flex w-full @xl:w-auto bg-[#a5a234]">
         {submitBtnText}
       </Button>
     </div>

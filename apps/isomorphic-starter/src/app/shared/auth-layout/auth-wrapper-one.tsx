@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Logo from "@components/logo";
-import { Button, Text } from "rizzui";
+import { Button, Text, Title } from "rizzui";
 import { PiArrowLeftBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
 import OrSeparation from "@/app/shared/auth-layout/or-separation";
@@ -46,20 +46,20 @@ export default function AuthWrapperOne({
       ></Link>
 
       <div className="min-h-screen justify-start gap-x-8 px-4 py-8 pt-10 md:pt-12 lg:flex lg:p-6 xl:gap-x-10 xl:p-7 2xl:p-10 2xl:pt-10 [&>div]:min-h-[calc(100vh-80px)]">
-        <div className="flex justify-center mr-60 mb-7 px-6 pt-3 text-center md:pt-0 lg:px-0 xl:mb-8 2xl:mb-10">
+        <div className="flex justify-center mr-40 mb-7 px-6 pt-3 text-center md:pt-0 lg:px-0 xl:mb-8 2xl:mb-10">
           <Link
             href={"/"}
-            className="mb-6 flex justify-center max-w-[168px] xl:mb-8"
+            className="mb-6 mt-6 ml-6 flex justify-center max-w-[250px] xl:mb-8"
           >
             <Logo className="pl-80" />
           </Link>
           {/* <Title
                 as="h2"
                 className="mb-5 text-[26px] leading-snug md:text-3xl md:!leading-normal lg:mb-7 lg:pe-16 lg:text-[28px] xl:text-3xl 2xl:pe-8 2xl:text-4xl"
-              >a
+              >
                 {title}
-              </Title> */}
-          {/* <Text className="leading-[1.85] text-gray-700 md:leading-loose lg:pe-8 2xl:pe-14">
+              </Title>
+          <Text className="leading-[1.85] text-gray-700 md:leading-loose lg:pe-8 2xl:pe-14">
                 {description}
               </Text> */}
         </div>
