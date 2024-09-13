@@ -40,7 +40,7 @@ export default function TableToolbar<TData extends Record<string, any>>({
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4 pb-4">
         <Input
           type="search"
           placeholder="Search by customer name..."

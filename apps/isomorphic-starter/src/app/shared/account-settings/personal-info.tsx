@@ -55,7 +55,7 @@ export default function PersonalInfoView() {
     const uuid = user.id;
     const token = user.token;
     const response = await axios.put(
-      `http://localhost:3000/api/v1/users/update/${uuid}`,
+      `http://192.168.0.146:8080/api/v1/users/update/${uuid}`,
       userr,
       {
         headers: {
@@ -90,7 +90,7 @@ export default function PersonalInfoView() {
         const uuid = user.id;
         const token = user.token;
         const response = await axios.get(
-          `http://localhost:3000/api/v1/users/find-one/${uuid}`,
+          `http://192.168.0.146:8080/api/v1/users/find-one/${uuid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -32,6 +32,10 @@ const menuItems = [
     value: '/profile/management',
   },
   {
+    label: 'Accounting',
+    value: '/profile/accounting',
+  },
+  {
     label: 'Integrations',
     value: '/profile/integration',
   },

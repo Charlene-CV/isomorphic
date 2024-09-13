@@ -46,7 +46,7 @@ export default function PasswordSettingsView({
       const token = user.token;
       console.log({data: data})
       const response = await axios.put(
-        `http://localhost:3000/api/v1/users/change-password`,
+        `http://192.168.0.146:8080/api/v1/users/change-password`,
         {
           oldPassword: data.currentPassword,
           password: data.newPassword,

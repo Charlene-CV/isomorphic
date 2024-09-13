@@ -118,6 +118,8 @@ export const routes = {
   profile: "/profile",
   management: "/management",
   tags: "/profile/management/tags",
+  accounting: "/accounting",
+  taxes: "/profile/accounting/taxes",
   welcome: "/welcome",
   comingSoon: "/coming-soon",
   accessDenied: "/access-denied",
