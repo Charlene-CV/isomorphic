@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Form } from '@ui/form';
-import { Input, Button, ActionIcon, Title } from 'rizzui';
+import { Input, Button, ActionIcon, Title, Text, Switch } from 'rizzui';
 import { TagFormInput, tagFormSchema } from '@/validators/create-tag.schema';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { useRouter } from 'next/navigation';
@@ -12,16 +12,12 @@ import { useRouter } from 'next/navigation';
 import Cookies from "js-cookie";
 import axios from 'axios';
 import { toast } from "react-hot-toast";
-import { Text } from "rizzui";
-import { routes } from '@/config/routes';
-import { Switch } from 'rizzui';
 
 export default function CreateTag() {
   const { closeModal } = useModal();
   const [reset, setReset] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const router = useRouter();
 
   const onSubmit: SubmitHandler<TagFormInput> = async (data) => {
     // set timeout ony required to display loading state of the create category button
@@ -35,17 +31,15 @@ export default function CreateTag() {
     //   });
     //   closeModal();
     // }, 600);
-    console.log("Hiiii");
     const user: any = JSON.parse(Cookies.get("user"));
     const token = user.token;
     const tagData = { 
       name: data?.name, 
       icon: data?.icon,
-      // isActive: data?.isActive
+      isActive: isActive
      };
-    console.log(tagData);
     const response = await axios.post(
-      `http://192.168.0.146:8080/api/v1/tags/create`,
+      `http://localhost:3000/api/v1/tags/create`,
       tagData,
       {
         headers: {
@@ -53,6 +47,7 @@ export default function CreateTag() {
         }
       }
     );
+    console.log({response});
     if (response.status === 200) {
       closeModal();
       window.location.reload();
@@ -62,60 +57,57 @@ export default function CreateTag() {
     }
   };
 
-  return (
-    <Form<TagFormInput>
-      resetValues={reset}
-      onSubmit={onSubmit}
-      validationSchema={tagFormSchema}
-      className="flex flex-grow flex-col gap-6 p-6 @container [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
-    >
-      {({ register, formState: { errors }, setValue }) => {
-        return (
-          <>
-            <div className="flex items-center justify-between">
-              <Title as="h4" className="font-semibold">
-                Add A New Tag
-              </Title>
-              <ActionIcon size="sm" variant="text" onClick={closeModal}>
-                <PiXBold className="h-auto w-5" />
-              </ActionIcon>
-            </div>
-            <Input
-              label="Tag Name"
-              placeholder="Tag name"
-              {...register('name')}
-              error={errors.name?.message}
-            />
-            <Input
-              label="Tag Icon"
-              placeholder="Tag Icon"
-              {...register('icon')}
-              error={errors.icon?.message}
-            />
-            {/* <Switch
-              label="Active"
-              checked={isActive}
-              onChange={(e) => setIsActive(e.target.checked)}
-            /> */}
-            <div className="flex items-center justify-end gap-4">
-              <Button
-                variant="outline"
-                onClick={closeModal}
-                className="w-full @xl:w-auto"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                isLoading={isLoading}
-                className="w-full @xl:w-auto bg-[#a5a234]"
-              >
-                Create Tag
-              </Button>
-            </div>
-          </>
-        );
+const { register, handleSubmit, formState: { errors }, setValue } = useForm<TagFormInput>();
+
+return (
+  <form
+    onSubmit={handleSubmit(onSubmit)}
+    className="flex flex-grow flex-col gap-6 p-6 @container [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
+  >
+    <div className="flex items-center justify-between">
+      <Title as="h4" className="font-semibold">
+        Add A New Tag
+      </Title>
+      <ActionIcon size="sm" variant="text" onClick={closeModal}>
+        <PiXBold className="h-auto w-5" />
+      </ActionIcon>
+    </div>
+    <Input
+      label="Tag Name"
+      placeholder="Tag name"
+      {...register('name')}
+      error={errors.name?.message}
+    />
+    <Input
+      label="Tag Icon"
+      placeholder="Tag Icon"
+      {...register('icon')}
+      error={errors.icon?.message}
+    />
+    <Switch
+      label="Active"
+      checked={isActive}
+      onChange={(e) => {
+        setIsActive(e.target.checked);
+        setValue('isActive', e.target.checked);
       }}
-    </Form>
+    />
+    <div className="flex items-center justify-end gap-4">
+      <Button
+        variant="outline"
+        onClick={closeModal}
+        className="w-full @xl:w-auto"
+      >
+        Cancel
+      </Button>
+      <Button
+        type="submit"
+        isLoading={isLoading}
+        className="w-full @xl:w-auto bg-[#a5a234]"
+      >
+        Create Tag
+      </Button>
+    </div>
+  </form>
   );
 }

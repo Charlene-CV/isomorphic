@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { FaTrash } from 'react-icons/fa';
-import { Title, ActionIcon } from 'rizzui';
+import { Title, ActionIcon, Text } from 'rizzui';
 import cn from '@utils/class-names';
 import UserCog from '@components/icons/user-cog';
 import { useModal } from '@/app/shared/modal-views/use-modal';
@@ -10,12 +10,12 @@ import EditTag from '@/app/shared/roles-permissions/edit-tag';
 import Cookies from "js-cookie";
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Text } from 'rizzui';
 
 interface TagCardProps {
   name: string;
   icon: string;
   className?: string
+  uuid: string
 }
 
 export async function deleteTag(name: string) {
@@ -23,7 +23,7 @@ export async function deleteTag(name: string) {
     const token = user.token;
     const names: string[] = [name];
     const response = await axios.delete(
-      `http://192.168.0.146:8080/api/v1/tags/delete`,
+      `http://localhost:3000/api/v1/tags/delete`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -42,8 +42,9 @@ export default function TagCard({
   name,
   icon,
   className,
+  uuid
 }: TagCardProps) {
-  const { openModal } = useModal();
+
   return (
     <div className={cn('rounded-lg border border-muted p-6', className)} >
       <header className="flex items-center justify-between gap-2">
@@ -66,7 +67,7 @@ export default function TagCard({
         variant="outline"
         label="Edit Tag"
         icon={<UserCog className="h-5 w-5" />}
-        view={<EditTag name={name} icon={icon} />}
+        view={<EditTag name={name} icon={icon} isActive uuid={uuid}/>}
         className="items-center gap-1 text-gray-800 @lg:w-full lg:mt-6"
       />
     </div>

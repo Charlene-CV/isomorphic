@@ -23,7 +23,7 @@ export default function TagsGrid({
     const user: any = JSON.parse(Cookies.get("user"));
     const token = user.token;
     const response = await axios.get(
-      `http://192.168.0.146:8080/api/v1/tags/all`,
+      `http://localhost:3000/api/v1/tags/all`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -36,6 +36,8 @@ export default function TagsGrid({
     getTags();
   }, []);
 
+  console.log("data", data)
+
   return (
     <div className={cn('@container', className)}>
       <div
@@ -45,7 +47,7 @@ export default function TagsGrid({
         )}
       >
         {data.map((tag, index) => (
-          <React.Fragment key={index}>
+          <React.Fragment key={index}>  
             <TagCard {...tag} />
           </React.Fragment>
         ))}

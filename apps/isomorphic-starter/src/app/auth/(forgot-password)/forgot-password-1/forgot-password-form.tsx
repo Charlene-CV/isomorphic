@@ -25,13 +25,14 @@ export default function ForgotPasswordForm() {
 
   const onSubmit: SubmitHandler<ResetPasswordSchema> = async (data) => {
     try {
-      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/resetPass',
+      const response = await axios.post('http://localhost:3000/api/v1/auth/resetPass',
         {
           email: data?.email,
           password: data?.password,
           confPass: data?.confirmPassword
         }
       );
+      console.log(response.status);
       if (response.status === 200) {
         reset();
         router.push('/signin');

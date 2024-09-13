@@ -31,7 +31,7 @@ export default function SignInForm() {
         email: data?.email,
         password: data?.password
       };
-      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
+      const response = await axios.post('http://localhost:3000/api/v1/auth/logIn', content);
       const responseData = response?.data?.data;
       if (responseData?.token) {
         Cookies.set('user', JSON.stringify({

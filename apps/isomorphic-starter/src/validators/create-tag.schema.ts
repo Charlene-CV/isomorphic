@@ -4,7 +4,8 @@ import { z } from 'zod';
 export const tagFormSchema = z.object({
   name: z.string().min(1, { message: "Tag name is required." }),
   icon: z.string(),
-  // isActive: z.boolean()
+  isActive: z.boolean(),
+  uuid: z.string()
 });
 
 // generate form types from zod validation schema
