@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import TagCard from '@/app/shared/roles-permissions/tag-card';
+import TagCard from '@/app/shared/tags/tag-card';
 import cn from '@utils/class-names';
 import axios from 'axios';
 // @ts-ignore

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { PiCheckBold, PiXBold } from "react-icons/pi";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { permissions, roles } from "@/app/shared/roles-permissions/utils";
+import { permissions, roles } from "@/app/shared/tags/utils";
 import { useModal } from "@/app/shared/modal-views/use-modal";
 import { ActionIcon, Title, Button, Input, Switch, Text } from "rizzui";
 import { Form } from "@ui/form";

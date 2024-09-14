@@ -5,7 +5,7 @@ import cn from '@utils/class-names';
 import UserCog from '@components/icons/user-cog';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import ModalButton from '@/app/shared/modal-button';
-import EditTag from '@/app/shared/roles-permissions/edit-tag';
+import EditTag from '@/app/shared/tags/edit-tag';
 // @ts-ignore
 import Cookies from "js-cookie";
 import axios from 'axios';

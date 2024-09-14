@@ -1,7 +1,7 @@
 import PageHeader from '@/app/shared/page-header';
 import ModalButton from '@/app/shared/modal-button';
-import RolesGrid from '@/app/shared/roles-permissions/tag-grid';
-import CreateTag from '@/app/shared/roles-permissions/create-tag';
+import RolesGrid from '@/app/shared/tags/tag-grid';
+import CreateTag from '@/app/shared/tags/create-tag';
 
 const pageHeader = {
   title: 'All Equipment',
