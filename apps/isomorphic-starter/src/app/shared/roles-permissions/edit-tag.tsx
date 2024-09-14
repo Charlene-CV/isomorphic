@@ -46,7 +46,7 @@ export default function EditTag(tag: TagFormInput) {
     const uuid = user.id;
     const token = user.token;
     const response =  await axios.put(
-      `http://192.168.0.146:8080/api/v1/tags/update/${tag.uuid}`,
+      `http://localhost:3000/api/v1/tags/update/${tag.uuid}`,
       tagData,
       {
         headers: {

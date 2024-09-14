@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
         };
         alert("F")
         console.log("hhh")
-        const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
+        const response = await axios.post('http://localhost:3000/api/v1/auth/logIn', content);
         console.log(response)
         const responseData = response?.data?.data;
         const user = {

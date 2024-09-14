@@ -34,7 +34,7 @@ export default function TanTableEnhanced() {
         const user: any = JSON.parse(Cookies.get("user"));
         const token = user.token;
         const response = await axios.get(
-          `http://192.168.0.146:8080/api/v1/taxes/all`,
+          `http://localhost:3000/api/v1/taxes/all`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -43,13 +43,14 @@ export default function TanTableEnhanced() {
         );
         setData(response?.data?.data);
         console.log(response?.data?.data);
+        console.log({data});
       } catch (error) {
         console.error('Error fetching taxes:', error);
       }
     }
 
     fetchData();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     console.log(data);

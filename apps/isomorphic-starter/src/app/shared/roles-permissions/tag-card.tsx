@@ -23,7 +23,7 @@ export async function deleteTag(name: string) {
     const token = user.token;
     const names: string[] = [name];
     const response = await axios.delete(
-      `http://192.168.0.146:8080/api/v1/tags/delete`,
+      `http://localhost:3000/api/v1/tags/delete`,
       {
         headers: {
           Authorization: `Bearer ${token}`
