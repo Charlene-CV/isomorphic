@@ -25,7 +25,7 @@ export default function ForgotPasswordForm() {
 
   const onSubmit: SubmitHandler<ResetPasswordSchema> = async (data) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/auth/resetPass',
+      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/resetPass',
         {
           email: data?.email,
           password: data?.password,
@@ -96,7 +96,7 @@ export default function ForgotPasswordForm() {
       <Text className="mt-6 text-center text-[15px] leading-loose text-gray-500 lg:mt-8 lg:text-start xl:text-base">
         Don’t want to reset your password?{' '}
         <Link
-          href={routes.auth.signIn1}
+          href={routes.signIn}
           className="font-bold text-gray-700 transition-colors hover:text-blue"
         >
           Sign In

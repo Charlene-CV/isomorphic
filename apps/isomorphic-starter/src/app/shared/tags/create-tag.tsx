@@ -39,7 +39,7 @@ export default function CreateTag() {
       isActive: isActive
      };
     const response = await axios.post(
-      `http://localhost:3000/api/v1/tags/create`,
+      `http://192.168.0.146:8080/api/v1/tags/create`,
       tagData,
       {
         headers: {

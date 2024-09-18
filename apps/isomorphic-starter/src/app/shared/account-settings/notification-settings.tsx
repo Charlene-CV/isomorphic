@@ -77,7 +77,7 @@ export default function NotificationSettingsView() {
   );
 }
 
-const options = ['None', 'In-app', 'Email'];
+const options = ['None', 'Email'];
 
 function ButtonGroup({ onChange }: { onChange: (option: string) => void }) {
   const [selected, setSelected] = useState<string>();
