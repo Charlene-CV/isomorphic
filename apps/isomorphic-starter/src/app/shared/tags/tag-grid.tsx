@@ -1,42 +1,38 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import TagCard from '@/app/shared/tags/tag-card';
 import cn from '@utils/class-names';
 import axios from 'axios';
 // @ts-ignore
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import { TagFormInput } from '@/validators/create-tag.schema';
+import { baseUrl } from '@/config/url';
 
 interface RolesGridProps {
   className?: string;
   gridClassName?: string;
 }
 
-export default function TagsGrid({
-  className,
-  gridClassName,
-}: RolesGridProps) {
+export default function TagsGrid({ className, gridClassName }: RolesGridProps) {
   const [data, setData] = useState<TagFormInput[]>([]);
 
   async function getTags() {
-    const user: any = JSON.parse(Cookies.get("user"));
+    const user: any = JSON.parse(Cookies.get('user'));
     const token = user.token;
-    const response = await axios.get(
-      `${baseUrl}/api/v1/tags/all`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+    const response = await axios.get(`${baseUrl}/api/v1/tags/all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setData(response?.data?.data);
-  };
+  }
 
   useEffect(() => {
     getTags();
   }, []);
 
-  console.log("data", data)
+  console.log('data', data);
 
   return (
     <div className={cn('@container', className)}>
@@ -47,7 +43,7 @@ export default function TagsGrid({
         )}
       >
         {data.map((tag, index) => (
-          <React.Fragment key={index}>  
+          <React.Fragment key={index}>
             <TagCard {...tag} />
           </React.Fragment>
         ))}

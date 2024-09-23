@@ -7,14 +7,7 @@ export const createRoleSchema = z.object({
     .string()
     .min(1, { message: messages.roleNameIsRequired })
     .min(3, { message: messages.roleNameLengthMin }),
-  roleColor: z
-    .object({
-      r: z.number(),
-      g: z.number(),
-      b: z.number(),
-      a: z.number(),
-    })
-    .optional(),
+  model: z.string().optional(),
 });
 
 // generate form types from zod validation schema
