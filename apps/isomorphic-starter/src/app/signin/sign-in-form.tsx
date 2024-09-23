@@ -30,17 +30,21 @@ export default function SignInForm() {
     try {
       const content = {
         email: data?.email,
-        password: data?.password
+        password: data?.password,
       };
-      const response = await axios.post('${baseUrl}/api/v1/auth/logIn', content);
+      const response = await axios.post(`${baseUrl}/auth/logIn`, content);
       const responseData = response?.data?.data;
       if (responseData?.token) {
-        Cookies.set('user', JSON.stringify({
-          id: responseData.user.uuid,
-          name: `${responseData.user.firstName} ${responseData.user.lastName}`,
-          email: responseData.user.email,
-          token: responseData.token,
-        }), { expires: 7 });
+        Cookies.set(
+          'user',
+          JSON.stringify({
+            id: responseData.user.uuid,
+            name: `${responseData.user.firstName} ${responseData.user.lastName}`,
+            email: responseData.user.email,
+            token: responseData.token,
+          }),
+          { expires: 7 }
+        );
         const user = JSON.parse(Cookies.get('user'));
         if (user && response.status === 200) {
           toast.success(<Text>Signing in...</Text>, { duration: 5000 });
@@ -52,7 +56,7 @@ export default function SignInForm() {
         }
       }
     } catch (error) {
-      console.error("Error logging in: ", error);
+      console.error('Error logging in: ', error);
     }
   };
 
@@ -117,7 +121,11 @@ export default function SignInForm() {
                 Forgot Password?
               </Link>
             </div>
-            <Button className="w-full" type="submit" size="lg" style={{ color: "#a5a234" }}
+            <Button
+              className="w-full"
+              type="submit"
+              size="lg"
+              style={{ color: '#a5a234' }}
             >
               <span>Sign in</span>{' '}
               <PiArrowRightBold className="ms-2 mt-0.5 h-5 w-5" />
