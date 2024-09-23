@@ -4,6 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { env } from '@/env.mjs';
 import { pagesOptions } from './pages-options';
 import axios from 'axios';
+import { baseUrl } from '@/config/url';
 
 export const authOptions: NextAuthOptions = {
   // debug: true,
@@ -57,7 +58,7 @@ export const authOptions: NextAuthOptions = {
         };
         alert("F")
         console.log("hhh")
-        const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
+        const response = await axios.post('${baseUrl}/api/v1/auth/logIn', content);
         console.log(response)
         const responseData = response?.data?.data;
         const user = {

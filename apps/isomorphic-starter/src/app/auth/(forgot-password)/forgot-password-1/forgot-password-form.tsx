@@ -12,6 +12,7 @@ import {
 } from '@/validators/reset-password.schema';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { baseUrl } from '@/config/url';
 
 const initialValues = {
   email: '',
@@ -25,7 +26,7 @@ export default function ForgotPasswordForm() {
 
   const onSubmit: SubmitHandler<ResetPasswordSchema> = async (data) => {
     try {
-      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/resetPass',
+      const response = await axios.post('${baseUrl}/api/v1/auth/resetPass',
         {
           email: data?.email,
           password: data?.password,

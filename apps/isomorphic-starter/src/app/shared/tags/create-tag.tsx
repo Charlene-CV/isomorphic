@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from "js-cookie";
 import axios from 'axios';
 import { toast } from "react-hot-toast";
+import { baseUrl } from '@/config/url';
 
 export default function CreateTag() {
   const { closeModal } = useModal();
@@ -39,7 +40,7 @@ export default function CreateTag() {
       isActive: isActive
      };
     const response = await axios.post(
-      `http://192.168.0.146:8080/api/v1/tags/create`,
+      `${baseUrl}/api/v1/tags/create`,
       tagData,
       {
         headers: {

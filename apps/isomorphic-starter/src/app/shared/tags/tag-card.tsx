@@ -10,6 +10,7 @@ import EditTag from '@/app/shared/tags/edit-tag';
 import Cookies from "js-cookie";
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { baseUrl } from '@/config/url';
 
 interface TagCardProps {
   name: string;
@@ -23,7 +24,7 @@ export async function deleteTag(name: string) {
     const token = user.token;
     const names: string[] = [name];
     const response = await axios.delete(
-      `http://192.168.0.146:8080/api/v1/tags/delete`,
+      `${baseUrl}/api/v1/tags/delete`,
       {
         headers: {
           Authorization: `Bearer ${token}`

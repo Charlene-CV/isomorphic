@@ -14,6 +14,7 @@ import axios from 'axios';
 // @ts-ignore
 import Cookies from 'js-cookie';
 import UnderlineShape from '@components/shape/underline';
+import { baseUrl } from '@/config/url';
 
 const initialValues: LoginSchema = {
   email: '',
@@ -31,7 +32,7 @@ export default function SignInForm() {
         email: data?.email,
         password: data?.password
       };
-      const response = await axios.post('http://192.168.0.146:8080/api/v1/auth/logIn', content);
+      const response = await axios.post('${baseUrl}/api/v1/auth/logIn', content);
       const responseData = response?.data?.data;
       if (responseData?.token) {
         Cookies.set('user', JSON.stringify({

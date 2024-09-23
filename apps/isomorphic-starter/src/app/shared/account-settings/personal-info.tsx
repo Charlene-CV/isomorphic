@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import axios from "axios";
 // @ts-ignore
 import Cookies from "js-cookie";
+import { baseUrl } from '@/config/url';
 
 // const Select = dynamic(() => import("rizzui").then((mod) => mod.Select), {
 //   ssr: false,
@@ -55,7 +56,7 @@ export default function PersonalInfoView() {
     const uuid = user.id;
     const token = user.token;
     const response = await axios.put(
-      `http://192.168.0.146:8080/api/v1/users/update/${uuid}`,
+      `${baseUrl}/api/v1/users/update/${uuid}`,
       userr,
       {
         headers: {
@@ -90,7 +91,7 @@ export default function PersonalInfoView() {
         const uuid = user.id;
         const token = user.token;
         const response = await axios.get(
-          `http://192.168.0.146:8080/api/v1/users/find-one/${uuid}`,
+          `${baseUrl}/api/v1/users/find-one/${uuid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

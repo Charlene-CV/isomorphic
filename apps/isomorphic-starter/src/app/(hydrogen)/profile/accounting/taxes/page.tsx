@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TaxFormInput } from '@/validators/taxes-schema';
+import { baseUrl } from '@/config/url';
 
 const pageHeader = {
   title: 'Tax Table',
@@ -34,7 +35,7 @@ export default function TanTableEnhanced() {
         const user: any = JSON.parse(Cookies.get("user"));
         const token = user.token;
         const response = await axios.get(
-          `http://192.168.0.146:8080/api/v1/taxes/all`,
+          `${baseUrl}/api/v1/taxes/all`,
           {
             headers: {
               Authorization: `Bearer ${token}`

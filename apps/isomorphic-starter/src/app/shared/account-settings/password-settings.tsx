@@ -16,6 +16,8 @@ import {
 import Cookies from "js-cookie";
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { baseUrl } from '@/config/url';
+
 
 export default function PasswordSettingsView({
   settings,
@@ -46,7 +48,7 @@ export default function PasswordSettingsView({
       const token = user.token;
       console.log({data: data})
       const response = await axios.put(
-        `http://192.168.0.146:8080/api/v1/users/change-password`,
+        `${baseUrl}/api/v1/users/change-password`,
         {
           oldPassword: data.currentPassword,
           password: data.newPassword,

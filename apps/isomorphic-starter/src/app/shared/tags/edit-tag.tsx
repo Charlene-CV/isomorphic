@@ -12,6 +12,7 @@ import axios from "axios";
 // @ts-ignore
 import Cookies from "js-cookie";
 import toast from 'react-hot-toast';
+import { baseUrl } from '@/config/url';
 
 export default function EditTag(tag: TagFormInput) {
   const defaultValues = {
@@ -46,7 +47,7 @@ export default function EditTag(tag: TagFormInput) {
     const uuid = user.id;
     const token = user.token;
     const response =  await axios.put(
-      `http://192.168.0.146:8080/api/v1/tags/update/${tag.uuid}`,
+      `${baseUrl}/api/v1/tags/update/${tag.uuid}`,
       tagData,
       {
         headers: {
