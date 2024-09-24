@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 import { baseUrl } from '@/config/url';
 import { TermFormInput } from '@/validators/create-terms.schema';
 
-export default function CreateTerms({ fecthTerms }: any) {
+export default function CreateTerms({ fetchTerms }: any) {
   const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
 
@@ -35,7 +35,7 @@ export default function CreateTerms({ fecthTerms }: any) {
     );
 
     if (response.status === 200) {
-      fecthTerms();
+      fetchTerms();
       closeModal();
       window.location.reload();
       toast.success(<Text>Payment Terms added successfully</Text>);

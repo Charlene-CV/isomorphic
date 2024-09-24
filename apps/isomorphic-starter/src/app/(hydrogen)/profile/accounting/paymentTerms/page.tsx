@@ -53,7 +53,7 @@ export default function TanTableEnhanced() {
           <ImportButton title={'Import File'} />
           <ModalButton
             label="Add New Term"
-            view={<CreateTerms fecthTerms={fetchData} />}
+            view={<CreateTerms fetchTerms={fetchData} />}
             className="relative right-2 top-2 m-5 px-2 py-1 text-sm"
           />
         </div>
