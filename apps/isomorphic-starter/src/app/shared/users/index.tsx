@@ -98,7 +98,7 @@ export default function UsersTable({ users, fetchUsers }: any) {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
       if (uuids.length > 0) {
-        const response = await axios.delete(`${baseUrl}/users/delete`, {
+        const response = await axios.delete(`${baseUrl}/api/v1/users/delete`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -118,12 +118,13 @@ export default function UsersTable({ users, fetchUsers }: any) {
 
   const getUser = async (uuid: string): Promise<User | null> => {
     try {
-      const token = localStorage.getItem('token');
+      const user: any = JSON.parse(Cookies.get('user'));
+      const token = user.token;
+
       const response = await axios.get<{ data: User }>(
-        `${baseUrl}/users/find-one/${uuid}`,
+        `${baseUrl}/api/v1/users/find-one/${uuid}`,
         {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         }

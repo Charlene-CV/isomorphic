@@ -48,7 +48,7 @@ export default function CreateUser({ fetchUsers }: any) {
       const token = user.token;
       const response = await axios.get<{
         data: Role[];
-      }>(`${baseUrl}/roles/all`, {
+      }>(`${baseUrl}/api/v1/roles/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,7 +74,7 @@ export default function CreateUser({ fetchUsers }: any) {
     try {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
-      await axios.post(`${baseUrl}/users/create`, formattedData, {
+      await axios.post(`${baseUrl}/api/v1/users/create`, formattedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -32,7 +32,7 @@ export default function BlankPage() {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
       const response = await axios.get<{ data: any[] }>(
-        `${baseUrl}/roles/all`,
+        `${baseUrl}/api/v1/roles/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ export default function BlankPage() {
       const token = user.token;
       const response = await axios.get<{
         data: User[];
-      }>(`${baseUrl}/users/all`, {
+      }>(`${baseUrl}/api/v1/users/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

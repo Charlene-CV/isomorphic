@@ -72,7 +72,7 @@ export default function EditRole({
 
       // Fetch models
       const modelsResponse = await axios.get<{ data: FunctionList[] }>(
-        `${baseUrl}/function-lists/all`,
+        `${baseUrl}/api/v1/function-lists/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ export default function EditRole({
 
       // Fetch role details
       const roleResponse = await axios.get<{ data: RoleDetails }>(
-        `${baseUrl}/roles/find-one/${roleUuid}`,
+        `${baseUrl}/api/v1/roles/find-one/${roleUuid}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -130,7 +130,7 @@ export default function EditRole({
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
       const response = await axios.put(
-        `${baseUrl}/roles/update/${roleUuid}`,
+        `${baseUrl}/api/v1/roles/update/${roleUuid}`,
         payload,
         {
           headers: {

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
 import ImportButton from '@/app/shared/import-button';
 import PageHeader from '@/app/shared/page-header';
 import EnhancedTanTable from '@/app/shared/tan-table/enhanced';
 import { routes } from '@/config/routes';
 // @ts-ignore
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { TaxFormInput } from '@/validators/taxes-schema';
@@ -20,11 +20,11 @@ const pageHeader = {
     },
     {
       name: 'Taxes',
-    }
+    },
   ],
 };
 
-const columns = ["Name", "Origin", "Destination", "Tax", "Active"];
+const columns = ['Name', 'Origin', 'Destination', 'Tax', 'Active'];
 
 export default function TanTableEnhanced() {
   const [data, setData] = useState<TaxFormInput[]>([]);
@@ -32,26 +32,23 @@ export default function TanTableEnhanced() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const user: any = JSON.parse(Cookies.get("user"));
+        const user: any = JSON.parse(Cookies.get('user'));
         const token = user.token;
-        const response = await axios.get(
-          `${baseUrl}/api/v1/taxes/all`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
+        const response = await axios.get(`${baseUrl}/api/v1/taxes/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setData(response?.data?.data);
         console.log(response?.data?.data);
-        console.log({data});
+        console.log({ data });
       } catch (error) {
         console.error('Error fetching taxes:', error);
       }
     }
 
     fetchData();
-  }, [data]);
+  }, []);
 
   useEffect(() => {
     console.log(data);

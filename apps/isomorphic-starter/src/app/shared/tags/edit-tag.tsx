@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { PiCheckBold, PiXBold } from "react-icons/pi";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { permissions, roles } from "@/app/shared/tags/utils";
-import { useModal } from "@/app/shared/modal-views/use-modal";
-import { ActionIcon, Title, Button, Input, Switch, Text } from "rizzui";
-import { Form } from "@ui/form";
-import { TagFormInput, tagFormSchema } from "@/validators/create-tag.schema";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import { PiCheckBold, PiXBold } from 'react-icons/pi';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { permissions, roles } from '@/app/shared/tags/utils';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import { ActionIcon, Title, Button, Input, Switch, Text } from 'rizzui';
+import { Form } from '@ui/form';
+import { TagFormInput, tagFormSchema } from '@/validators/create-tag.schema';
+import axios from 'axios';
 // @ts-ignore
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { baseUrl } from '@/config/url';
 
 export default function EditTag(tag: TagFormInput) {
   const defaultValues = {
-    name: tag.name || "",
-    icon: tag.icon || "",
+    name: tag.name || '',
+    icon: tag.icon || '',
   };
   const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function EditTag(tag: TagFormInput) {
     register,
     formState: { errors, isDirty, isValid },
   } = useForm<TagFormInput>({
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues,
   });
 
@@ -38,21 +38,21 @@ export default function EditTag(tag: TagFormInput) {
   }, [reset, tag]);
 
   const onSubmit: SubmitHandler<TagFormInput> = async (data) => {
-    const tagData = { 
-      name: data?.name, 
+    const tagData = {
+      name: data?.name,
       icon: data?.icon,
-      isActive: isActive
-     };
-    const user: any = JSON.parse(Cookies.get("user"));
-    const uuid = user.id;
+      isActive: isActive,
+    };
+    const user: any = JSON.parse(Cookies.get('user'));
+    //  const uuid = user.uuid;
     const token = user.token;
-    const response =  await axios.put(
+    const response = await axios.put(
       `${baseUrl}/api/v1/tags/update/${tag.uuid}`,
       tagData,
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     if (response.status === 200) {
@@ -65,7 +65,7 @@ export default function EditTag(tag: TagFormInput) {
   };
 
   function setValue(arg0: string, checked: boolean) {
-    throw new Error("Function not implemented.");
+    throw new Error('Function not implemented.');
   }
 
   // return (
@@ -132,13 +132,13 @@ export default function EditTag(tag: TagFormInput) {
       <Input
         label="Tag Name"
         placeholder="Tag Name"
-        {...register("name")}
+        {...register('name')}
         error={errors.name?.message}
       />
       <Input
         label="Tag Icon"
         placeholder="Tag Icon"
-        {...register("icon")}
+        {...register('icon')}
         error={errors.icon?.message}
       />
       <Switch
@@ -146,7 +146,7 @@ export default function EditTag(tag: TagFormInput) {
         checked={isActive}
         onChange={(e) => {
           setIsActive(e.target.checked);
-          setValue("isActive", e.target.checked);
+          setValue('isActive', e.target.checked);
         }}
       />
       <div className="flex items-center justify-end gap-4">

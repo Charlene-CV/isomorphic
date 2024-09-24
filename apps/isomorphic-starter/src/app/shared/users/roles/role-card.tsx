@@ -59,9 +59,8 @@ export default function RoleCard({
       const uuids: string[] = [uuid];
 
       try {
-        const response = await axios.delete(`${baseUrl}/roles/delete`, {
+        const response = await axios.delete(`${baseUrl}/api/v1/roles/delete`, {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           data: { uuids },

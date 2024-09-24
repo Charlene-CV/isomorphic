@@ -61,7 +61,7 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
       const token = user.token;
       const response = await axios.get<{
         data: Role[];
-      }>(`${baseUrl}/roles/all`, {
+      }>(`${baseUrl}/api/v1/roles/all`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
       const token = user.token;
 
       const response = await axios.get(
-        `${baseUrl}/users/find-one/${user?.uuid}`,
+        `${baseUrl}/api/v1/users/find-one/${user?.uuid}`,
         {
           headers: {
             'Content-Type': 'application/json',

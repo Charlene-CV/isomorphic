@@ -44,7 +44,7 @@ export default function CreateRole({ fetchRoles }: any) {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
       const response = await axios.get<{ data: Model[] }>(
-        `${baseUrl}/function-lists/all`,
+        `${baseUrl}/api/v1/function-lists/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -79,11 +79,15 @@ export default function CreateRole({ fetchRoles }: any) {
     try {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
-      const response = await axios.post(`${baseUrl}/roles/create`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add Bearer token to the headers
-        },
-      });
+      const response = await axios.post(
+        `${baseUrl}/api/v1/roles/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add Bearer token to the headers
+          },
+        }
+      );
       console.log('Role created successfully', response.data);
       setSelectedPermissions([]);
       closeModal();
