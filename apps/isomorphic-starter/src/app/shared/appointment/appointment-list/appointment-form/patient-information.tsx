@@ -48,7 +48,6 @@ export default function PatientInformation() {
   });
 
   const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
-    console.log('data', data);
     setTimeout(() => {
       setLoading(true);
       setFormData((prev) => ({
@@ -63,7 +62,6 @@ export default function PatientInformation() {
       );
       setStep(0);
     }, 600);
-    console.log('FormData', formData);
     closeModal();
   };
 

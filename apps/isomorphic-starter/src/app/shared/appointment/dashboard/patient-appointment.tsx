@@ -115,7 +115,6 @@ export default function PatientAppointment({
   const { theme } = useTheme();
   const isTablet = useMedia('(max-width: 820px)', false);
   function handleChange(viewType: string) {
-    console.log('viewType', viewType);
   }
 
   return (

@@ -99,7 +99,6 @@ export default function PersonalInfoView() {
           }
         );
         const responseData = response?.data?.data;
-        console.log({responseData});
         reset({
           firstName: responseData.firstName || "",
           lastName: responseData.lastName || "",

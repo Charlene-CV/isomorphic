@@ -20,7 +20,6 @@ export default function FormPackageInfo({ className }: FormPackageInfoProps) {
   } = useFormContext();
   // const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
-  // console.log('uploadedImage', uploadedImage);
 
   return (
     <FormGroup

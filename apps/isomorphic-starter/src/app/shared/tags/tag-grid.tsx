@@ -32,7 +32,6 @@ export default function TagsGrid({ className, gridClassName }: RolesGridProps) {
     getTags();
   }, []);
 
-  console.log('data', data);
 
   return (
     <div className={cn('@container', className)}>

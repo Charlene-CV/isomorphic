@@ -53,7 +53,6 @@ export default function CreateUser({ fetchUsers }: any) {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('response', response.data.data);
       setRoles(response.data.data);
     } catch (error) {
       console.error('Error fetching roles:', error);

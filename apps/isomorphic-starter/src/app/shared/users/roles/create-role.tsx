@@ -88,7 +88,6 @@ export default function CreateRole({ fetchRoles }: any) {
           },
         }
       );
-      console.log('Role created successfully', response.data);
       setSelectedPermissions([]);
       closeModal();
       if (response.status === 200) {

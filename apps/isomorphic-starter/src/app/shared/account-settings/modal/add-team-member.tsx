@@ -68,7 +68,6 @@ export default function AddTeamMemberModalView() {
     closeModal();
     setTimeout(() => {
       setLoading(false);
-      console.log(' data ->', data);
       setReset({
         first_name: '',
         last_name: '',

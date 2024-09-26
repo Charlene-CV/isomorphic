@@ -59,7 +59,6 @@ export default function Patients({ className }: { className?: string }) {
   }, []);
 
   function handleChange(viewType: string) {
-    console.log('viewType', viewType);
   }
 
   return (

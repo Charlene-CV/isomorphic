@@ -31,7 +31,6 @@ const columns = [
     accessor: 'name',
     cell: (info: { getValue: () => string }) => {
       const value = info.getValue();
-      console.log('Name column value:', value);
       return value;
     },
   },
@@ -41,7 +40,6 @@ const columns = [
     accessor: 'origin',
     cell: (info: { getValue: () => string }) => {
       const value = info.getValue();
-      console.log('Origin column value:', value);
       return value;
     },
   },
@@ -51,7 +49,6 @@ const columns = [
     accessor: 'destination',
     cell: (info: { getValue: () => string }) => {
       const value = info.getValue();
-      console.log('Destination column value:', value);
       return value;
     },
   },
@@ -61,7 +58,6 @@ const columns = [
     accessor: 'tax',
     cell: (info: { getValue: () => number }) => {
       const value = info.getValue();
-      console.log('Tax column value:', value);
       return value;
     },
   },
@@ -70,8 +66,8 @@ const columns = [
     header: 'Created At',
     accessor: 'createdAt',
     cell: (info: { getValue: () => string }) => {
+      console.log("Cell value for createdAt:", info.getValue());
       const value = info.getValue();
-      console.log('CreatedAt column value:', value);
       const date = new Date(value);
       return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString();
     },
@@ -93,7 +89,6 @@ export default function TanTableEnhanced() {
           },
         });
 
-        console.log("API Response: ", response.data);
         setData(response?.data?.data || []);  // Ensure data is set or fallback to empty array
       } catch (error) {
         console.error('Error fetching taxes:', error);
@@ -104,8 +99,6 @@ export default function TanTableEnhanced() {
 
     fetchData();
   }, []);
-
-  console.log("Fetched Data: ", data);
 
   return (
     <>

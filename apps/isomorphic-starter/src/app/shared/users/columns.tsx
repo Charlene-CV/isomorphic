@@ -148,7 +148,6 @@ export const getColumns = ({
                   const user = await fetchUser(row.uuid);
                   if (user) {
                     // Handle fetched user data, e.g., display in a modal
-                    console.log('Fetched User:', user);
                   }
                 }
               }}

@@ -24,7 +24,6 @@ export default function CreateTag() {
     // set timeout ony required to display loading state of the create category button
     // setLoading(true);
     // setTimeout(() => {
-    //   console.log('data', data);
     //   setLoading(false);
     //   setReset({
     //     tagName: '',
@@ -48,7 +47,6 @@ export default function CreateTag() {
         }
       }
     );
-    console.log({response});
     if (response.status === 200) {
       closeModal();
       window.location.reload();

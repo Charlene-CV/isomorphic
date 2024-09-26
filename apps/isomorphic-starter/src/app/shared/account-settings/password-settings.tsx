@@ -46,7 +46,6 @@ export default function PasswordSettingsView({
     try {
       const user: any = JSON.parse(Cookies.get("user"));
       const token = user.token;
-      console.log({data: data})
       const response = await axios.put(
         `${baseUrl}/api/v1/users/change-password`,
         {

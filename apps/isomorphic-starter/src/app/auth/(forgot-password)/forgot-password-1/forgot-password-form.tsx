@@ -33,7 +33,6 @@ export default function ForgotPasswordForm() {
           confPass: data?.confirmPassword
         }
       );
-      console.log(response.status);
       if (response.status === 200) {
         reset();
         router.push('/signin');

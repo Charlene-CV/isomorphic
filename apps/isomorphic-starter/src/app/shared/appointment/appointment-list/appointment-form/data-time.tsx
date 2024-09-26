@@ -131,7 +131,6 @@ export default function DateTime() {
   });
 
   const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
-    console.log('data', data);
     setFormData((prev) => ({
       ...prev,
       date: data.date,

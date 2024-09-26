@@ -55,7 +55,6 @@ export default function RoleCard({
     const user: any = JSON.parse(Cookies.get('user'));
     const token = user.token;
     if (uuid) {
-      console.log(`Remove role with UUID: ${uuid}`);
       const uuids: string[] = [uuid];
 
       try {

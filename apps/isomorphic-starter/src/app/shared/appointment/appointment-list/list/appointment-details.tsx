@@ -14,7 +14,6 @@ export default function AppointmentDetails({
 }) {
   const { closeModal } = useModal();
 
-  console.log(data, 'doctor');
   return (
     <div className="block">
       <div className="flex items-center justify-between border-b border-gray-200 p-5 md:p-7">

@@ -112,7 +112,6 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
   useEffect(() => {
     fetchRoles();
     fetchUser();
-    console.log('user', user?.isActive);
   }, []);
 
   const onSubmit: any = async (data: any) => {
@@ -125,7 +124,6 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
       roleUuid: data.roleUuid,
       isActive: data.isActive,
     };
-    console.log('formattedData', formattedData);
     try {
       const userToken: any = JSON.parse(Cookies.get('user'));
       const token = userToken.token;

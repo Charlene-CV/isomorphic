@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import { inter, lexendDeca } from "@/app/fonts";
 import cn from "@utils/class-names";
 import NextProgress from "@components/next-progress";
-import { ThemeProvider, JotaiProvider } from "@/app/shared/theme-provider";
+import { ThemeProvider as AppThemeProvider, JotaiProvider } from "@/app/shared/theme-provider";
 import GlobalDrawer from "@/app/shared/drawer-views/container";
 import GlobalModal from "@/app/shared/modal-views/container";
-import { toast } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
-import { Toast } from "node_modules/react-toastify/dist/components";
-import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "TDS",
@@ -27,15 +25,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
         suppressHydrationWarning
         className={cn(inter.variable, lexendDeca.variable, "font-inter")}
       >
-        <ThemeProvider>
-          <NextProgress />
-          <JotaiProvider>
-            {children}
-            <Toaster position="top-right"/>
-            <GlobalDrawer />
-            <GlobalModal />
-          </JotaiProvider>
-        </ThemeProvider>
+          <AppThemeProvider>
+            <NextProgress />
+            <JotaiProvider>
+              {children}
+              <Toaster position="top-right"/>
+              <GlobalDrawer />
+              <GlobalModal />
+            </JotaiProvider>
+          </AppThemeProvider>
       </body>
     </html>
   );
