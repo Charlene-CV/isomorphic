@@ -38,6 +38,8 @@ export default function MainTable<TData extends Record<string, any>>({
 
   if (!table) return null;
 
+  console.log("Table", table)
+
   if (isLoading) {
     return (
       <div className="flex h-full min-h-[128px] flex-col items-center justify-center">
@@ -136,6 +138,7 @@ export default function MainTable<TData extends Record<string, any>>({
                   <Fragment key={row.id}>
                     <TableRow>
                       {row.getVisibleCells().map((cell) => {
+                        console.log('cell', cell)
                         const bodyCellParam = {
                           cell,
                           columnOrder,

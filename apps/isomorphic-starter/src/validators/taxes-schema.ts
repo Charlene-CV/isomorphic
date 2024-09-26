@@ -6,6 +6,7 @@ export const taxFormSchema = z.object({
   origin: z.string(),
   destination: z.string(),
   tax: z.number(),
+  createdAt: z.date(),
   uuid: z.string()
 });
 

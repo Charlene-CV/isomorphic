@@ -141,21 +141,18 @@ export default function TableToolbar<TData extends Record<string, any>>({
 function FilterElements<T extends Record<string, any>>({
   table,
 }: TableToolbarProps<T>) {
-  const priceFieldValue = (table.getColumn('amount')?.getFilterValue() ?? [
-    '',
-    '',
-  ]) as string[];
+  const taxFieldValue = (table.getColumn('tax')?.getFilterValue() ?? ['', '']) as string[];
   const createdDate =
     table.getColumn('createdAt')?.getFilterValue() ?? ([null, null] as any);
-  const dueDate =
-    table.getColumn('dueDate')?.getFilterValue() ?? ([null, null] as any);
   const isFiltered =
     table.getState().globalFilter || table.getState().columnFilters.length > 0;
+
   return (
     <>
+      {/* You can use a price field or replace it with another appropriate filter if needed */}
       <PriceField
-        value={priceFieldValue}
-        onChange={(v) => table.getColumn('amount')?.setFilterValue(v)}
+        value={taxFieldValue}
+        onChange={(v) => table.getColumn('tax')?.setFilterValue(v)}
       />
       <DateFiled
         className="w-full"
@@ -164,26 +161,6 @@ function FilterElements<T extends Record<string, any>>({
         selected={getDateRangeStateValues(createdDate[0])}
         startDate={getDateRangeStateValues(createdDate[0])}
         onChange={(date) => table.getColumn('createdAt')?.setFilterValue(date)}
-      />
-      <DateFiled
-        className="w-full"
-        placeholderText="Select due date"
-        endDate={getDateRangeStateValues(dueDate[1])}
-        selected={getDateRangeStateValues(dueDate[0])}
-        startDate={getDateRangeStateValues(dueDate[0])}
-        onChange={(date) => table.getColumn('dueDate')?.setFilterValue(date)}
-      />
-      <StatusField
-        options={statusOptions}
-        value={table.getColumn('status')?.getFilterValue() ?? []}
-        onChange={(e) => table.getColumn('status')?.setFilterValue(e)}
-        getOptionValue={(option: { value: any }) => option.value}
-        getOptionDisplayValue={(option: { value: any }) =>
-          renderOptionDisplayValue(option.value as string)
-        }
-        displayValue={(selected: string) => renderOptionDisplayValue(selected)}
-        dropdownClassName="!z-20 h-auto"
-        className={'w-auto'}
       />
 
       {isFiltered && (

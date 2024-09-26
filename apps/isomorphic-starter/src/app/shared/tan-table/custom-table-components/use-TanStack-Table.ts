@@ -125,6 +125,9 @@ export function useTanStackTable<T extends Record<string, any>>({
     getPaginationRowModel: getPaginationRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+  console.log("Hre")
+  console.log({data})
+  console.log({columns})
 
   return {
     table,

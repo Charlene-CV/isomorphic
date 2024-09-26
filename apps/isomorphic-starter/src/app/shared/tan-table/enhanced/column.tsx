@@ -1,31 +1,31 @@
-import Link from 'next/link';
-import { routes } from '@/config/routes';
-import EyeIcon from '@components/icons/eye';
-import { Person } from '@/data/tan-table-data';
-import DateCell from '@ui/date-cell';
-import PencilIcon from '@components/icons/pencil';
-import AvatarCard from '@ui/avatar-card';
-import DeletePopover from '@/app/shared/delete-popover';
-import { createColumnHelper } from '@tanstack/react-table';
-import { ActionIcon, Badge, Checkbox, Text, Tooltip } from 'rizzui';
+import Link from "next/link";
+import { routes } from "@/config/routes";
+import EyeIcon from "@components/icons/eye";
+import { Person } from "@/data/tan-table-data";
+import DateCell from "@ui/date-cell";
+import PencilIcon from "@components/icons/pencil";
+import AvatarCard from "@ui/avatar-card";
+import DeletePopover from "@/app/shared/delete-popover";
+import { createColumnHelper } from "@tanstack/react-table";
+import { ActionIcon, Badge, Checkbox, Text, Tooltip } from "rizzui";
 
 function getStatusBadge(status: string) {
   switch (status?.toLowerCase()) {
-    case 'pending':
+    case "pending":
       return (
         <div className="flex items-center">
           <Badge color="warning" renderAsDot />
           <Text className="ms-2 font-medium text-orange-dark">{status}</Text>
         </div>
       );
-    case 'paid':
+    case "paid":
       return (
         <div className="flex items-center">
           <Badge color="success" renderAsDot />
           <Text className="ms-2 font-medium text-green-dark">{status}</Text>
         </div>
       );
-    case 'overdue':
+    case "overdue":
       return (
         <div className="flex items-center">
           <Badge color="danger" renderAsDot />
@@ -45,8 +45,8 @@ function getStatusBadge(status: string) {
 const columnHelper = createColumnHelper<Person>();
 
 export const defaultColumns = [
-  columnHelper.accessor('id', {
-    id: 'id',
+  columnHelper.accessor("id", {
+    id: "id",
     size: 60,
     header: ({ table }) => (
       <Checkbox
@@ -64,10 +64,10 @@ export const defaultColumns = [
     ),
     enableSorting: false,
   }),
-  columnHelper.accessor('name', {
-    id: 'name',
+  columnHelper.accessor("name", {
+    id: "name",
     size: 240,
-    header: 'Customer',
+    header: "Customer",
     cell: ({ row }) => (
       <AvatarCard
         src={row.original.avatar}
@@ -77,48 +77,50 @@ export const defaultColumns = [
     ),
     enableSorting: false,
   }),
-  columnHelper.accessor('email', {
-    id: 'email',
+  columnHelper.accessor("email", {
+    id: "email",
     size: 240,
-    header: 'Email',
+    header: "Email",
     cell: (info) => info.renderValue()?.toLowerCase(),
   }),
-  columnHelper.accessor('createdAt', {
-    id: 'createdAt',
+  columnHelper.accessor("createdAt", {
+    id: "createdAt",
     size: 200,
-    header: 'Created At',
-    filterFn: 'createdDate' as any,
+    header: "Created At",
+    filterFn: "createdDate" as any,
     cell: ({ row }) => <DateCell date={new Date(row.original.createdAt)} />,
   }),
-  columnHelper.accessor('dueDate', {
-    id: 'dueDate',
+  columnHelper.accessor("dueDate", {
+    id: "dueDate",
     size: 200,
-    header: 'Due Date',
-    filterFn: 'dueDate' as any,
+    header: "Due Date",
+    filterFn: "dueDate" as any,
     cell: ({ row }) => <DateCell date={new Date(row.original.createdAt)} />,
   }),
-  columnHelper.accessor('amount', {
-    id: 'amount',
+  columnHelper.accessor("amount", {
+    id: "amount",
     size: 140,
-    header: 'Amount',
-    filterFn: 'priceFilter' as any,
-    cell: ({ row }) => (
-      <Text className="font-medium text-gray-700 dark:text-gray-600">
-        ${row.original.amount}
-      </Text>
-    ),
+    header: "Amount",
+    filterFn: "priceFilter" as any,
+    cell: ({ row }) => {
+      return (
+        <Text className="font-medium text-gray-700 dark:text-gray-600">
+          ${row.original.amount}
+        </Text>
+      );
+    },
   }),
-  columnHelper.accessor('status', {
-    id: 'status',
+  columnHelper.accessor("status", {
+    id: "status",
     size: 140,
-    header: 'Status',
-    filterFn: 'statusFilter' as any,
+    header: "Status",
+    filterFn: "statusFilter" as any,
     cell: (info) => getStatusBadge(info.renderValue()!),
   }),
-  columnHelper.accessor('userName', {
-    id: 'userName',
+  columnHelper.accessor("userName", {
+    id: "userName",
     size: 160,
-    header: '',
+    header: "",
     enablePinning: true,
     enableSorting: false,
     cell: ({
@@ -131,7 +133,7 @@ export const defaultColumns = [
         <div className="flex items-center justify-end gap-3 pe-3">
           <Tooltip
             size="sm"
-            content={'Edit Invoice'}
+            content={"Edit Invoice"}
             placement="top"
             color="invert"
           >
@@ -151,7 +153,7 @@ export const defaultColumns = [
           </Tooltip>
           <Tooltip
             size="sm"
-            content={'View Invoice'}
+            content={"View Invoice"}
             placement="top"
             color="invert"
           >
