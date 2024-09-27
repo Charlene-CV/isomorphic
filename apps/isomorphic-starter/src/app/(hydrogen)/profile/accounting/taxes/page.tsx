@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import ImportButton from "@/app/shared/import-button";
 import PageHeader from "@/app/shared/page-header";
@@ -10,6 +10,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { TaxFormInput } from "@/validators/taxes-schema";
 import { baseUrl } from "@/config/url";
+import TaxesTable from "@/app/shared/taxes";
 
 const pageHeader = {
   title: "Tax Table",
@@ -24,80 +25,30 @@ const pageHeader = {
   ],
 };
 
-const columns = [
-  {
-    id: 'name',
-    header: 'Name',
-    accessor: 'name',
-    cell: (info: { getValue: () => string }) => {
-      const value = info.getValue();
-      return value;
-    },
-  },
-  {
-    id: 'origin',
-    header: 'Origin',
-    accessor: 'origin',
-    cell: (info: { getValue: () => string }) => {
-      const value = info.getValue();
-      return value;
-    },
-  },
-  {
-    id: 'destination',
-    header: 'Destination',
-    accessor: 'destination',
-    cell: (info: { getValue: () => string }) => {
-      const value = info.getValue();
-      return value;
-    },
-  },
-  {
-    id: 'tax',
-    header: 'Tax',
-    accessor: 'tax',
-    cell: (info: { getValue: () => number }) => {
-      const value = info.getValue();
-      return value;
-    },
-  },
-  {
-    id: 'createdAt',
-    header: 'Created At',
-    accessor: 'createdAt',
-    cell: (info: { getValue: () => string }) => {
-      console.log("Cell value for createdAt:", info.getValue());
-      const value = info.getValue();
-      const date = new Date(value);
-      return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString();
-    },
-  }
-];
-
-export default function TanTableEnhanced() {
+export default function TaxTable() {
   const [data, setData] = useState<TaxFormInput[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const user: any = JSON.parse(Cookies.get('user'));
-        const token = user.token;
-        const response = await axios.get(`${baseUrl}/api/v1/taxes/all`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setData(response?.data?.data || []);  // Ensure data is set or fallback to empty array
-      } catch (error) {
-        console.error('Error fetching taxes:', error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchTaxes = async () => {
+    try {
+      const user: any = JSON.parse(Cookies.get('user'));
+      const token = user.token;
+      const response = await axios.get(`${baseUrl}/api/v1/taxes/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setData(response?.data?.data || []);
+      return response?.data?.data;
+    } catch (error) {
+      console.error('Error fetching taxes:', error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchTaxes();
   }, []);
 
   return (
@@ -107,16 +58,7 @@ export default function TanTableEnhanced() {
           <ImportButton title={"Import File"} />
         </div>
       </PageHeader>
-      
-      {loading ? (
-        <div>Loading...</div> // Optionally add a loading state
-      ) : (
-        data.length > 0 ? (
-          <EnhancedTanTable columns={columns} data={data} />  // Render table only when data is available
-        ) : (
-          <div>No data available</div>  // Message for no data
-        )
-      )}
+      <TaxesTable taxes={data} fetchTaxes={fetchTaxes} />
     </>
   );
 }

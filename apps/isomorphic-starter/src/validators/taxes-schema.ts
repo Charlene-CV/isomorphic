@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // form zod validation schema
 export const taxFormSchema = z.object({
-  name: z.string().min(1, { message: "Tag name is required." }),
+  name: z.string().min(1, { message: "Tax name is required." }),
   origin: z.string(),
   destination: z.string(),
   tax: z.number(),

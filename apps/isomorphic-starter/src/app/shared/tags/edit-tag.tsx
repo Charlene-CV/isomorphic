@@ -44,7 +44,6 @@ export default function EditTag(tag: TagFormInput) {
       isActive: isActive,
     };
     const user: any = JSON.parse(Cookies.get('user'));
-    //  const uuid = user.uuid;
     const token = user.token;
     const response = await axios.put(
       `${baseUrl}/api/v1/tags/update/${tag.uuid}`,
