@@ -41,7 +41,7 @@ export default function ManagementSettingsView() {
       <div className="flex flex-row justify-between py-10 px-10 border-b border-dashed border-muted">
         <h4 className="text-base font-medium">Equipment</h4>
         <div>
-          <Link href={routes.tags}>
+          <Link href={routes.equipment}>
             <Button type="submit" variant="solid" className="bg-[#a5a234]">
               Manage
             </Button>

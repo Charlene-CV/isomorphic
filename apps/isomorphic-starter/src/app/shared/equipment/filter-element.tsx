@@ -3,7 +3,7 @@
 import { PiTrashDuotone, PiMagnifyingGlassBold } from 'react-icons/pi';
 import { Badge, Text, Title, Button, Input } from 'rizzui';
 import ModalButton from '@/app/shared/modal-button';
-import CreateTax from './create-tax';
+import CreateEquip from './create-equip';
 import { useEffect, useState } from 'react';
 
 type FilterElementProps = {
@@ -13,7 +13,7 @@ type FilterElementProps = {
   handleReset: () => void;
   onSearch: (searchTerm: string) => void;
   searchTerm: string;
-  fetchTaxes: any;
+  fetchEquipments: any;
 };
 
 export default function FilterElement({
@@ -23,14 +23,14 @@ export default function FilterElement({
   updateFilter,
   onSearch,
   searchTerm,
-  fetchTaxes,
+  fetchEquipments,
 }: FilterElementProps) {
   return (
     <>
       <div>
         <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container">
           <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-            All Taxes
+            All Equipment
           </Title>
 
           <Input
@@ -42,7 +42,7 @@ export default function FilterElement({
             className="w-full @4xl:w-auto order-1"
           />
 
-          <Input
+          {/* <Input
             type="text"
             placeholder="Filter by Origin"
             value={filters['origin'] || ''}
@@ -58,12 +58,12 @@ export default function FilterElement({
             onChange={(event) => updateFilter('destination', event.target.value)}
             rounded="lg"
             className="w-full @4xl:w-auto order-3"
-          />
+          /> */}
 
           <div className="flex basis-auto justify-end order-4">
             <ModalButton
-              label="Add New Tax"
-              view={<CreateTax fetchTaxes={fetchTaxes} />}
+              label="Add New Equipment"
+              view={<CreateEquip fetchEquipments={fetchEquipments} />}
               customSize="600px"
               className="mt-0"
             />
@@ -82,7 +82,7 @@ export default function FilterElement({
 
           <Input
             type="search"
-            placeholder="Search for taxes..."
+            placeholder="Search for equipment..."
             value={searchTerm}
             onClear={() => onSearch('')}
             onChange={(event) => onSearch(event.target.value)}

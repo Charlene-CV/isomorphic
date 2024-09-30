@@ -1,14 +1,19 @@
 import { z } from 'zod';
-import { messages } from '@/config/messages';
 
 // form zod validation schema
-export const createRoleSchema = z.object({
-  roleName: z
-    .string()
-    .min(1, { message: messages.roleNameIsRequired })
-    .min(3, { message: messages.roleNameLengthMin }),
-  model: z.string().optional(),
+export const roleFormSchema = z.object({
+  uuid: z.string(),
+  name: z.string().min(1, { message: "Role name is required." }),
+  permissions: z.array(
+    z.object({
+      modelUuid: z.string().min(1, { message: "Model UUID is required." }),
+      write: z.boolean(),
+      edit: z.boolean(),
+      read: z.boolean(),
+      delete: z.boolean(),
+    })
+  ).min(1, { message: "At least one permission is required." }),
 });
 
 // generate form types from zod validation schema
-export type CreateRoleInput = z.infer<typeof createRoleSchema>;
+export type RoleFormInput = z.infer<typeof roleFormSchema>;

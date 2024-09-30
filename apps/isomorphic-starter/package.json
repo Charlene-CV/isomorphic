@@ -18,6 +18,7 @@
     "@headlessui/react": "2.0.4",
     "@isomorphic/core": "workspace:*",
     "@nextui-org/button": "^2.0.38",
+    "@nextui-org/checkbox": "^2.1.5",
     "@nextui-org/system": "^2.2.6",
     "@nextui-org/theme": "^2.2.11",
     "@paralleldrive/cuid2": "^2.2.2",

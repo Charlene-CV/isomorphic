@@ -63,9 +63,9 @@ export default function CreateTax({ fetchTaxes }: any) {
             if (response.status === 200) {
                 fetchTaxes();
                 closeModal();
-                toast.success(<Text>Tag added successfully!</Text>);
+                toast.success(<Text>Tax added successfully!</Text>);
             } else {
-                toast.error(<Text>Error adding tag...</Text>);
+                toast.error(<Text>Error adding tax...</Text>);
             }
         } catch (error) {
             console.error('Error during form submission:', error);

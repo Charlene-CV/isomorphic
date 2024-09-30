@@ -1,51 +1,33 @@
 import { z } from 'zod';
-import { messages } from '@/config/messages';
-import { validateEmail } from './common-rules';
 
 // form zod validation schema
-export const createUserSchema = z.object({
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  email: validateEmail,
-  roleUuid: z.string().min(1, { message: messages.roleIsRequired }),
-});
-
-// generate form types from zod validation schema
-export type CreateUserInput = z.infer<typeof createUserSchema>;
-
-const insuranceSchema = z.object({
-  companyName: z.string().min(1, { message: 'Company name is required' }),
-  licenseExpireAt: z.date().refine((date) => date > new Date(), {
-    message: 'License expiration date must be a future date',
+export const userFormSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required." }),
+  lastName: z.string().min(1, { message: "Last name is required." }),
+  email: z.string().email({ message: "Invalid email address." }),
+  externalId: z.string().optional(),
+  quickbookId: z.string().optional(),
+  phone: z.string().min(1, { message: "Phone number is required." }),
+  grossRevenu: z.number(),
+  grossMargin: z.number(),
+  flatRate: z.number(),
+  fastCard: z.string().optional(),
+  fuelCardNumber: z.string().optional(),
+  notes: z.string().optional(),
+  mobile: z.string().min(1, { message: "Mobile number is required." }),
+  driverType: z.string().optional(),
+  payType: z.string().optional(),
+  fuelDeduction: z.string().optional(),
+  paymentSchedule: z.string().optional(),
+  insurance: z.object({
+    companyName: z.string().min(1, { message: "Insurance company name is required." }),
+    licenseExpireAt: z.string().min(1, { message: "License expiration date is required." }),
+    insurancePolicy: z.string().min(1, { message: "Insurance policy is required." }),
+    expiryWarning: z.boolean(),
   }),
-  insurancePolicy: z
-    .string()
-    .min(1, { message: 'Insurance policy is required' }),
-  expiryWarning: z.boolean(),
-});
-
-export const updateUserSchema = z.object({
-  firstName: z.string().min(1, { message: 'First name is required' }),
-  lastName: z.string().nullable().optional(),
-  email: z.string().email({ message: 'Invalid email address' }),
-  // externalId: z.string().nullable().optional(),
-  // quickbookId: z.string().nullable().optional(),
-  // phone: z.string().nullable().optional(),
-  // grossRevenu: z.number().nullable().optional(),
-  // grossMargin: z.number().nullable().optional(),
-  // flatRate: z.number().nullable().optional(),
-  // fastCard: z.string().nullable().optional(),
-  // fuelCardNumber: z.string().nullable().optional(),
-  // notes: z.string().nullable().optional(),
-  // mobile: z.string().nullable().optional(),
-  // driverType: z.string().nullable().optional(),
-  // payType: z.string().nullable().optional(),
-  // fuelDeduction: z.string().nullable().optional(),
-  // paymentSchedule: z.string().nullable().optional(),
-  // insurance: insuranceSchema.nullable().optional(),
-  isActive: z.boolean().optional(),
-  roleUuid: z.string(),
+  roleUuid: z.string().min(1, { message: "Role UUID is required." }),
 });
 
 // generate form types from zod validation schema
-export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+export type UserFormInput = z.infer<typeof userFormSchema>;
+

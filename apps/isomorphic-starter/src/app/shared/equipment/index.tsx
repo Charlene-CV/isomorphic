@@ -10,12 +10,12 @@ import ControlledTable from '../controlled-table';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 // @ts-ignore
 import Cookies from 'js-cookie';
-import { TaxFormInput } from '@/validators/taxes-schema';
+import { EquipFormInput } from '@/validators/equipment-schema';
 import { useModal } from '../modal-views/use-modal';
-import EditTax from './edit-tax';
+import EditEquip from './edit-equip';
 
 const FilterElement = dynamic(
-  () => import('@/app/shared/taxes/filter-element'),
+  () => import('@/app/shared/equipment/filter-element'),
   { ssr: false }
 );
 
@@ -25,30 +25,30 @@ const filterState = {
   destination: '',
 };
 
-export default function TaxesTable({ taxes, fetchTaxes }: any) {
+export default function EquipmentTable({ equipment, fetchEquipments }: any) {
   const [pageSize, setPageSize] = useState(5);
-  const [editTax, setEditTax] = useState<TaxFormInput | null>(null);
+  const [editEquip, setEditEquip] = useState<EquipFormInput | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { openModal, closeModal } = useModal();
-  const [filteredTaxes, setFilteredTaxes] = useState<TaxFormInput[]>([]);
+  const [filteredEquips, setFilteredEquips] = useState<EquipFormInput[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleEditClick = async (uuid: string) => {
-    const tax = await fetchTax(uuid);
-    if (tax) {
-      setEditTax(tax);
+    const equip = await fetchEquipment(uuid);
+    if (equip) {
+      setEditEquip(equip);
       openModal({
-        view: <EditTax taxData={tax} fetchTaxes={fetchTaxes} closeModal={() => setIsModalOpen(false)} />
+        view: <EditEquip equipData={equip} fetchEquipments={fetchEquipments} closeModal={() => setIsModalOpen(false)} />
       });
     }
   };
 
-  const handleDeleteTax = async (uuids: string[]) => {
+  const handleDeleteEquip = async (uuids: string[]) => {
     try {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
       if (uuids.length > 0) {
-        const response = await axios.delete(`${baseUrl}/api/v1/taxes/delete`, {
+        const response = await axios.delete(`${baseUrl}/api/v1/equipment/delete`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -57,36 +57,36 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
         });
 
         if (response.status === 200) {
-          fetchTaxes();
+          fetchEquipments();
         }
       }
     } catch (error) {
-      console.error('Error removing taxes:', error);
+      console.error('Error removing equipment:', error);
     }
   };
 
   const handleSearching = async (param: string) => {
     setSearchTerm(param);
-    const taxesPromise = fetchTaxes();
-    let savedTaxes = await taxesPromise;
-    taxesPromise.then((taxesArray: any) => {
-      savedTaxes = taxesArray;
+    const equipPromise = fetchEquipments();
+    let savedEquips = await equipPromise;
+    equipPromise.then((equipArray: any) => {
+      savedEquips = equipArray;
     });
-    let filtered = savedTaxes.filter((tax: { name: string }) => tax.name.includes(param));
-    setFilteredTaxes(filtered);
+    let filtered = savedEquips.filter((equipment: { name: string }) => equipment.name.includes(param));
+    setFilteredEquips(filtered);
   };
 
   useEffect(() => {
     console.log('Search term changed:', searchTerm);
-  }, [searchTerm]); 
+  }, [searchTerm]);
 
-  const getTax = async (uuid: string): Promise<TaxFormInput | null> => {
+  const getEquip = async (uuid: string): Promise<EquipFormInput | null> => {
     try {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
 
-      const response = await axios.get<{ data: TaxFormInput }>(
-        `${baseUrl}/api/v1/taxes/find-one/${uuid}`,
+      const response = await axios.get<{ data: EquipFormInput }>(
+        `${baseUrl}/api/v1/equipment/find-one/${uuid}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,17 +100,17 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
         return null;
       }
     } catch (error) {
-      console.error('Error fetching tax:', error);
+      console.error('Error fetching equipment:', error);
       return null;
     }
   };
 
-  const fetchTax = useCallback(async (uuid: string): Promise<TaxFormInput | null> => {
-    return await getTax(uuid);
+  const fetchEquipment = useCallback(async (uuid: string): Promise<EquipFormInput | null> => {
+    return await getEquip(uuid);
   }, []);
 
   const onDeleteItem = useCallback((uuid: string) => {
-    handleDeleteTax([uuid]);
+    handleDeleteEquip([uuid]);
   }, []);
 
   const {
@@ -127,7 +127,7 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
     handleRowSelect,
     handleSelectAll,
     handleReset,
-  } = useTable(taxes, pageSize, filterState);
+  } = useTable(equipment, pageSize, filterState);
 
   const columns = useMemo(
     () =>
@@ -140,29 +140,47 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
           onHeaderCellClick: (value: string) => ({ onClick: () => handleSort(value) }),
         },
         {
-          title: 'Origin',
-          dataIndex: 'origin',
-          key: 'origin',
+          title: 'Status',
+          dataIndex: 'status',
+          key: 'status',
         },
         {
-          title: 'Destination',
-          dataIndex: 'destination',
-          key: 'destination',
+          title: 'Description',
+          dataIndex: 'description',
+          key: 'description',
         },
         {
-          title: 'Tax',
-          dataIndex: 'tax',
-          key: 'tax',
+          title: 'External ID',
+          dataIndex: 'externalId',
+          key: 'externalId',
         },
         {
-          title: 'Created At',
-          dataIndex: 'createdAt',
-          key: 'createdAt',
+          title: 'Billable',
+          dataIndex: 'isBillable',
+          key: 'isBillable',
+          render: (isBillable: boolean) => (isBillable ? 'Yes' : 'No'),
+        },
+        {
+          title: 'IFTA Tracking',
+          dataIndex: 'isIftaTracking',
+          key: 'isIftaTracking',
+          render: (isIftaTracking: boolean) => (isIftaTracking ? 'Yes' : 'No'),
+        },
+        {
+          title: 'VIN',
+          dataIndex: 'vin',
+          key: 'vin',
+        },
+        {
+          title: 'Pay Amount',
+          dataIndex: 'payAmount',
+          key: 'payAmount',
+          render: (payAmount: number | null) => (payAmount !== null ? `$${payAmount.toFixed(2)}` : 'N/A'),
         },
         {
           title: 'Action',
           key: 'action',
-          render: (text: string, record: TaxFormInput) => (
+          render: (text: string, record: EquipFormInput) => (
             <>
               <button className="mr-4" onClick={() => handleEditClick(record.uuid)}>Edit</button>
               <button onClick={() => onDeleteItem(record.uuid)}>Delete</button>
@@ -170,7 +188,7 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
           ),
         },
       ] as ColumnType<DefaultRecordType>[],
-    [taxes, sortConfig, selectedRowKeys, handleSort, onDeleteItem]
+    [equipment, sortConfig, selectedRowKeys, handleSort, onDeleteItem]
   );
 
   return (
@@ -182,11 +200,11 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
         handleReset={handleReset}
         onSearch={handleSearching}
         searchTerm={searchTerm}
-        fetchTaxes={fetchTaxes}
+        fetchEquipments={fetchEquipments}
       />
       <ControlledTable
         variant="modern"
-        data={filteredTaxes.length > 0 ? filteredTaxes : taxes}
+        data={filteredEquips.length > 0 ? filteredEquips : equipment}
         isLoading={isLoading}
         showLoadingText={true}
         columns={columns}
@@ -199,9 +217,9 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
         }}
         className="rounded-md border border-muted text-sm shadow-sm"
       />
-      {isModalOpen && editTax && (
-        <EditTax
-          taxData={editTax}
+      {isModalOpen && editEquip && (
+        <EditEquip
+          equipData={editEquip}
           closeModal={() => setIsModalOpen(false)}
         />
       )}
