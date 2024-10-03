@@ -1,34 +1,12 @@
 'use client';
 
-import Link from 'next/link';
-import { Button, Title } from 'rizzui';
+import { Button } from 'rizzui';
 import LoggedInDevices from '@/app/shared/account-settings/logged-in-devices/table';
 import HorizontalFormBlockWrapper from '@/app/shared/account-settings/horiozontal-block';
-import GithubIcon from '@components/icons/github';
-import TeamsIcon from '@components/icons/teams';
-import FigmaIcon from '@components/icons/figma';
 import AddTeamMemberModalView from '@/app/shared/account-settings/modal/add-team-member';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { PiPlusBold } from 'react-icons/pi';
 import { loggedInDeviceData } from '@/data/logged-in-device';
-
-const currentActiveTeams = [
-  {
-    name: 'GitHub',
-    url: 'https://github.com/RedQ',
-    icon: <GithubIcon className="h-6 w-6" />,
-  },
-  {
-    name: 'Teams',
-    url: 'https://teams.microsoft.com/redQ',
-    icon: <TeamsIcon className="h-6 w-6" />,
-  },
-  {
-    name: 'Figma',
-    url: 'https://figma.com/redQ',
-    icon: <FigmaIcon className="h-6 w-6" />,
-  },
-];
 
 export default function TeamSettingsView() {
   const { openModal } = useModal();
@@ -48,7 +26,7 @@ export default function TeamSettingsView() {
                 view: <AddTeamMemberModalView />,
               })
             }
-            className='bg-[#a5a234]'
+            className="bg-[#a5a234]"
           >
             <PiPlusBold className="me-1.5 h-4 w-4" />
             Add Member

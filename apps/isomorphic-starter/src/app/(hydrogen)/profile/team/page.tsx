@@ -10,19 +10,6 @@ import PageHeader from '@/app/shared/page-header';
 import Cookies from 'js-cookie';
 import RolesGrid from '@/app/shared/users/roles/role-grid';
 
-// const pageHeader = {
-//   title: 'Roles and Permissions ',
-//   breadcrumb: [
-//     {
-//       href: '/',
-//       name: 'Dashboard',
-//     },
-//     {
-//       name: 'User Management, Role & Permission',
-//     },
-//   ],
-// };
-
 export default function BlankPage() {
   const [roles, setRoles] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);

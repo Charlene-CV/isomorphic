@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@hooks/use-table';
 import { getColumns } from '@/app/shared/users/columns';
@@ -73,7 +73,6 @@ export interface User {
 
 export default function UsersTable({ users, fetchUsers }: any) {
   const [pageSize, setPageSize] = useState(10);
-  // const [userss, setUsers] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -100,7 +99,6 @@ export default function UsersTable({ users, fetchUsers }: any) {
       if (uuids.length > 0) {
         const response = await axios.delete(`${baseUrl}/api/v1/users/delete`, {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           data: { uuids },

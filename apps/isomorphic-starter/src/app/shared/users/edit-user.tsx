@@ -5,10 +5,7 @@ import { PiXBold } from 'react-icons/pi';
 import { Controller, useForm } from 'react-hook-form';
 import { Form } from '@ui/form';
 import { Input, Button, ActionIcon, Title, Select, Switch } from 'rizzui';
-import {
-  UpdateUserInput,
-  updateUserSchema,
-} from '@/validators/create-user.schema';
+import { UserFormInput, userFormSchema } from '@/validators/create-user.schema';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';
@@ -44,7 +41,7 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
     register,
     formState: { errors },
     reset: resetForm,
-  } = useForm<UpdateUserInput>({
+  } = useForm<UserFormInput>({
     defaultValues: {
       firstName: firstName || '',
       lastName: lastName || '',
@@ -83,7 +80,6 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
         `${baseUrl}/api/v1/users/find-one/${user?.uuid}`,
         {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         }
@@ -128,12 +124,15 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
       const userToken: any = JSON.parse(Cookies.get('user'));
       const token = userToken.token;
 
-      await axios.put(`${baseUrl}/users/update/${user.uuid}`, formattedData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.put(
+        `${baseUrl}/api/v1/users/update/${user.uuid}`,
+        formattedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setReset({
         firstName: '',
@@ -152,10 +151,10 @@ export default function EditUser({ user, fetchUsers }: EditUserProps) {
   };
 
   return (
-    <Form<UpdateUserInput>
+    <Form<UserFormInput>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={updateUserSchema}
+      validationSchema={userFormSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, formState: { errors } }) => {

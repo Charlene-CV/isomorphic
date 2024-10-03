@@ -38,3 +38,63 @@ export const ROLES = {
   RestrictedUser: 'Restricted User',
   Customer: 'Customer',
 } as const;
+
+export const ServiceConnectionEnum = {
+  DEFAULT: 'default app',
+  YRC: 'yrc',
+  CONWAY: 'conway',
+  FEDEX: 'fedex',
+  FREIGHTCOM: 'freightcom',
+  DAYROSS: 'day & ross',
+  MANITOULIN: 'manitoulin',
+  SAIA: 'saia',
+  ABF: 'abf',
+  DAYTON: 'dayton',
+  R_AND_L: 'r and l',
+  FR8NEX: 'fr8nex',
+  RATE_CARD: 'rate card',
+  FREIGHT_RATER: 'freight rater',
+  CARRIER_CONNECTOR: 'carrier connector',
+  PROJECT44: 'project 44',
+  GREEN_SCREENS: 'green screend',
+};
+
+export const CustomerTypesEnum = {
+  SHIPPER: 'shipper',
+  BROKER: 'broker',
+  CARRIER: 'carrier',
+  OTHER: 'other',
+};
+
+export const BillingOptionsEnum = {
+  SHIPPER: 'shipper',
+  CONSIGNEE: 'consignee',
+  THIRD_PARTY: 'third party',
+};
+
+export const LiveLocationEnum = {
+  NO: 'Do not share',
+  EXACT: 'Share exact live location & ETA',
+  APPROXIMATE: 'Share approximate live location & ETA',
+};
+
+export const CustomerServiceTypeEnum = {
+  LTL: 'LTL',
+  TL: 'Truckload',
+  CUBE: 'Cube',
+};
+
+export interface IAddress {
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  postal?: string | null;
+  country?: string | null;
+  latitude: number;
+  longitude: number;
+}
+
+export interface IBusinessHours {
+  open: Date;
+  close: Date;
+}

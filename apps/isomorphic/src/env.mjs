@@ -11,7 +11,7 @@ export const env = createEnv({
       process.env.NODE_ENV === 'production'
         ? z.string().min(1)
         : z.string().min(1).optional(),
-    NEXTAUTH_URL: z.string().url(),
+    NEXTAUTH_URL: z.string().url().optional(),
 
     // email
     SMTP_HOST: z.string().optional(),

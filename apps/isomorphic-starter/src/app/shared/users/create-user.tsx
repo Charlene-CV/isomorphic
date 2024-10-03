@@ -2,13 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler } from 'react-hook-form';
 import { Form } from '@ui/form';
 import { Input, Button, ActionIcon, Title, Select } from 'rizzui';
-import {
-  CreateUserInput,
-  createUserSchema,
-} from '@/validators/create-user.schema';
+import { UserFormInput, userFormSchema } from '@/validators/create-user.schema';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';
@@ -26,21 +23,6 @@ export default function CreateUser({ fetchUsers }: any) {
   const [reset, setReset] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm<CreateUserInput>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      roleUuid: '',
-    },
-    mode: 'onBlur', // or 'onChange'
-  });
 
   const fetchRoles = async () => {
     try {
@@ -63,7 +45,7 @@ export default function CreateUser({ fetchUsers }: any) {
     fetchRoles();
   }, []);
 
-  const onSubmit: SubmitHandler<CreateUserInput> = async (data) => {
+  const onSubmit: SubmitHandler<UserFormInput> = async (data) => {
     const formattedData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -93,10 +75,10 @@ export default function CreateUser({ fetchUsers }: any) {
   };
 
   return (
-    <Form<CreateUserInput>
+    <Form<UserFormInput>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={createUserSchema}
+      validationSchema={userFormSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {

@@ -12,7 +12,6 @@ import {
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { PiXBold } from 'react-icons/pi';
 import { baseUrl } from '@/config/url';
-import { useRouter } from 'next/navigation';
 // @ts-ignore
 import Cookies from 'js-cookie';
 
@@ -36,8 +35,6 @@ export default function CreateRole({ fetchRoles }: any) {
   const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>(
     []
   );
-
-  const router = useRouter();
 
   const fetchModels = async () => {
     try {
