@@ -18,7 +18,7 @@ const FilterElement = dynamic(
   () => import('@/app/shared/equipment/filter-element'),
   { ssr: false }
 );
-
+///////////////
 const filterState = {
   name: '',
   origin: '',

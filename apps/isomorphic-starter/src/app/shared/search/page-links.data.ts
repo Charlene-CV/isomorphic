@@ -14,7 +14,7 @@ export const pageLinks = [
   },
   {
     name: "Support",
-    href: routes.support.dashboard,
+    href: routes.tags,
   },
   {
     name: "Logistics",
