@@ -116,6 +116,8 @@ export const routes = {
     customers: '/customers',
   },
   editCustomer: (id: string) => `/customers/${id}/edit`,
+  people: (id: string) => `/customers/${id}/people`,
+  addresses: (id: string) => `/customers/${id}/addresses`,
   emailTemplates: '/email-templates',
   profile: '/profile',
   management: '/profile/management',

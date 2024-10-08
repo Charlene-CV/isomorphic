@@ -38,7 +38,6 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
   const [isLoading, setLoading] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [accessorials, setAccessorials] = useState<Accessorial[]>([]);
-  // const [customer, setCustomer] = useState<any>(null);
 
   const {
     control,
@@ -64,7 +63,6 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
         }
       );
 
-      // setCustomer(response.data?.data);
       setFormValues(response.data?.data);
     } catch (error) {
       console.error('Error fetching customer:', error);
@@ -137,7 +135,7 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
       const updatedData = {
         ...data,
         accessorialUuids: data.accessorialUuids,
-        tagsUuids: data.tagsUuids,
+        tagUuids: data.tagsUuids,
       };
 
       const response = await axios.put(
@@ -152,14 +150,14 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
 
       if (response.status === 200) {
         toast.success('Customer updated successfully!', {
-          position: 'top-right', // Positioning
-          autoClose: 3000, // Auto close after 3 seconds
-          hideProgressBar: true, // Hide the progress bar
-          closeOnClick: true, // Close on click
-          pauseOnHover: false, // Don't pause on hover
-          draggable: false, // Make it non-draggable
-          progress: undefined, // No progress bar
-        }); // Show success message
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+        });
       }
     } catch (error) {
       console.error('Error during form submission:', error);
@@ -183,7 +181,6 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               <PiXBold className="h-auto w-5" />
             </ActionIcon>
           </div>
-
           <div>
             <Input
               label="Name"
@@ -192,6 +189,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               className="col-span-full mb-5 text-xl md:col-span-1"
               error={errors.name?.message}
             />
+          </div>
+          <div>
             <Input
               label="Short Code"
               placeholder="Enter user's Short Code"
@@ -199,7 +198,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               {...register('shortCode')}
               error={errors.shortCode?.message}
             />
-
+          </div>
+          <div>
             <Input
               label="External ID"
               placeholder="Enter customer's External ID"
@@ -207,6 +207,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               className="col-span-full mb-5 text-xl md:col-span-1"
               error={errors.externalId?.message}
             />
+          </div>
+          <div>
             <Input
               label="Quickbook ID"
               placeholder="Enter user's Quickbook ID"
@@ -214,6 +216,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               {...register('quickbookId')}
               error={errors.quickbookId?.message}
             />
+          </div>
+          <div>
             <Input
               label="Balance"
               placeholder="Enter user's Balance"
@@ -221,6 +225,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               {...register('balance')}
               error={errors.balance?.message}
             />
+          </div>
+          <div>
             <Input
               label="Credit Limit"
               placeholder="Enter user's Credit Limit"
@@ -228,14 +234,18 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               {...register('creditLimit')}
               error={errors.creditLimit?.message}
             />
+          </div>
+          <div>
             <Input
-              label="contact Name"
+              label="Contact Name"
               placeholder="Enter user's contact Name"
               className="col-span-full"
               {...register('contactName')}
               error={errors.contactName?.message}
             />
+          </div>
 
+          <div>
             <Input
               label="Contact Email"
               placeholder="Enter customer's Contact email"
@@ -243,6 +253,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               className="col-span-full mb-5 text-xl md:col-span-1"
               error={errors.contactEmail?.message}
             />
+          </div>
+          <div>
             <Input
               label="Contact Phone"
               placeholder="Enter user's Contact Phone"
@@ -276,7 +288,7 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                       (selectedOption: any) => onChange(selectedOption.value) // Pass the enum label to onChange
                     }
                     name={name}
-                    label="Type"
+                    label="Customer Type"
                     className="col-span-full md:col-span-1"
                     error={errors?.customerType?.message}
                     dropdownClassName="!z-[1]"
@@ -284,6 +296,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                 );
               }}
             />
+          </div>
+          <div>
             <Controller
               name="billingOption"
               control={control}
@@ -316,6 +330,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                 );
               }}
             />
+          </div>
+          <div>
             <Controller
               name="liveLocation"
               control={control}
@@ -340,7 +356,7 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                       (selectedOption: any) => onChange(selectedOption.value) // Pass the enum label to onChange
                     }
                     name={name}
-                    label="Type"
+                    label="Live Location"
                     className="col-span-full md:col-span-1"
                     error={errors?.liveLocation?.message}
                     dropdownClassName="!z-[1]"
@@ -348,6 +364,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                 );
               }}
             />
+          </div>
+          <div>
             <Controller
               name="serviceType"
               control={control}
@@ -372,7 +390,7 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                       (selectedOption: any) => onChange(selectedOption.value) // Pass the enum label to onChange
                     }
                     name={name}
-                    label="Type"
+                    label="Service Type"
                     className="col-span-full md:col-span-1"
                     error={errors?.serviceType?.message}
                     dropdownClassName="!z-[1]"
@@ -387,48 +405,68 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
               control={control}
               render={({ field }) => (
                 <div>
-                  {/* The multi-select for selecting tags */}
                   <Select
-                    {...field} // Pass field properties to the Select component
+                    {...field}
                     label="Select Tags"
                     placeholder="Select tags"
                     options={tags.map((tag) => ({
                       value: tag.uuid,
                       label: tag.name,
-                    }))} // Map the tags array to the required format for the select component
+                    }))}
                     value={tags.filter((tag) =>
                       field.value?.includes(tag.uuid)
-                    )} // Selects the tags matching the current field values
+                    )}
                     onChange={(selectedOption: any) => {
-                      // Handle multiple selected tags
-                      const selectedValues = selectedOption
-                        ? selectedOption.map((option: any) => option.value)
+                      const selectedValues = Array.isArray(field.value)
+                        ? [...field.value]
                         : [];
-
-                      // Update the form value with selected UUIDs
+                      if (Array.isArray(selectedOption)) {
+                        selectedOption.forEach((option: any) => {
+                          if (!selectedValues.includes(option.value)) {
+                            selectedValues.push(option.value);
+                          }
+                        });
+                      } else if (
+                        selectedOption?.value &&
+                        !selectedValues.includes(selectedOption.value)
+                      ) {
+                        selectedValues.push(selectedOption.value);
+                      }
+                      setValue('tagsUuids', selectedValues);
                       field.onChange(selectedValues);
                     }}
-                    error={errors.tagsUuids?.message} // Show error if any
+                    displayValue={() =>
+                      field.value
+                        ? field.value
+                            .map(
+                              (uuid: string) =>
+                                tags.find((tag) => tag.uuid === uuid)?.name
+                            )
+                            .filter(Boolean)
+                            .join(', ') // Display tag names for selected UUIDs
+                        : ''
+                    }
+                    error={errors.tagsUuids?.message}
+                    // dropdownClassName="!z-[1]"
                   />
 
-                  {/* Display the selected tags with an option to remove them */}
                   <div className="selected-tags mt-2 flex flex-wrap gap-2">
                     {field.value?.map((uuid: string) => {
-                      const tag = tags.find((tag) => tag.uuid === uuid); // Find the tag by UUID
+                      const tag = tags.find((tag) => tag.uuid === uuid);
                       return (
                         <div
                           key={uuid}
                           className="bg-gray-200 text-gray-800 py-1 px-2 rounded flex items-center"
                         >
-                          {tag?.name} {/* Display tag name */}
+                          {tag?.name}
                           <button
                             className="ml-2 text-red-500"
                             onClick={() => {
-                              // Remove the selected tag when '×' is clicked
-                              const updatedValues = field.value?.filter(
-                                (id: string) => id !== uuid
-                              );
-                              field.onChange(updatedValues); // Update the form value with the remaining UUIDs
+                              const updatedValues =
+                                field.value &&
+                                field.value.filter((id: string) => id !== uuid);
+                              setValue('tagsUuids', updatedValues || []);
+                              field.onChange(updatedValues);
                             }}
                           >
                             &times;
@@ -440,56 +478,79 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                 </div>
               )}
             />
-
+          </div>
+          <div>
             <Controller
               name="accessorialUuids"
               control={control}
               render={({ field }) => (
                 <div>
-                  {/* The multi-select for selecting accessorials */}
                   <Select
-                    {...field} // Pass field properties to the Select component
+                    {...field}
                     label="Select Accessorials"
                     placeholder="Select accessorials"
                     options={accessorials.map((accessorial) => ({
                       value: accessorial.uuid,
                       label: accessorial.name,
-                    }))} // Map the accessorials array to the required format for the select component
+                    }))}
                     value={accessorials.filter((accessorial) =>
                       field.value?.includes(accessorial.uuid)
-                    )} // Selects the accessorials matching the current field values
+                    )}
                     onChange={(selectedOption: any) => {
-                      // Handle multiple selected accessorials
-                      const selectedValues = selectedOption
-                        ? selectedOption.map((option: any) => option.value)
+                      const selectedValues = Array.isArray(field.value)
+                        ? [...field.value]
                         : [];
-
-                      // Update the form value with selected UUIDs
+                      if (Array.isArray(selectedOption)) {
+                        selectedOption.forEach((option: any) => {
+                          if (!selectedValues.includes(option.value)) {
+                            selectedValues.push(option.value);
+                          }
+                        });
+                      } else if (
+                        selectedOption?.value &&
+                        !selectedValues.includes(selectedOption.value)
+                      ) {
+                        selectedValues.push(selectedOption.value);
+                      }
+                      setValue('accessorialUuids', selectedValues);
                       field.onChange(selectedValues);
                     }}
-                    error={errors.accessorialUuids?.message} // Show error if any
+                    displayValue={() =>
+                      field.value
+                        ? field.value
+                            .map(
+                              (uuid: string) =>
+                                accessorials.find(
+                                  (accessorial) => accessorial.uuid === uuid
+                                )?.name
+                            )
+                            .filter(Boolean)
+                            .join(', ') // Display accessorial names for selected UUIDs
+                        : ''
+                    }
+                    error={errors.accessorialUuids?.message}
+                    // dropdownClassName="!z-[1]"
                   />
 
-                  {/* Display the selected accessorials with an option to remove them */}
                   <div className="selected-accessorials mt-2 flex flex-wrap gap-2">
                     {field.value?.map((uuid: string) => {
                       const accessorial = accessorials.find(
                         (accessorial) => accessorial.uuid === uuid
-                      ); // Find the accessorial by UUID
+                      );
                       return (
                         <div
                           key={uuid}
                           className="bg-gray-200 text-gray-800 py-1 px-2 rounded flex items-center"
                         >
-                          {accessorial?.name} {/* Display accessorial name */}
+                          {accessorial?.name}
                           <button
                             className="ml-2 text-red-500"
                             onClick={() => {
-                              // Remove the selected accessorial when '×' is clicked
-                              const updatedValues = field.value?.filter(
-                                (id: string) => id !== uuid
-                              );
-                              field.onChange(updatedValues); // Update the form value with the remaining UUIDs
+                              const updatedValues =
+                                field.value &&
+                                field.value.filter((id: string) => id !== uuid);
+                              setValue('accessorialUuids', updatedValues || []);
+                              field.onChange(updatedValues);
                             }}
                           >
                             &times;
@@ -559,6 +620,8 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                 />
               )}
             />
+          </div>
+          <div>
             <Controller
               name="addresses.address"
               control={control}
@@ -684,7 +747,7 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                     onChange={onChange} // Bind the onChange handler
                     className="mr-2"
                   />
-                  <label>Quote</label>
+                  <label>Require Quote</label>
                 </div>
               )}
             />
@@ -698,7 +761,7 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
                     onChange={onChange} // Bind the onChange handler
                     className="mr-2"
                   />
-                  <label>Dimenstions</label>
+                  <label>Require Dimensions</label>
                 </div>
               )}
             />

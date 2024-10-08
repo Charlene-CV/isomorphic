@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@hooks/use-table';
 import axios from 'axios';
@@ -12,6 +12,7 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import Cookies from 'js-cookie';
 import { Customer } from '..';
 import { getColumns } from './columns';
+import { usePathname } from 'next/navigation';
 
 const FilterElement = dynamic(
   () => import('@/app/shared/customers/people/filter-element'),
@@ -37,10 +38,47 @@ export interface People {
   customer: Customer;
 }
 
-export default function PeopleTable({ people, fetchCustomerPeople }: any) {
+export default function PeopleTable() {
+  const [people, setPeople] = useState([]);
+  const pathname = usePathname();
+  const segments = pathname.split('/');
+  const uuidval = segments[2];
+  useEffect(() => {
+    if (uuidval) {
+      setuuidval(uuidval);
+    }
+  }, [uuidval]);
+
+  const [uuid, setuuidval] = useState(uuidval ?? '');
   const [pageSize, setPageSize] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editPeople, setEditPeople] = useState<People | null>(null);
+
+  const fetchCustomerPeople = async () => {
+    if (!uuid) return;
+
+    const user: any = JSON.parse(Cookies.get('user'));
+    const token = user.token;
+
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/people/customer/${uuid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setPeople(response?.data?.data);
+    } catch (error) {
+      console.error('Error fetching customer people:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomerPeople();
+  }, []);
 
   const getPerson = async (uuid: string): Promise<People | null> => {
     const user: any = JSON.parse(Cookies.get('user'));
@@ -177,7 +215,7 @@ export default function PeopleTable({ people, fetchCustomerPeople }: any) {
         onSearch={handleSearch}
         searchTerm={searchTerm}
         fetchCustomerPeople={fetchCustomerPeople}
-        uuid={people?.customer?.uuid}
+        uuid={uuid}
       />
       <ControlledTable
         variant="modern"

@@ -176,7 +176,7 @@ export const getColumns = ({
                 label="Edit"
                 view={
                   <EditPeople
-                    uuid={row?.customer?.uuid}
+                    uuid={row?.uuid}
                     people={row}
                     fetchCustomerPeople={fetchCustomerPeople}
                   />

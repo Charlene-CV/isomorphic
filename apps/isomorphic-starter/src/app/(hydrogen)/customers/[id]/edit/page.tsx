@@ -9,6 +9,7 @@ import PageHeader from '@/app/shared/page-header';
 import Cookies from 'js-cookie';
 import { Customer } from '@/app/shared/customers';
 import { routes } from '@/config/routes';
+import CustomerNav from '@/app/shared/customers/customer-navigation';
 
 const pageHeader = {
   title: 'Customers',
@@ -60,28 +61,6 @@ export default function EditCustomerPage({
     }
   };
 
-  const fetchCustomerPeople = async () => {
-    if (!id) return;
-
-    const user: any = JSON.parse(Cookies.get('user'));
-    const token = user.token;
-
-    try {
-      const response = await axios.get(
-        `${baseUrl}/api/v1/people/customer/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setPeople(response?.data?.data);
-    } catch (error) {
-      console.error('Error fetching customer people:', error);
-    }
-  };
-
   useEffect(() => {
     fetchCustomer();
   }, [id]); // Add id as a dependency to the effect
@@ -92,6 +71,7 @@ export default function EditCustomerPage({
         title={pageHeader.title}
         breadcrumb={pageHeader.breadcrumb ?? []}
       />
+      <CustomerNav uuid={id} />
       {customer ? (
         <EditCustomer customerUuid={id as string} />
       ) : (
