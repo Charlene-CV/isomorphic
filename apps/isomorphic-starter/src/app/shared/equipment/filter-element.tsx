@@ -29,18 +29,15 @@ export default function FilterElement({
     <>
       <div>
         <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container">
-          <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-            All Equipment
-          </Title>
 
-          <Input
+          {/* <Input
             type="text"
             placeholder="Filter by Name"
             value={filters['name'] || ''}
             onChange={(event) => updateFilter('name', event.target.value)}
             rounded="lg"
             className="w-full @4xl:w-auto order-1"
-          />
+          /> */}
 
           {/* <Input
             type="text"
@@ -65,7 +62,7 @@ export default function FilterElement({
               label="Add New Equipment"
               view={<CreateEquip fetchEquipments={fetchEquipments} />}
               customSize="600px"
-              className="mt-0"
+              className="mt-0 bg-[#a5a234]" 
             />
           </div>
 

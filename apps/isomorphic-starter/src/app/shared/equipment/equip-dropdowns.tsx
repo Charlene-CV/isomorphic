@@ -11,7 +11,7 @@ export const getTypes = async (): Promise<EquipTypeFormInput[] | null> => {
     try {
         const user: any = JSON.parse(Cookies.get('user'));
         const token = user.token;
-        const response = await axios.get(`${baseUrl}/api/v1/equipment-types/all`,
+        const response = await axios.get(`${baseUrl}/api/v1/equipment-types/active`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

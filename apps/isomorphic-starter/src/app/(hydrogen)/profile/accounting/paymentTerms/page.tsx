@@ -50,7 +50,7 @@ export default function TanTableEnhanced() {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           {/* <ExportButton data={data} fileName={fileName} header={header} /> */}
-          <ImportButton title={'Import File'} />
+          <ImportButton title={'Import File'} className="bg-[#a5a234]"/>
           <ModalButton
             label="Add New Term"
             view={<CreateTerms fetchTerms={fetchData} />}

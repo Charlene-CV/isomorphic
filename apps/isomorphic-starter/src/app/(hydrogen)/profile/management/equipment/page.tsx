@@ -37,6 +37,7 @@ export default function EquipTable() {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("FETCHED: ", response?.data?.data)
       setData(response?.data?.data || []);
       return response?.data?.data;
     } catch (error) {
@@ -50,11 +51,15 @@ export default function EquipTable() {
     fetchEquipments();
   }, []);
 
+  useEffect(() => {
+  }, [data]);
+
+
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-          <ImportButton title={"Import File"} />
+          <ImportButton title={"Import File"} className="bg-[#a5a234]"/>
         </div>
       </PageHeader>
       <EquipmentTable equipment={data} fetchEquipments={fetchEquipments} />

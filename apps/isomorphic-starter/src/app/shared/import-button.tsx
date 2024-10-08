@@ -39,7 +39,7 @@ export default function ImportButton({
           customSize: '480px',
         })
       }
-      className={cn('w-full @lg:w-auto', className)}
+      className={cn('w-full @lg:w-auto bg-[#a5a234]', className)}
     >
       <PiArrowLineDownBold className="me-1.5 h-[17px] w-[17px]" />
       {buttonLabel}

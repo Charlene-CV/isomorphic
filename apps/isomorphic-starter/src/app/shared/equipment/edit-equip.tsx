@@ -2,21 +2,52 @@
 
 import { useEffect, useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
-import { Input, Button, ActionIcon, Title, Text, Modal } from 'rizzui';
+import { Input, Button, ActionIcon, Title, Text, Select } from 'rizzui';
 import { EquipFormInput, equipFormSchema } from '@/validators/equipment-schema';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';
+import { getUsers, getTypes, getSubtypes } from './equip-dropdowns';
 // @ts-ignore
 import Cookies from 'js-cookie';
 import { toast } from 'react-hot-toast';
 import FormGroup from '../form-group';
 import { Checkbox } from "@nextui-org/checkbox";
+import { UserFormInput } from '@/validators/create-user.schema';
+import { EquipTypeFormInput } from '@/validators/equipmenttype-schema';
+import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype-schema';
 
 export default function EditEquip({ fetchEquipments, equipData }: any) {
   const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
+
+  const [managers, setManagers] = useState<UserFormInput[]>([]);
+  const [drivers, setDrivers] = useState<UserFormInput[]>([]);
+  const [types, setTypes] = useState<EquipTypeFormInput[]>([]);
+  const [subtypes, setSubtypes] = useState<EquipSubTypeFormInput[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const managerUsers = await getUsers('Manager');
+        setManagers(managerUsers || []);
+
+        const driverUsers = await getUsers('Driver');
+        setDrivers(driverUsers || []);
+
+        const fetchedTypes = await getTypes();
+        setTypes(fetchedTypes || []);
+
+        const fetchedSubtypes = await getSubtypes();
+        setSubtypes(fetchedSubtypes || []);
+      } catch (error) {
+        console.error('Error fetching dropdown data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -81,34 +112,37 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
   }, [equipData, reset]);
 
   const onSubmit: SubmitHandler<EquipFormInput> = async (data) => {
-    const formattedData = {
-      name: data?.name,
-      status: data?.status,
-      description: data?.description ?? null,
-      externalId: data?.externalId ?? null,
-      isBillable: data?.isBillable ?? false,
-      isIftaTracking: data?.isIftaTracking ?? false,
-      vin: data?.vin ?? null,
-      payAmount: data?.payAmount ?? null,
-      specifications: {
-        length: data?.specifications?.length || 0,
-        width: data?.specifications?.width || 0,
-        height: data?.specifications?.height || 0,
-        weight: data?.specifications?.weight || 0,
-        capacity: data?.specifications?.capacity || 0,
-        units: data?.specifications?.units || '',
-      },
-      licenses: data?.licenses ?? [],
-      managerUuid: data?.managerUuid ?? null,
-      driverUuid: data?.driverUuid ?? null,
-      typeUuid: data?.typeUuid ?? '',
-      subTypeUuid: data?.subTypeUuid ?? null,
-      paymentTypeUuid: data?.paymentTypeUuid ?? null
-    };
     try {
+      const formattedData = {
+        name: data?.name ?? null,
+        status: data?.status ?? null,
+        description: data?.description ?? null,
+        externalId: data?.externalId ?? null,
+        isBillable: data?.isBillable ?? false,
+        isIftaTracking: data?.isIftaTracking ?? false,
+        vin: data?.vin ?? null,
+        payAmount: data?.payAmount ?? null,
+        specifications: {
+          length: data?.specifications?.length ?? null,
+          width: data?.specifications?.width ?? null,
+          height: data?.specifications?.height ?? null,
+          weight: data?.specifications?.weight ?? null,
+          capacity: data?.specifications?.capacity ?? null,
+          units: (data?.specifications?.units && data?.specifications?.units !== '') ? data.specifications.units : null,
+        },
+        licenses: data?.licenses ?? null,
+        driverUuid: (data?.driverUuid?.value && data?.driverUuid.value !== '') ? data.driverUuid.value : null,
+        managerUuid: (data?.managerUuid?.value && data?.managerUuid.value !== '') ? data.managerUuid.value : null,
+        typeUuid: data.typeUuid.value,
+        subTypeUuid: (data?.subTypeUuid?.value && data?.subTypeUuid?.value !== '') ? data.subTypeUuid.value : null,
+        paymentTypeUuid: (data?.paymentTypeUuid && data?.paymentTypeUuid !== '') ? data.paymentTypeUuid : null,
+      };
+
+      console.log({formattedData})
+
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
-      const response = await axios.put(`${baseUrl}/api/v1/taxes/update/${equipData.uuid}`, formattedData, {
+      const response = await axios.put(`${baseUrl}/api/v1/equipments/update/${equipData.uuid}`, formattedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -144,7 +178,6 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
               label="Name"
               placeholder="Enter equipment name"
               {...register('name')}
-              className="w-full"
               error={errors.name?.message}
             />
 
@@ -152,7 +185,6 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
               label="Status"
               placeholder="Enter status"
               {...register('status')}
-              className="w-full"
               error={errors.status?.message}
             />
 
@@ -190,36 +222,64 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
               error={errors.payAmount?.message}
             />
 
-            <Input
-              label="Manager"
-              placeholder="Enter manager"
-              {...register('managerUuid')}
-              className="w-full"
-              error={errors.managerUuid?.message}
+            <Controller
+              name="managerUuid"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Manager"
+                  placeholder="Select manager"
+                  options={managers.map((manager) => ({ value: manager.uuid, label: `${manager.firstName} ${manager.lastName}` }))}
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={errors.managerUuid?.message}
+                />
+              )}
             />
 
-            <Input
-              label="Driver"
-              placeholder="Enter driver"
-              {...register('driverUuid')}
-              className="w-full"
-              error={errors.driverUuid?.message}
+            <Controller
+              name="driverUuid"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Driver"
+                  placeholder="Select driver"
+                  options={drivers.map((driver) => ({ value: driver.uuid, label: `${driver.firstName} ${driver.lastName}` }))}
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={errors.driverUuid?.message}
+                />
+              )}
             />
 
-            <Input
-              label="Type"
-              placeholder="Enter type"
-              {...register('typeUuid')}
-              className="w-full"
-              error={errors.typeUuid?.message}
+            <Controller
+              name="typeUuid"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Type"
+                  placeholder="Select type"
+                  options={types.map((type) => ({ value: type.uuid, label: type.name }))}
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={errors.typeUuid?.message}
+                />
+              )}
             />
 
-            <Input
-              label="Sub-Type"
-              placeholder="Enter sub-type"
-              {...register('subTypeUuid')}
-              className="w-full"
-              error={errors.subTypeUuid?.message}
+            <Controller
+              name="subTypeUuid"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Sub-Type"
+                  placeholder="Select sub-type"
+                  options={subtypes.map((subtype) => ({ value: subtype.uuid, label: subtype.name }))}
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={errors.subTypeUuid?.message}
+                />
+              )}
             />
 
             <Input
@@ -229,7 +289,9 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
               className="w-full"
               error={errors.paymentTypeUuid?.message}
             />
+          </div>
 
+          <div className="flex flex-row justify-start gap-4">
             <Controller
               name="isBillable"
               control={control}
@@ -240,17 +302,17 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
                   defaultSelected={field.value}
                 >
                   <input
-                    type="checkbox"
-                    checked={field.value}
-                    onChange={field.onChange}
-                    style={{
-                      outline: '0.5px solid #d1d5db',
-                      borderRadius: '0.25rem',
-                      padding: '4px',
-                      marginRight: '10px',
-                      marginBottom: '4px'
-                    }}
-                  />
+                  type="checkbox"
+                  checked={field.value}
+                  onChange={field.onChange}
+                  style={{
+                    outline: '0.5px solid #d1d5db',
+                    borderRadius: '0.25rem',
+                    padding: '4px',
+                    marginRight: '10px',
+                    marginBottom: '4px'
+                  }}
+                />
                   Billable
                 </Checkbox>
               )}
@@ -266,22 +328,23 @@ export default function EditEquip({ fetchEquipments, equipData }: any) {
                   defaultSelected={field.value}
                 >
                   <input
-                    type="checkbox"
-                    checked={field.value}
-                    onChange={field.onChange}
-                    style={{
-                      outline: '0.5px solid #d1d5db',
-                      borderRadius: '0.25rem',
-                      padding: '4px',
-                      marginRight: '10px',
-                      marginBottom: '4px'
-                    }}
-                  />
+                  type="checkbox"
+                  checked={field.value}
+                  onChange={field.onChange}
+                  style={{
+                    outline: '0.5px solid #d1d5db',
+                    borderRadius: '0.25rem',
+                    padding: '4px',
+                    marginRight: '10px',
+                    marginBottom: '4px'
+                  }}
+                />
                   IFTA Tracking
                 </Checkbox>
               )}
             />
           </div>
+
         </FormGroup>
 
         <div className="flex justify-end gap-4 mt-5">

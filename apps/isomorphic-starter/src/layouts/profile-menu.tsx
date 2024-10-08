@@ -19,6 +19,8 @@ export default function ProfileMenu({
   avatarClassName?: string;
   username?: boolean;
 }) {
+  // const user: any = JSON.parse(Cookies.get('user'));
+  // console.log({user})
   return (
     <ProfileMenuPopover>
       <Popover.Trigger>
@@ -87,7 +89,8 @@ function DropdownMenu() {
           src="https://isomorphic-furyroad.s3.amazonaws.com/public/avatars/avatar-11.webp"
           name="Albert Flores"
         />
-        <div className="ms-3">
+        <h6></h6>
+        {/* <div className="ms-3">
           <Title
             as="h6"
             className="font-semibold"
@@ -95,7 +98,7 @@ function DropdownMenu() {
             {(JSON.parse(Cookies.get('user'))).name}
           </Title>
           <Text className="text-gray-600">{(JSON.parse(Cookies.get('user'))).email}</Text>
-        </div>
+        </div> */}
       </div>
       <div className="grid px-3.5 py-3.5 font-medium text-gray-700">
         {menuItems.map((item) => (

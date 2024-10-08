@@ -23,6 +23,7 @@ export default function EditCarrier({ fetchCarriers, carrierData }: any) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<CarrierFormInput>({
     defaultValues: {
@@ -67,6 +68,7 @@ export default function EditCarrier({ fetchCarriers, carrierData }: any) {
 
   const { fields, append, remove } = useFieldArray({
     name: "addresses",
+    control
   });
 
   const onSubmit: SubmitHandler<CarrierFormInput> = async (data) => {
@@ -215,7 +217,7 @@ export default function EditCarrier({ fetchCarriers, carrierData }: any) {
           <Button
             type="submit"
             isLoading={isLoading}
-            className="w-full md:w-auto"
+            className="w-full md:w-auto bg-[#a5a234]"
           >
             Edit Carrier
           </Button>

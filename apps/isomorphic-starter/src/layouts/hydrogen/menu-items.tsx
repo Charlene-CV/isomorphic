@@ -70,8 +70,8 @@ export const menuItems = [
     icon: <PiBriefcaseDuotone />,
   },
   {
-    name: 'Job Board',
-    href: routes.jobBoard.dashboard,
+    name: 'Carriers',
+    href: routes.carriers,
     icon: <PiShapesDuotone />,
   },
   {

@@ -26,10 +26,22 @@ export const equipFormSchema = z.object({
     issued: z.string(),
     expiry: z.string().nullable(),
   })).nullable(),
-  managerUuid: z.string().nullable(),
-  driverUuid: z.string().nullable(),
-  typeUuid: z.string(),
-  subTypeUuid: z.string().nullable(),
+  managerUuid: z.object({
+    label: z.string(),
+    value: z.string(),
+  }).nullable(),
+  driverUuid: z.object({
+    label: z.string(),
+    value: z.string(),
+  }).nullable(),
+  typeUuid: z.object({
+    label: z.string(),
+    value: z.string(),
+  }),
+  subTypeUuid: z.object({
+    label: z.string(),
+    value: z.string(),
+  }).nullable(),
   paymentTypeUuid: z.string().nullable()
 });
 

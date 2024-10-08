@@ -178,7 +178,7 @@ export const FileInput = ({
         >
           Reset
         </Button>
-        <Button className="w-full" onClick={() => handleFileUpload()}>
+        <Button className="w-full bg-[#a5a234]" onClick={() => handleFileUpload()}>
           <PiArrowLineDownBold className="me-1.5 h-[17px] w-[17px]" />
           {btnLabel}
         </Button>

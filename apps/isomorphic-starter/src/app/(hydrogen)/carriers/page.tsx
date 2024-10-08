@@ -2,7 +2,6 @@
 
 import ImportButton from "@/app/shared/import-button";
 import PageHeader from "@/app/shared/page-header";
-import { routes } from "@/config/routes";
 // @ts-ignore
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -29,7 +28,7 @@ export default function CarrierTable() {
   const [loading, setLoading] = useState(true);
 
   const fetchCarriers = async () => {
-    try {
+      console.log("entered fetchcarriers")
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
       const response = await axios.get(`${baseUrl}/api/v1/carriers/all`, {
@@ -38,23 +37,22 @@ export default function CarrierTable() {
         },
       });
       setData(response?.data?.data || []);
-      return response?.data?.data;
-    } catch (error) {
-      console.error('Error fetching carriers:', error);
-    } finally {
       setLoading(false);
-    }
+      return response?.data?.data;
   };
 
   useEffect(() => {
     fetchCarriers();
   }, []);
 
+  useEffect(() => {
+  }, [data]);
+
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-          <ImportButton title={"Import File"} />
+          <ImportButton title={"Import File"} className="bg-[#a5a234]"/>
         </div>
       </PageHeader>
       <CarriersTable carriers={data} fetchCarriers={fetchCarriers} />

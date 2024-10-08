@@ -13,6 +13,8 @@ import Cookies from "js-cookie";
 import { CarrierFormInput } from "@/validators/carrier-schema";
 import { useModal } from "../modal-views/use-modal";
 import EditCarrier from "./edit-carrier";
+import { toast } from "react-hot-toast";
+import { Text } from "rizzui";
 
 const FilterElement = dynamic(
   () => import("@/app/shared/carriers/filter-element"),
@@ -79,181 +81,184 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
 
         if (response.status === 200) {
           fetchCarriers();
+          toast.success(<Text>Carrier deleted successfully!</Text>);
+        } else {
+          toast.error(<Text>Error deleting carrier...</Text>);
         }
       }
     } catch (error) {
-      console.error("Error removing carriers:", error);
-    }
-  };
+    console.error("Error removing carriers:", error);
+  }
+};
 
-  const handleSearching = async (param: string) => {
-    setSearchTerm(param);
-    const carriersPromise = fetchCarriers();
-    let savedCarriers = await carriersPromise;
-    carriersPromise.then((carriersArray: any) => {
-      savedCarriers = carriersArray;
-    });
-    let filtered = savedCarriers.filter((carrier: { name: string }) =>
-      carrier.name.includes(param)
+const handleSearching = async (param: string) => {
+  setSearchTerm(param);
+  const carriersPromise = fetchCarriers();
+  let savedCarriers = await carriersPromise;
+  carriersPromise.then((carriersArray: any) => {
+    savedCarriers = carriersArray;
+  });
+  let filtered = savedCarriers.filter((carrier: { name: string }) =>
+    carrier.name.includes(param)
+  );
+  setFilteredCarriers(filtered);
+};
+
+useEffect(() => {
+  console.log("Search term changed:", searchTerm);
+}, [searchTerm]);
+const getCarrier = async (uuid: string): Promise<CarrierFormInput | null> => {
+  try {
+    const user: any = JSON.parse(Cookies.get("user"));
+    const token = user.token;
+    const response = await axios.get<{ data: CarrierFormInput }>(
+      `${baseUrl}/api/v1/carriers/find-one/${uuid}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    setFilteredCarriers(filtered);
-  };
 
-  useEffect(() => {
-    console.log("Search term changed:", searchTerm);
-  }, [searchTerm]);
-  const getCarrier = async (uuid: string): Promise<CarrierFormInput | null> => {
-    try {
-      const user: any = JSON.parse(Cookies.get("user"));
-      const token = user.token;
-      const response = await axios.get<{ data: CarrierFormInput }>(
-        `${baseUrl}/api/v1/carriers/find-one/${uuid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        return response.data.data;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching carrier:", error);
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
       return null;
     }
-  };
-  const fetchCarrier = useCallback(
-    async (uuid: string): Promise<CarrierFormInput | null> => {
-      return await getCarrier(uuid);
-    },
-    []
-  );
+  } catch (error) {
+    console.error("Error fetching carrier:", error);
+    return null;
+  }
+};
+const fetchCarrier = useCallback(
+  async (uuid: string): Promise<CarrierFormInput | null> => {
+    return await getCarrier(uuid);
+  },
+  []
+);
 
-  const onDeleteItem = useCallback((uuid: string) => {
-    handleDeleteCarrier([uuid]);
-  }, []);
+const onDeleteItem = useCallback((uuid: string) => {
+  handleDeleteCarrier([uuid]);
+}, []);
 
-  const {
-    isLoading,
-    isFiltered,
-    currentPage,
-    totalItems,
-    handlePaginate,
-    filters,
-    updateFilter,
-    sortConfig,
-    handleSort,
-    selectedRowKeys,
-    handleRowSelect,
-    handleSelectAll,
-    handleReset,
-  } = useTable(carriers, pageSize, filterState);
-  const columns = useMemo(
-    () =>
-      [
-        {
-          title: "Name",
-          dataIndex: "name",
-          key: "name",
-          sorter: true,
-          onHeaderCellClick: (value: string) => ({
-            onClick: () => handleSort(value),
-          }),
-        },
-        {
-          title: "DOT ID",
-          dataIndex: "dotId",
-          key: "dotId",
-        },
-        {
-          title: "Currency",
-          dataIndex: "currency",
-          key: "currency",
-        },
-        {
-          title: "Address",
-          dataIndex: "addresses",
-          key: "address",
-          render: (addresses: any[]) =>
-            addresses.map((address, index) => (
-              <div key={index}>
-                {address.address}, {address.city}, {address.state}, {address.postal}, {address.country}
-              </div>
-            )),
-        },
-        {
-          title: "Latitude",
-          dataIndex: "addresses",
-          key: "latitude",
-          render: (addresses: any[]) =>
-            addresses.map((address, index) => (
-              <div key={index}>{address.latitude}</div>
-            )),
-        },
-        {
-          title: "Longitude",
-          dataIndex: "addresses",
-          key: "longitude",
-          render: (addresses: any[]) =>
-            addresses.map((address, index) => (
-              <div key={index}>{address.longitude}</div>
-            )),
-        },
-        {
-          title: "Action",
-          key: "action",
-          render: (text: string, record: CarrierFormInput) => (
-            <>
-              <button
-                className="mr-4"
-                onClick={() => handleEditClick(record.uuid)}
-              >
-                Edit
-              </button>
-              <button onClick={() => onDeleteItem(record.uuid)}>Delete</button>
-            </>
-          ),
-        },
-      ] as ColumnType<DefaultRecordType>[],
-    [carriers, sortConfig, selectedRowKeys, handleSort, onDeleteItem]
-  );
-  
+const {
+  isLoading,
+  isFiltered,
+  currentPage,
+  totalItems,
+  handlePaginate,
+  filters,
+  updateFilter,
+  sortConfig,
+  handleSort,
+  selectedRowKeys,
+  handleRowSelect,
+  handleSelectAll,
+  handleReset,
+} = useTable(carriers, pageSize, filterState);
+const columns = useMemo(
+  () =>
+    [
+      {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+        sorter: true,
+        onHeaderCellClick: (value: string) => ({
+          onClick: () => handleSort(value),
+        }),
+      },
+      {
+        title: "DOT ID",
+        dataIndex: "dotId",
+        key: "dotId",
+      },
+      {
+        title: "Currency",
+        dataIndex: "currency",
+        key: "currency",
+      },
+      {
+        title: "Address",
+        dataIndex: "addresses",
+        key: "address",
+        render: (addresses: any[]) =>
+          addresses.map((address, index) => (
+            <div key={index}>
+              {address.address}, {address.city}, {address.state}, {address.postal}, {address.country}
+            </div>
+          )),
+      },
+      {
+        title: "Latitude",
+        dataIndex: "addresses",
+        key: "latitude",
+        render: (addresses: any[]) =>
+          addresses.map((address, index) => (
+            <div key={index}>{address.latitude}</div>
+          )),
+      },
+      {
+        title: "Longitude",
+        dataIndex: "addresses",
+        key: "longitude",
+        render: (addresses: any[]) =>
+          addresses.map((address, index) => (
+            <div key={index}>{address.longitude}</div>
+          )),
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (text: string, record: CarrierFormInput) => (
+          <>
+            <button
+              className="mr-4"
+              onClick={() => handleEditClick(record.uuid)}
+            >
+              Edit
+            </button>
+            <button onClick={() => onDeleteItem(record.uuid)}>Delete</button>
+          </>
+        ),
+      },
+    ] as ColumnType<DefaultRecordType>[],
+  [carriers, sortConfig, selectedRowKeys, handleSort, onDeleteItem]
+);
 
-  return (
-    <div className="mt-14">
-      <FilterElement
-        isFiltered={isFiltered}
-        filters={filters}
-        updateFilter={updateFilter}
-        handleReset={handleReset}
-        onSearch={handleSearching}
-        searchTerm={searchTerm}
-        fetchCarriers={fetchCarriers}
+
+return (
+  <div className="mt-14">
+    <FilterElement
+      isFiltered={isFiltered}
+      filters={filters}
+      updateFilter={updateFilter}
+      handleReset={handleReset}
+      onSearch={handleSearching}
+      searchTerm={searchTerm}
+      fetchCarriers={fetchCarriers}
+    />
+    <ControlledTable
+      variant="modern"
+      data={filteredCarriers.length > 0 ? filteredCarriers : carriers}
+      isLoading={isLoading}
+      showLoadingText={true}
+      columns={columns}
+      paginatorOptions={{
+        pageSize,
+        setPageSize,
+        total: totalItems,
+        current: currentPage,
+        onChange: (page: number) => handlePaginate(page),
+      }}
+      className="rounded-md border border-muted text-sm shadow-sm"
+    />
+    {isModalOpen && editCarrier && (
+      <EditCarrier
+        carrierData={editCarrier}
+        closeModal={() => setIsModalOpen(false)}
       />
-      <ControlledTable
-        variant="modern"
-        data={filteredCarriers.length > 0 ? filteredCarriers : carriers}
-        isLoading={isLoading}
-        showLoadingText={true}
-        columns={columns}
-        paginatorOptions={{
-          pageSize,
-          setPageSize,
-          total: totalItems,
-          current: currentPage,
-          onChange: (page: number) => handlePaginate(page),
-        }}
-        className="rounded-md border border-muted text-sm shadow-sm"
-      />
-      {isModalOpen && editCarrier && (
-        <EditCarrier
-          carrierData={editCarrier}
-          closeModal={() => setIsModalOpen(false)}
-        />
-      )}
-    </div>
-  );
+    )}
+  </div>
+);
 }
