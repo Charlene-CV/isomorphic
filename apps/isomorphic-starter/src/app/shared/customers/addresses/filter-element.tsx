@@ -47,7 +47,7 @@ export default function FilterElement({
     <>
       <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container">
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-          All Users
+          All Addresses
         </Title>
 
         <StatusField

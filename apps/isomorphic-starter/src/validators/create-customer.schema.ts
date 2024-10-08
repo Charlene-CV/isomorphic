@@ -12,8 +12,8 @@ const addressSchema = z.object({
   state: z.string().nullable().optional(),
   postal: z.string().nullable().optional(),
   country: z.string().nullable().optional(),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
 });
 
 const businessHoursSchema = z.object({
@@ -24,8 +24,8 @@ const businessHoursSchema = z.object({
 export const createCustomerSchema = z.object({
   name: z.string().min(1),
   shortCode: z.string().min(1),
-  customerType: z.nativeEnum(CustomerTypesEnum),
-  billingOption: z.nativeEnum(BillingOptionsEnum),
+  customerType: z.nativeEnum(CustomerTypesEnum).optional(),
+  billingOption: z.nativeEnum(BillingOptionsEnum).optional(),
   requireQuote: z.boolean(),
   currency: z.string().min(1),
   isActive: z.boolean(),

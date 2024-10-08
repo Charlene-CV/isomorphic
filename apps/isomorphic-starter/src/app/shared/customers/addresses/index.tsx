@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@hooks/use-table';
 import axios from 'axios';
@@ -14,6 +14,7 @@ import { IAddress, IBusinessHours } from '@/config/constants';
 import { Accessorial } from '../../accessorials';
 import { Customer } from '..';
 import { getColumns } from './columns';
+import { usePathname } from 'next/navigation';
 
 const FilterElement = dynamic(
   () => import('@/app/shared/customers/addresses/filter-element'),
@@ -43,10 +44,46 @@ export interface Addresses {
   accessorials: Accessorial[] | [];
 }
 
-export default function AddressTable({ address, fetchAddresses }: any) {
+export default function AddressTable() {
   const [pageSize, setPageSize] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [addresses, setAddress] = useState<Addresses | null>(null);
+  const [address, setAddress] = useState<any>(null);
+  const pathname = usePathname();
+  const segments = pathname.split('/');
+  const uuidval = segments[2];
+  useEffect(() => {
+    if (uuidval) {
+      setuuidval(uuidval);
+    }
+  }, [uuidval]);
+
+  const [uuid, setuuidval] = useState(uuidval ?? '');
+
+  const fetchAddresses = async () => {
+    if (!uuid) return;
+
+    const user: any = JSON.parse(Cookies.get('user'));
+    const token = user.token;
+
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/v1/customer-addresses/customer/${uuid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setAddress(response?.data?.data);
+    } catch (error) {
+      console.error('Error fetching customer people:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
 
   const getAddress = async (uuid: string): Promise<Addresses | null> => {
     const user: any = JSON.parse(Cookies.get('user'));

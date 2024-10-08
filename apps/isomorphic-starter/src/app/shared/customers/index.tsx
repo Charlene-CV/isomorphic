@@ -69,8 +69,6 @@ export interface Customer {
 
 export default function CustomerTable({ customers, fetchCustomers }: any) {
   const [pageSize, setPageSize] = useState(10);
-  const [editCustomer, setEditCustomer] = useState<Customer | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleDeleteCustomer = async (uuids: string[]) => {
     try {

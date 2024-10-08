@@ -148,7 +148,7 @@ export const getColumns = ({
                 label="Edit"
                 view={
                   <EditAddress
-                    uuid={row?.customer?.uuid}
+                    uuid={row?.uuid}
                     address={row}
                     fetchAddresses={fetchAddresses}
                   />
@@ -156,7 +156,6 @@ export const getColumns = ({
                 customSize="600px"
                 className="mt-0"
               />
-              <PencilIcon />
             </ActionIcon>
           </Tooltip>
           <DeletePopover
