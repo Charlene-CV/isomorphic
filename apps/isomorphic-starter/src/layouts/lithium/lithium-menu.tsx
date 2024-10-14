@@ -98,7 +98,7 @@ export const EnhancedMenu = forwardRef(
 
     useEffect(() => {
       if (
-        items.some((item) =>
+        items?.some((item) =>
           item.subMenuItems?.some((subItem) => subItem.href === pathname)
         )
       ) {

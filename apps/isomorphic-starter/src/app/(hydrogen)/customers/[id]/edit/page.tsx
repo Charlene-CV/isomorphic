@@ -36,7 +36,6 @@ export default function EditCustomerPage({
   const { id } = params;
 
   const [customer, setCustomer] = useState<Customer | null>(null);
-  const [people, setPeople] = useState<any[] | null>([]);
 
   // Effect to fetch the customer when the router is ready
   const fetchCustomer = async () => {

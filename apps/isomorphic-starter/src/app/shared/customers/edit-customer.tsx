@@ -1,10 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PiXBold } from 'react-icons/pi';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Input, Button, ActionIcon, Title, Select, Switch } from 'rizzui';
-import { useModal } from '@/app/shared/modal-views/use-modal';
+import { Input, Button, Title, Select, Switch } from 'rizzui';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';
 // @ts-ignore
@@ -34,7 +32,6 @@ interface EditCustomerProps {
 }
 
 export default function EditCustomer({ customerUuid }: EditCustomerProps) {
-  const { closeModal } = useModal();
   const [isLoading, setLoading] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [accessorials, setAccessorials] = useState<Accessorial[]>([]);
@@ -177,9 +174,6 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
             <Title as="h4" className="font-semibold">
               Edit Customer
             </Title>
-            <ActionIcon size="sm" variant="text" onClick={closeModal}>
-              <PiXBold className="h-auto w-5" />
-            </ActionIcon>
           </div>
           <div>
             <Input
@@ -782,13 +776,6 @@ export default function EditCustomer({ customerUuid }: EditCustomerProps) {
           </div>
 
           <div className="col-span-full flex items-center justify-end gap-4">
-            <Button
-              variant="outline"
-              onClick={closeModal}
-              className="w-full @xl:w-auto"
-            >
-              Cancel
-            </Button>
             <Button
               type="submit"
               isLoading={isLoading}

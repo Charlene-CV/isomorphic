@@ -156,7 +156,7 @@ export const getColumns = ({
       width: 120,
       render: (_: any, row: People) => (
         <div className="flex gap-2">
-          <Tooltip content="View Details" placement="top">
+          {/* <Tooltip content="View Details" placement="top">
             <ActionIcon
               onClick={async () => {
                 if (fetchPerson) {
@@ -169,7 +169,7 @@ export const getColumns = ({
             >
               <EyeIcon />
             </ActionIcon>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip content="Edit" placement="top">
             <ActionIcon onClick={() => handleEditClick(row.uuid)}>
               <ModalButton
@@ -184,7 +184,7 @@ export const getColumns = ({
                 customSize="600px"
                 className="mt-0"
               />
-              <PencilIcon />
+              {/* <PencilIcon /> */}
             </ActionIcon>
           </Tooltip>
           <DeletePopover

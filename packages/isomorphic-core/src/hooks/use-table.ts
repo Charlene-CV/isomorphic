@@ -135,7 +135,7 @@ export function useTable<T extends AnyObject>(
     return (
       sortedData
         ?.filter((item) => {
-          const isMatchingItem = Object.entries(filters).some(
+          const isMatchingItem = Object.entries(filters)?.some(
             ([columnId, filterValue]) => {
               if (
                 Array.isArray(filterValue) &&
@@ -170,10 +170,10 @@ export function useTable<T extends AnyObject>(
         })
         // global search after running filters
         .filter((item) =>
-          Object.values(item).some((value) =>
+          Object.values(item)?.some((value) =>
             typeof value === 'object'
               ? value &&
-                Object.values(value).some(
+                Object.values(value)?.some(
                   (nestedItem) =>
                     nestedItem &&
                     String(nestedItem).toLowerCase().includes(searchTermLower)
@@ -197,10 +197,10 @@ export function useTable<T extends AnyObject>(
     const searchTermLower = searchTerm.toLowerCase();
 
     return sortedData?.filter((item) =>
-      Object.values(item).some((value) =>
+      Object.values(item)?.some((value) =>
         typeof value === 'object'
           ? value &&
-            Object.values(value).some(
+            Object.values(value)?.some(
               (nestedItem) =>
                 nestedItem &&
                 String(nestedItem).toLowerCase().includes(searchTermLower)

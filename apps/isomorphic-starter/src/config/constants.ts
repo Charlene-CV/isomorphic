@@ -98,3 +98,9 @@ export interface IBusinessHours {
   open: Date;
   close: Date;
 }
+
+export const TariffTypes = {
+  PALLETS: 'pallets',
+  CWT: 'Cube weight (CWT)',
+  MILE: 'Per mile by weight range',
+};

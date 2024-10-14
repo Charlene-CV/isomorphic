@@ -11,8 +11,8 @@ const addressSchema = z.object({
 });
 
 const businessHoursSchema = z.object({
-  open: z.date(),
-  close: z.date(),
+  open: z.date().nullable(),
+  close: z.date().nullable(),
 });
 
 export const customerAddressesSchema = z.object({
@@ -23,14 +23,14 @@ export const customerAddressesSchema = z.object({
   fax: z.string().optional(),
   email: z.string().optional(),
   businessHours: businessHoursSchema.nullable(),
-  addresses: addressSchema.nullable(),
+  address: addressSchema.nullable(),
   externalId: z.string().nullable().optional(),
   customBroker: z.string().nullable().optional(),
   bolInstruction: z.string().nullable().optional(),
   shipperNotes: z.string().nullable().optional(),
   consigneeNotes: z.string().nullable().optional(),
   customerUuid: z.string().min(1),
-  accessorialUuids: z.array(z.string()).optional(),
+  accessorialUuids: z.array(z.string()).nullable().optional(),
 });
 
 export type CustomerAddressesInput = z.infer<typeof customerAddressesSchema>;

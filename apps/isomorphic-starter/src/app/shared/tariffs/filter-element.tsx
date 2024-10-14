@@ -5,7 +5,7 @@ import StatusField from '@/app/shared/controlled-table/status-field';
 import { Badge, Text, Title, Button, Input } from 'rizzui';
 import { STATUSES } from '@/data/users-data';
 import ModalButton from '@/app/shared/modal-button';
-import CreateAddresses from './create-addresses';
+import CreateTariff from './create-tariff';
 
 const statusOptions = [
   {
@@ -29,9 +29,40 @@ type FilterElementProps = {
   handleReset: () => void;
   onSearch: (searchTerm: string) => void;
   searchTerm: string;
-  fetchAddresses: any;
-  uuid: string;
+  fetchTariffs: any;
 };
+
+function renderOptionDisplayValue(value: string) {
+  switch (value) {
+    case STATUSES.Active:
+      return (
+        <div className="flex items-center">
+          <Badge color="success" renderAsDot />
+          <Text className="ms-2 font-medium capitalize text-green-dark">
+            {value}
+          </Text>
+        </div>
+      );
+    case STATUSES.Deactivated:
+      return (
+        <div className="flex items-center">
+          <Badge color="danger" renderAsDot />
+          <Text className="ms-2 font-medium capitalize text-red-dark">
+            {value}
+          </Text>
+        </div>
+      );
+    default:
+      return (
+        <div className="flex items-center">
+          <Badge renderAsDot className="bg-gray-400" />
+          <Text className="ms-2 font-medium capitalize text-gray-600">
+            {value}
+          </Text>
+        </div>
+      );
+  }
+}
 
 export default function FilterElement({
   isFiltered,
@@ -40,14 +71,13 @@ export default function FilterElement({
   updateFilter,
   onSearch,
   searchTerm,
-  fetchAddresses,
-  uuid,
+  fetchTariffs,
 }: FilterElementProps) {
   return (
     <>
       <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container">
         <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-          All Addresses
+          Tariffs
         </Title>
 
         <StatusField
@@ -81,7 +111,7 @@ export default function FilterElement({
 
         <Input
           type="search"
-          placeholder="Search for addresses..."
+          placeholder="Search for tariffs..."
           value={searchTerm}
           onClear={() => onSearch('')}
           onChange={(event) => onSearch(event.target.value)}
@@ -93,10 +123,8 @@ export default function FilterElement({
 
         <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
           <ModalButton
-            label="Add New Address"
-            view={
-              <CreateAddresses uuid={uuid} fetchAddresses={fetchAddresses} />
-            }
+            label="Add New Tariff"
+            view={<CreateTariff fetchTariffs={fetchTariffs} />}
             customSize="600px"
             className="mt-0"
           />
@@ -104,36 +132,4 @@ export default function FilterElement({
       </div>
     </>
   );
-}
-
-function renderOptionDisplayValue(value: string) {
-  switch (value) {
-    case STATUSES.Active:
-      return (
-        <div className="flex items-center">
-          <Badge color="success" renderAsDot />
-          <Text className="ms-2 font-medium capitalize text-green-dark">
-            {value}
-          </Text>
-        </div>
-      );
-    case STATUSES.Deactivated:
-      return (
-        <div className="flex items-center">
-          <Badge color="danger" renderAsDot />
-          <Text className="ms-2 font-medium capitalize text-red-dark">
-            {value}
-          </Text>
-        </div>
-      );
-    default:
-      return (
-        <div className="flex items-center">
-          <Badge renderAsDot className="bg-gray-400" />
-          <Text className="ms-2 font-medium capitalize text-gray-600">
-            {value}
-          </Text>
-        </div>
-      );
-  }
 }

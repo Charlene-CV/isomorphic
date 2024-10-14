@@ -2,10 +2,10 @@
 
 import { Badge, Text, Tooltip, ActionIcon } from 'rizzui';
 import { HeaderCell } from '@/app/shared/table';
+import AvatarCard from '@ui/avatar-card';
 import DeletePopover from '@/app/shared/delete-popover';
 import { ColumnType } from 'rc-table';
-import AvatarCard from '@ui/avatar-card';
-import { Customer } from '.';
+import { Tariffs } from '.';
 import { routes } from '@/config/routes';
 import PencilIcon from '@components/icons/pencil';
 import Link from 'next/link';
@@ -25,18 +25,18 @@ function getStatusBadge(status: boolean) {
 }
 
 type Columns = {
-  data: Customer[];
+  data: Tariffs[];
   sortConfig?: any;
   handleSelectAll: () => void;
   checkedItems: string[];
   onDeleteItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
-  fetchCustomer?: (id: string) => Promise<Customer | null>;
-  fetchCustomers?: () => Promise<Customer[] | null>;
+  fetchTariff?: (uuid: string) => Promise<Tariffs | null>;
+  fetchTariffs?: any;
 };
 
-type CustomerColumnType = ColumnType<Customer>;
+type TariffColumnType = ColumnType<Tariffs>;
 
 export const getColumns = ({
   data,
@@ -44,18 +44,18 @@ export const getColumns = ({
   handleSelectAll,
   onDeleteItem,
   onHeaderCellClick,
-  fetchCustomer,
-  fetchCustomers,
+  fetchTariff,
+  fetchTariffs,
   onChecked,
   sortConfig,
-}: Columns): CustomerColumnType[] => {
+}: Columns): TariffColumnType[] => {
   return [
     {
       title: <HeaderCell title="Name" />,
-      dataIndex: 'fullName',
-      key: 'fullName',
+      dataIndex: 'name',
+      key: 'name',
       width: 250,
-      render: (_: string, customer: Customer) => {
+      render: (_: string, tariff: Tariffs) => {
         // Fallback to initials when avatar is not available
         const getInitials = (name: string) => {
           const names = name.split(' ');
@@ -65,7 +65,7 @@ export const getColumns = ({
           return initials;
         };
 
-        const displayName = customer?.name;
+        const displayName = `${tariff.name}`;
         const avatarContent = getInitials(displayName);
 
         return (
@@ -77,20 +77,21 @@ export const getColumns = ({
       },
     },
     {
-      title: (
-        <HeaderCell
-          title="Short Code"
-          sortable
-          ascending={
-            sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
-          }
-        />
-      ),
-      dataIndex: 'shortCode',
-      key: 'shortCode',
+      title: <HeaderCell title="Type" />,
+      dataIndex: 'type',
+      key: 'type',
       width: 250,
-      render: (shortCode) => {
-        return shortCode;
+      render: (type) => {
+        return type;
+      },
+    },
+    {
+      title: <HeaderCell title="Notes" />,
+      dataIndex: 'notes',
+      key: 'notes',
+      width: 250,
+      render: (notes) => {
+        return notes;
       },
     },
     {
@@ -101,29 +102,20 @@ export const getColumns = ({
       render: (value: boolean) => getStatusBadge(value),
     },
     {
-      title: <HeaderCell title="Portal Access" />,
-      dataIndex: 'hasPortalAccess',
-      key: 'hasPortalAccess',
+      title: <HeaderCell title="Importing" />,
+      dataIndex: 'isImporting',
+      key: 'isImporting',
       width: 150,
       render: (value: boolean) => getStatusBadge(value),
-    },
-    {
-      title: <HeaderCell title="Location sharing" />,
-      dataIndex: 'liveLocation',
-      key: 'liveLocation',
-      width: 250,
-      render: (liveLocation) => {
-        return liveLocation;
-      },
     },
     {
       title: <HeaderCell title="Actions" />,
       key: 'actions',
       width: 120,
-      render: (_: any, row: Customer) => (
+      render: (_: any, row: Tariffs) => (
         <div className="flex gap-2">
           <Tooltip content="Edit" placement="top">
-            <Link href={routes.editCustomer(row.uuid)} passHref>
+            <Link href={routes.editTariff(row.uuid)} passHref>
               <ActionIcon
                 as="span"
                 size="sm"

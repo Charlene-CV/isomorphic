@@ -39,7 +39,7 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
       fax: '',
       email: '',
       businessHours: null,
-      addresses: null,
+      address: null,
       externalId: '',
       customBroker: '',
       bolInstruction: '',
@@ -74,21 +74,21 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
   const onSubmit: SubmitHandler<CustomerAddressesInput> = async (data) => {
     setLoading(true);
     const formatData = {
-      company: data?.company,
-      contactName: data?.contactName,
-      phone: data?.phone,
-      phoneExt: data?.phoneExt,
-      fax: data?.fax,
-      email: data?.email,
-      businessHours: data?.businessHours,
-      addresses: data?.addresses,
-      externalId: data?.externalId,
-      customBroker: data?.customBroker,
-      bolInstruction: data?.bolInstruction,
-      shipperNotes: data?.shipperNotes,
-      consigneeNotes: data?.consigneeNotes,
+      company: data?.company || null,
+      contactName: data?.contactName || null,
+      phone: data?.phone || null,
+      phoneExt: data?.phoneExt || null,
+      fax: data?.fax || null,
+      email: data?.email || null,
+      businessHours: data?.businessHours || null,
+      address: data?.address || null,
+      externalId: data?.externalId || null,
+      customBroker: data?.customBroker || null,
+      bolInstruction: data?.bolInstruction || null,
+      shipperNotes: data?.shipperNotes || null,
+      consigneeNotes: data?.consigneeNotes || null,
       customerUuid: uuid,
-      accessorialUuids: data?.accessorialUuids,
+      accessorialUuids: data?.accessorialUuids || [],
     };
 
     const user: any = JSON.parse(Cookies.get('user'));
@@ -212,7 +212,7 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 value={
                   field.value instanceof Date
                     ? field.value.toTimeString().substring(0, 5) // Get HH:mm format
-                    : field.value
+                    : field.value || undefined
                 }
                 className="col-span-full"
                 error={errors?.businessHours?.open?.message}
@@ -240,7 +240,7 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 value={
                   field.value instanceof Date
                     ? field.value.toTimeString().substring(0, 5) // Get HH:mm format
-                    : field.value
+                    : field.value || undefined
                 }
                 className="col-span-full"
                 error={errors?.businessHours?.close?.message}
@@ -256,7 +256,7 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
             )}
           />
           <Controller
-            name="addresses.address"
+            name="address.address"
             control={control}
             render={({ field }) => (
               <Input
@@ -265,12 +265,12 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 {...field}
                 value={field.value ?? ''}
                 className="col-span-full"
-                error={errors?.addresses?.address?.message}
+                error={errors?.address?.address?.message}
               />
             )}
           />
           <Controller
-            name="addresses.city"
+            name="address.city"
             control={control}
             render={({ field }) => (
               <Input
@@ -279,12 +279,12 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 {...field}
                 value={field.value ?? ''}
                 className="col-span-full"
-                error={errors?.addresses?.city?.message}
+                error={errors?.address?.city?.message}
               />
             )}
           />
           <Controller
-            name="addresses.state"
+            name="address.state"
             control={control}
             render={({ field }) => (
               <Input
@@ -293,12 +293,12 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 {...field}
                 value={field.value ?? ''}
                 className="col-span-full"
-                error={errors?.addresses?.state?.message}
+                error={errors?.address?.state?.message}
               />
             )}
           />
           <Controller
-            name="addresses.postal"
+            name="address.postal"
             control={control}
             render={({ field }) => (
               <Input
@@ -307,12 +307,12 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 {...field}
                 value={field.value ?? ''}
                 className="col-span-full"
-                error={errors?.addresses?.postal?.message}
+                error={errors?.address?.postal?.message}
               />
             )}
           />
           <Controller
-            name="addresses.country"
+            name="address.country"
             control={control}
             render={({ field }) => (
               <Input
@@ -321,12 +321,12 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 {...field}
                 value={field.value ?? ''}
                 className="col-span-full"
-                error={errors?.addresses?.country?.message}
+                error={errors?.address?.country?.message}
               />
             )}
           />
           <Controller
-            name="addresses.latitude"
+            name="address.latitude"
             control={control}
             render={({ field }) => (
               <Input
@@ -335,13 +335,13 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 type="number"
                 {...field}
                 className="col-span-full"
-                error={errors?.addresses?.latitude?.message}
+                error={errors?.address?.latitude?.message}
                 onChange={(e) => field.onChange(e.target.valueAsNumber)}
               />
             )}
           />
           <Controller
-            name="addresses.longitude"
+            name="address.longitude"
             control={control}
             render={({ field }) => (
               <Input
@@ -350,7 +350,7 @@ export default function CreateAddresses({ uuid, fetchAddresses }: any) {
                 type="number"
                 {...field}
                 className="col-span-full"
-                error={errors?.addresses?.longitude?.message}
+                error={errors?.address?.longitude?.message}
                 onChange={(e) => field.onChange(e.target.valueAsNumber)}
               />
             )}

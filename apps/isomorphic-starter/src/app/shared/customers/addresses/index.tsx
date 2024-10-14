@@ -33,7 +33,7 @@ export interface Addresses {
   phoneExt?: string | null;
   fax?: string | null;
   email?: string | null;
-  addresses?: IAddress[] | [];
+  address?: IAddress[] | [];
   businessHours?: IBusinessHours | null;
   externalId?: string | null;
   customBroker?: string | null;
@@ -41,13 +41,15 @@ export interface Addresses {
   shipperNotes?: string | null;
   consigneeNotes?: string | null;
   customer: Customer;
-  accessorials: Accessorial[] | [];
+  accessorials: Accessorial[] | null;
 }
 
 export default function AddressTable() {
   const [pageSize, setPageSize] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [address, setAddress] = useState<any>(null);
+  const [address, setAddress] = useState([]);
+  const [editAddress, setEditAddress] = useState<Addresses | null>(null);
+
   const pathname = usePathname();
   const segments = pathname.split('/');
   const uuidval = segments[2];
@@ -148,10 +150,10 @@ export default function AddressTable() {
 
   const handleEditClick = async (uuid: string) => {
     if (fetchAddress) {
-      const address = await fetchAddress(uuid);
+      const newAddress = await fetchAddress(uuid);
 
-      if (address) {
-        setAddress(address);
+      if (newAddress) {
+        setEditAddress(newAddress);
         setIsModalOpen(true);
       }
     }
@@ -221,7 +223,7 @@ export default function AddressTable() {
         onSearch={handleSearch}
         searchTerm={searchTerm}
         fetchAddresses={fetchAddresses}
-        uuid={address?.customer?.uuid}
+        uuid={uuid}
       />
       <ControlledTable
         variant="modern"

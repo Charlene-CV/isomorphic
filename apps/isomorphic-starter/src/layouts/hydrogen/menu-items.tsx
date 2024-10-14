@@ -376,6 +376,11 @@ export const menuItems = [
     href: routes.forms.customers,
     icon: <PiUserDuotone />,
   },
+  {
+    name: 'Tariffs',
+    href: routes.forms.tariffs,
+    icon: <PiGridFourDuotone />,
+  },
   // label start
   {
     name: 'Tables',

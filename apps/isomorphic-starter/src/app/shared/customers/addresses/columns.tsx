@@ -1,9 +1,7 @@
 'use client';
 
-import { Badge, Text, Tooltip, ActionIcon } from 'rizzui';
+import { Tooltip, ActionIcon } from 'rizzui';
 import { HeaderCell } from '@/app/shared/table';
-import EyeIcon from '@components/icons/eye';
-import PencilIcon from '@components/icons/pencil';
 import AvatarCard from '@ui/avatar-card';
 import DeletePopover from '@/app/shared/delete-popover';
 import { ColumnType } from 'rc-table';
@@ -128,7 +126,7 @@ export const getColumns = ({
       width: 120,
       render: (_: any, row: Addresses) => (
         <div className="flex gap-2">
-          <Tooltip content="View Details" placement="top">
+          {/* <Tooltip content="View Details" placement="top">
             <ActionIcon
               onClick={async () => {
                 if (fetchAddress) {
@@ -141,7 +139,7 @@ export const getColumns = ({
             >
               <EyeIcon />
             </ActionIcon>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip content="Edit" placement="top">
             <ActionIcon onClick={() => handleEditClick(row.uuid)}>
               <ModalButton

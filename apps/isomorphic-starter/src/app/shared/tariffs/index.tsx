@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@hooks/use-table';
-import { getColumns } from '@/app/shared/customers/columns';
+import { getColumns } from '@/app/shared/tariffs/columns';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';
 import { ColumnType } from 'rc-table';
@@ -11,12 +11,11 @@ import ControlledTable from '../controlled-table';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 // @ts-ignore
 import Cookies from 'js-cookie';
-import { IAddress, IBusinessHours } from '@/config/constants';
-import { People } from './people';
-import { Addresses } from './addresses';
+import { Accessorial } from '../accessorials';
+import { Customer } from '../customers';
 
 const FilterElement = dynamic(
-  () => import('@/app/shared/customers/filter-element'),
+  () => import('@/app/shared/tariffs/filter-element'),
   { ssr: false }
 );
 
@@ -25,58 +24,37 @@ const filterState = {
   status: '',
 };
 
-interface Tag {
+export interface Tariffs {
   uuid: string;
   name: string;
-}
-
-interface Accessorial {
-  uuid: string;
-  name: string;
-}
-
-export interface Customer {
-  uuid: string;
-  name: string;
-  shortCode: string;
-  balance?: number | null;
-  creditLimit?: number | null;
-  externalId?: string | null;
-  quickbookId?: string | null;
-  customerType?: string | null;
-  billingOption?: string | null;
-  businessHours?: IBusinessHours | null;
+  type: string;
   notes?: string | null;
-  weight: string; // default(lbs)
-  length: string; // default(in)
-  contactName?: string | null;
-  contactEmail?: string | null;
-  contactPhone?: string | null;
-  requireQuote: boolean;
-  currency: string; // default(CAD)
+  startDate?: Date | null;
+  endDate?: Date | null;
+  fuelTable: string;
+  basePerc?: number | null;
+  adjustmentPerc?: number | null;
+  ratePerc?: number | null;
+  rangMultiplier: number;
   isActive: boolean;
-  requireDimensions: boolean;
-  hasPortalAccess: boolean;
-  liveLocation?: string | null;
-  logo?: string | null;
-  addresses?: IAddress | null;
-  serviceType?: string | null;
-  accessorials: Accessorial[] | [];
-  tags: Tag[] | [];
-  people: People[] | [];
-  customerAddresses: Addresses[] | [];
+  isImporting: boolean;
+  customer: Customer;
+  accessorials: Accessorial[] | null;
+  // cwtRanges?: CwtRanges[] | [];
+  // cwtLanes?: CwtLanes[] | [];
 }
 
-export default function CustomerTable({ customers, fetchCustomers }: any) {
+export default function TariffTable({ tariffs, fetchTariffs }: any) {
   const [pageSize, setPageSize] = useState(10);
 
-  const handleDeleteCustomer = async (uuids: string[]) => {
+  const handleDeleteTariff = async (uuids: string[]) => {
     try {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
+
       if (uuids.length > 0) {
         const response = await axios.delete(
-          `${baseUrl}/api/v1/customers/delete`,
+          `${baseUrl}/api/v1/tariffs/delete`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -87,22 +65,22 @@ export default function CustomerTable({ customers, fetchCustomers }: any) {
         );
 
         if (response.status === 200) {
-          fetchCustomers();
+          fetchTariffs();
         }
       }
     } catch (error) {
       // Handle error here
-      console.error('Error removing customers:', error);
+      console.error('Error removing tariffs:', error);
     }
   };
 
-  const getCustomer = async (uuid: string): Promise<Customer | null> => {
+  const getTariff = async (uuid: string): Promise<Tariffs | null> => {
     try {
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
 
-      const response = await axios.get<{ data: Customer }>(
-        `${baseUrl}/api/v1/customers/find-one/${uuid}`,
+      const response = await axios.get<{ data: Tariffs }>(
+        `${baseUrl}/api/v1/tariffs/find-one/${uuid}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -117,20 +95,20 @@ export default function CustomerTable({ customers, fetchCustomers }: any) {
       }
     } catch (error) {
       // Handle error here
-      console.error('Error fetching customer:', error);
+      console.error('Error fetching Tariff:', error);
       return null;
     }
   };
 
-  const fetchCustomer = useCallback(
-    async (uuid: string): Promise<Customer | null> => {
-      return await getCustomer(uuid);
+  const fetchTariff = useCallback(
+    async (uuid: string): Promise<Tariffs | null> => {
+      return await getTariff(uuid);
     },
     []
   );
 
   const onDeleteItem = useCallback((uuid: string) => {
-    handleDeleteCustomer([uuid]);
+    handleDeleteTariff([uuid]);
   }, []);
 
   const {
@@ -149,7 +127,7 @@ export default function CustomerTable({ customers, fetchCustomers }: any) {
     handleRowSelect,
     handleSelectAll,
     handleReset,
-  } = useTable(customers, pageSize, filterState);
+  } = useTable(tariffs, pageSize, filterState);
 
   const onHeaderCellClick = (value: string) => ({
     onClick: () => {
@@ -160,39 +138,39 @@ export default function CustomerTable({ customers, fetchCustomers }: any) {
   const columns = useMemo(
     () =>
       getColumns({
-        data: customers,
+        data: tariffs,
         sortConfig,
         checkedItems: selectedRowKeys,
         onHeaderCellClick,
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
-        fetchCustomer: async (uuid: string) => {
-          const customer = await fetchCustomer(uuid);
-          if (customer) {
-            // Do something with the customer
-            return customer;
+        fetchTariff: async (uuid: string) => {
+          const tariff = await fetchTariff(uuid);
+
+          if (tariff) {
+            return tariff;
           }
-          // Handle the case where no customer is returned
+
           return null;
         },
-        fetchCustomers,
+        fetchTariffs,
       }) as unknown as ColumnType<DefaultRecordType>[],
     [
-      customers,
+      tariffs,
       sortConfig,
       selectedRowKeys,
       onHeaderCellClick,
       onDeleteItem,
       handleRowSelect,
       handleSelectAll,
-      fetchCustomer,
-      fetchCustomers,
+      fetchTariff,
+      fetchTariffs,
     ]
   );
 
   return (
-    <div className="mt-14">
+    <div>
       <FilterElement
         isFiltered={isFiltered}
         filters={filters}
@@ -200,11 +178,12 @@ export default function CustomerTable({ customers, fetchCustomers }: any) {
         handleReset={handleReset}
         onSearch={handleSearch}
         searchTerm={searchTerm}
-        fetchCustomers={fetchCustomers}
+        fetchTariffs={fetchTariffs}
       />
+
       <ControlledTable
         variant="modern"
-        data={customers}
+        data={tariffs}
         isLoading={isLoading}
         showLoadingText={true}
         columns={columns}

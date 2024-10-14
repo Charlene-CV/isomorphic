@@ -3,6 +3,6 @@ export function filterData<T extends Record<string, any>>(
   filterKeys: string[]
 ) {
   return array.filter((obj) => {
-    return Object.values(obj).some((key) => filterKeys.includes(key));
+    return Object.values(obj)?.some((key) => filterKeys.includes(key));
   });
 }

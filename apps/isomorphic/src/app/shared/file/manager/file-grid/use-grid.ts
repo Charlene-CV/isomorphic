@@ -68,10 +68,10 @@ export function useGrid<T extends AnyObject>(
   const filteredData = () => {
     return searchTerm
       ? paginatedData().filter((item: any) =>
-          Object.values(item).some((value) => {
+          Object.values(item)?.some((value) => {
             return typeof value === 'object'
               ? value &&
-                  Object.values(value).some(
+                  Object.values(value)?.some(
                     (nestedItem) =>
                       nestedItem &&
                       String(nestedItem)

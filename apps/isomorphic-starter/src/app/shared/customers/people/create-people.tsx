@@ -71,6 +71,8 @@ export default function CreatePeople({ uuid, fetchCustomerPeople }: any) {
       closeModal();
     } catch (error) {
       console.error('Error during form submission:', error); // Log any errors
+    } finally {
+      setLoading(false); // always stop loading state
     }
   };
 
