@@ -10,17 +10,17 @@ import ControlledTable from "../controlled-table";
 import { DefaultRecordType } from "rc-table/lib/interface";
 // @ts-ignore
 import Cookies from "js-cookie";
-import { CarrierFormInput } from "@/validators/carrier-schema";
+import { TerminalFormInput } from "@/validators/terminal.schema";
 import { useModal } from "../modal-views/use-modal";
-import EditCarrier from "./edit-carrier";
+import EditTerminal from "./edit-terminal";
 import { toast } from "react-hot-toast";
 import { Button, Text } from "rizzui";
+import { Controller, useForm } from "react-hook-form";
 import FormGroup from "../form-group";
-import { useForm, Controller } from 'react-hook-form';
-import { Checkbox } from '@nextui-org/checkbox';
+import { Checkbox } from "@nextui-org/checkbox";
 
 const FilterElement = dynamic(
-  () => import("@/app/shared/carriers/filter-element"),
+  () => import("@/app/shared/terminals/filter-element"),
   { ssr: false }
 );
 const filterState = {
@@ -40,17 +40,17 @@ const filterState = {
   ],
 };
 
-export default function CarriersTable({ carriers, fetchCarriers }: any) {
+export default function TerminalsTable({ terminals, fetchTerminals }: any) {
+  const { control } = useForm();
   const [pageSize, setPageSize] = useState(10);
-  const [editCarrier, setEditCarrier] = useState<CarrierFormInput | null>(null);
+  const [editTerminal, setEditTerminal] = useState<TerminalFormInput | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { openModal, closeModal } = useModal();
-  const [filteredCarriers, setFilteredCarriers] = useState<CarrierFormInput[]>(
+  const [filteredTerminals, setFilteredTerminals] = useState<TerminalFormInput[]>(
     []
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
-  const { control } = useForm();
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     'name',
     'dotId',
@@ -60,15 +60,25 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
     'longitude'
   ]);
 
+  const toggleColumn = (columnKey: string) => {
+    if (columnKey !== 'action') {
+      setVisibleColumns((prevColumns) =>
+        prevColumns.includes(columnKey)
+          ? prevColumns.filter((col) => col !== columnKey)
+          : [...prevColumns, columnKey]
+      );
+    }
+  };
+
   const handleEditClick = async (uuid: string) => {
-    const carrier = await fetchCarrier(uuid);
-    if (carrier) {
-      setEditCarrier(carrier);
+    const terminal = await fetchTerminals(uuid);
+    if (terminal) {
+      setEditTerminal(terminal);
       openModal({
         view: (
-          <EditCarrier
-            carrierData={carrier}
-            fetchCarriers={fetchCarriers}
+          <EditTerminal
+            terminalData={terminal}
+            fetchTerminals={fetchTerminals}
             closeModal={() => setIsModalOpen(false)}
           />
         ),
@@ -76,13 +86,13 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
     }
   };
 
-  const handleDeleteCarrier = async (uuids: string[]) => {
+  const handleDeleteTerminal = async (uuids: string[]) => {
     try {
       const user: any = JSON.parse(Cookies.get("user"));
       const token = user.token;
       if (uuids.length > 0) {
         const response = await axios.delete(
-          `${baseUrl}/api/v1/carriers/delete`,
+          `${baseUrl}/api/v1/terminals/delete`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -93,39 +103,39 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
         );
 
         if (response.status === 200) {
-          fetchCarriers();
-          toast.success(<Text>Carrier deleted successfully!</Text>);
+          fetchTerminals();
+          toast.success(<Text>Terminal deleted successfully!</Text>);
         } else {
-          toast.error(<Text>Error deleting carrier...</Text>);
+          toast.error(<Text>Error deleting terminal...</Text>);
         }
       }
     } catch (error) {
-      console.error("Error removing carriers:", error);
+      console.error("Error removing terminals:", error);
     }
   };
 
   const handleSearching = async (param: string) => {
     setSearchTerm(param);
-    const carriersPromise = fetchCarriers();
-    let savedCarriers = await carriersPromise;
-    carriersPromise.then((carriersArray: any) => {
-      savedCarriers = carriersArray;
+    const terminalsPromise = fetchTerminals();
+    let savedTerminals = await terminalsPromise;
+    terminalsPromise.then((terminalsArray: any) => {
+      savedTerminals = terminalsArray;
     });
-    let filtered = savedCarriers.filter((carrier: { name: string }) =>
-      carrier.name.includes(param)
+    let filtered = savedTerminals.filter((terminal: { name: string }) =>
+      terminal.name.includes(param)
     );
-    setFilteredCarriers(filtered);
+    setFilteredTerminals(filtered);
   };
 
   useEffect(() => {
     console.log("Search term changed:", searchTerm);
   }, [searchTerm]);
-  const getCarrier = async (uuid: string): Promise<CarrierFormInput | null> => {
+  const getTerminal = async (uuid: string): Promise<TerminalFormInput | null> => {
     try {
       const user: any = JSON.parse(Cookies.get("user"));
       const token = user.token;
-      const response = await axios.get<{ data: CarrierFormInput }>(
-        `${baseUrl}/api/v1/carriers/find-one/${uuid}`,
+      const response = await axios.get<{ data: TerminalFormInput }>(
+        `${baseUrl}/api/v1/terminals/find-one/${uuid}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -139,19 +149,19 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
         return null;
       }
     } catch (error) {
-      console.error("Error fetching carrier:", error);
+      console.error("Error fetching terminal:", error);
       return null;
     }
   };
-  const fetchCarrier = useCallback(
-    async (uuid: string): Promise<CarrierFormInput | null> => {
-      return await getCarrier(uuid);
+  const fetchTerminal = useCallback(
+    async (uuid: string): Promise<TerminalFormInput | null> => {
+      return await getTerminal(uuid);
     },
     []
   );
 
   const onDeleteItem = useCallback((uuid: string) => {
-    handleDeleteCarrier([uuid]);
+    handleDeleteTerminal([uuid]);
   }, []);
 
   const {
@@ -168,18 +178,7 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
     handleRowSelect,
     handleSelectAll,
     handleReset,
-  } = useTable(carriers, pageSize, filterState);
-
-  const toggleColumn = (columnKey: string) => {
-    if (columnKey !== 'action') {
-      setVisibleColumns((prevColumns) =>
-        prevColumns.includes(columnKey)
-          ? prevColumns.filter((col) => col !== columnKey)
-          : [...prevColumns, columnKey]
-      );
-    }
-  };
-
+  } = useTable(terminals, pageSize, filterState);
   const columns = useMemo(
     () =>
       [
@@ -234,7 +233,7 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
         {
           title: "Action",
           key: "action",
-          render: (text: string, record: CarrierFormInput) => (
+          render: (text: string, record: TerminalFormInput) => (
             <>
               <button
                 className="mr-4"
@@ -247,7 +246,7 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
           ),
         },
       ] as ColumnType<DefaultRecordType>[],
-    [carriers, sortConfig, selectedRowKeys, handleSort, onDeleteItem]
+    [terminals, sortConfig, selectedRowKeys, handleSort, onDeleteItem]
   );
 
 
@@ -301,6 +300,7 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
           </div>
         </div>
       )}
+
       <div className='flex flex-row justify-between'>
         <FilterElement
           isFiltered={isFiltered}
@@ -309,15 +309,16 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
           handleReset={handleReset}
           onSearch={handleSearching}
           searchTerm={searchTerm}
-          fetchCarriers={fetchCarriers}
+          fetchTerminals={fetchTerminals}
         />
         <Button onClick={() => setIsColumnModalOpen(true)} className="self-start w-auto mb-2 mt-2 bg-[#a5a234]">
           Select Columns
         </Button>
       </div>
+
       <ControlledTable
         variant="modern"
-        data={filteredCarriers.length > 0 ? filteredCarriers : carriers}
+        data={filteredTerminals.length > 0 ? filteredTerminals : terminals}
         isLoading={isLoading}
         showLoadingText={true}
         columns={columns}
@@ -330,9 +331,9 @@ export default function CarriersTable({ carriers, fetchCarriers }: any) {
         }}
         className="rounded-md border border-muted text-sm shadow-sm"
       />
-      {isModalOpen && editCarrier && (
-        <EditCarrier
-          carrierData={editCarrier}
+      {isModalOpen && editTerminal && (
+        <EditTerminal
+          terminalData={editTerminal}
           closeModal={() => setIsModalOpen(false)}
         />
       )}

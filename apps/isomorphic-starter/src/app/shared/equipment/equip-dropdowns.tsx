@@ -2,8 +2,8 @@ import axios from 'axios';
 import { baseUrl } from '@/config/url';
 // @ts-ignore
 import Cookies from 'js-cookie';
-import { EquipTypeFormInput } from '@/validators/equipmenttype-schema';
-import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype-schema';
+import { EquipTypeFormInput } from '@/validators/equipmenttype.schema';
+import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype.schema';
 import { UserFormInput } from '@/validators/create-user.schema';
 import { RoleFormInput } from '@/validators/create-role.schema';
 

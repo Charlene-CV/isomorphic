@@ -28,7 +28,7 @@ export default function FilterElement({
   return (
     <>
       <div>
-        <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container">
+        <div className="relative mb-4 flex items-center justify-between whitespace-nowrap gap-2.5">
 
           {/* <Input
             type="text"
@@ -57,7 +57,7 @@ export default function FilterElement({
             className="w-full @4xl:w-auto order-3"
           /> */}
 
-          <div className="flex basis-auto justify-end order-4">
+          <div className="flex basis-auto justify-end order-4 ">
             <ModalButton
               label="Add New Equipment"
               view={<CreateEquip fetchEquipments={fetchEquipments} />}
@@ -83,10 +83,10 @@ export default function FilterElement({
             value={searchTerm}
             onClear={() => onSearch('')}
             onChange={(event) => onSearch(event.target.value)}
-            prefix={<PiMagnifyingGlassBold className="h-4 w-4" />}
+            prefix={<PiMagnifyingGlassBold className="h-3 w-3" />}
             rounded="lg"
             clearable
-            className="w-full @xl:ms-auto @xl:w-auto @4xl:w-[230px] @5xl:w-auto text-black bg-white order-6"
+            className="w-auto @xl:ms-auto @xl:w-auto @4xl:w-[230px] @5xl:w-auto text-black bg-white order-6"
           />
         </div>
       </div>

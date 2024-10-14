@@ -3,7 +3,7 @@
 import { PiTrashDuotone, PiMagnifyingGlassBold } from "react-icons/pi";
 import { Badge, Text, Title, Button, Input } from "rizzui";
 import ModalButton from "@/app/shared/modal-button";
-import CreateCarrier from "./create-carrier";
+import CreateTerminal from "./create-terminal";
 import { useEffect, useState } from "react";
 
 type FilterElementProps = {
@@ -13,7 +13,7 @@ type FilterElementProps = {
   handleReset: () => void;
   onSearch: (searchTerm: string) => void;
   searchTerm: string;
-  fetchCarriers: any;
+  fetchTerminals: any;
 };
 
 export default function FilterElement({
@@ -23,7 +23,7 @@ export default function FilterElement({
   updateFilter,
   onSearch,
   searchTerm,
-  fetchCarriers,
+  fetchTerminals,
 }: FilterElementProps) {
   return (
     <>
@@ -41,8 +41,8 @@ export default function FilterElement({
 
           <div className="flex basis-auto justify-end order-4">
             <ModalButton
-              label="Add New Carrier"
-              view={<CreateCarrier fetchCarriers={fetchCarriers} />}
+              label="Add New Terminal"
+              view={<CreateTerminal fetchTerminals={fetchTerminals} />}
               customSize="600px"
               className="mt-0 bg-[#a5a234]"
             />
@@ -61,7 +61,7 @@ export default function FilterElement({
 
           <Input
             type="search"
-            placeholder="Search for carriers..."
+            placeholder="Search for terminals..."
             value={searchTerm}
             onClear={() => onSearch("")}
             onChange={(event) => onSearch(event.target.value)}
