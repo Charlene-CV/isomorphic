@@ -10,7 +10,7 @@ import ControlledTable from '../controlled-table';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 // @ts-ignore
 import Cookies from 'js-cookie';
-import { EquipFormInput } from '@/validators/equipment-schema';
+import { EquipFormInput } from '@/validators/equipment.schema';
 import { useModal } from '../modal-views/use-modal';
 import EditEquip from './edit-equip';
 import FormGroup from '../form-group';
@@ -256,7 +256,7 @@ export default function EquipmentTable({ equipment, fetchEquipments }: any) {
                       <Controller
                         key={column.key}
                         name={`visibleColumns.${column.key}`}
-                        control={control} // Add control from useForm
+                        control={control}
                         render={({ field }) => (
                           <Checkbox
                             isSelected={field.value}
@@ -293,10 +293,7 @@ export default function EquipmentTable({ equipment, fetchEquipments }: any) {
         </div>
       )}
 
-      <div className='flex flex-col'>
-        <Button onClick={() => setIsColumnModalOpen(true)} className="self-start w-auto mb-2 mt-2 bg-[#a5a234]">
-          Select Columns
-        </Button>
+      <div className='flex flex-row justify-between'>
         <FilterElement
           isFiltered={isFiltered}
           filters={filters}
@@ -306,6 +303,9 @@ export default function EquipmentTable({ equipment, fetchEquipments }: any) {
           searchTerm={searchTerm}
           fetchEquipments={fetchEquipments}
         />
+        <Button onClick={() => setIsColumnModalOpen(true)} className="self-start w-auto mb-2 mt-2 bg-[#a5a234]">
+          Select Columns
+        </Button>
       </div>
       <ControlledTable
         variant="modern"

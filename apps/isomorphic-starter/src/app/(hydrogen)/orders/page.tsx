@@ -2,54 +2,51 @@
 
 import ImportButton from "@/app/shared/import-button";
 import PageHeader from "@/app/shared/page-header";
-import EnhancedTanTable from "@/app/shared/tan-table/enhanced";
-import { routes } from "@/config/routes";
 // @ts-ignore
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { TaxFormInput } from "@/validators/taxes.schema";
 import { baseUrl } from "@/config/url";
-import TaxesTable from "@/app/shared/taxes";
+import OrdersTable from "@/app/shared/orders";
+import { OrderFormInput } from "@/validators/create-order.schema";
 
 const pageHeader = {
-  title: "Tax Table",
+  title: "Orders",
   breadcrumb: [
-    {
-      href: routes.accounting,
-      name: "Accounting",
-    },
-    {
-      name: "Taxes",
-    },
+    // {
+    //   href: routes.management,
+    //   name: "Management",
+    // },
+    // {
+    //   name: "Equipment",
+    // },
   ],
 };
 
-export default function TaxTable() {
-  const [data, setData] = useState<TaxFormInput[]>([]);
+export default function OrderTable() {
+  const [data, setData] = useState<OrderFormInput[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchTaxes = async () => {
-    try {
+  const fetchOrders = async () => {
+      console.log("entered fetchorders")
       const user: any = JSON.parse(Cookies.get('user'));
       const token = user.token;
-      const response = await axios.get(`${baseUrl}/api/v1/taxes/all`, {
+      const response = await axios.get(`${baseUrl}/api/v1/orders/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setData(response?.data?.data || []);
-      return response?.data?.data;
-    } catch (error) {
-      console.error('Error fetching taxes:', error);
-    } finally {
       setLoading(false);
-    }
+      return response?.data?.data;
   };
 
   useEffect(() => {
-    fetchTaxes();
+    fetchOrders();
   }, []);
+
+  useEffect(() => {
+  }, [data]);
 
   return (
     <>
@@ -58,7 +55,7 @@ export default function TaxTable() {
           <ImportButton title={"Import File"} className="bg-[#a5a234]"/>
         </div>
       </PageHeader>
-      <TaxesTable taxes={data} fetchTaxes={fetchTaxes} />
+      <OrdersTable orders={data} fetchOrders={fetchOrders} />
     </>
   );
 }

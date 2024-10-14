@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Input, Button, ActionIcon, Title, Text, Select } from 'rizzui';
-import { EquipFormInput } from '@/validators/equipment-schema';
+import { EquipFormInput } from '@/validators/equipment.schema';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';
@@ -12,8 +12,8 @@ import { toast } from "react-hot-toast";
 import { getUsers, getTypes, getSubtypes } from './equip-dropdowns';
 import FormGroup from '../form-group';
 import { UserFormInput } from '@/validators/create-user.schema';
-import { EquipTypeFormInput } from '@/validators/equipmenttype-schema';
-import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype-schema';
+import { EquipTypeFormInput } from '@/validators/equipmenttype.schema';
+import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype.schema';
 import { Checkbox } from "@nextui-org/checkbox";
 
 export default function CreateEquip({ fetchEquipments }: any) {

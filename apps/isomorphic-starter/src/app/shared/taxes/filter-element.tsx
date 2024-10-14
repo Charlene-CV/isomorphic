@@ -28,12 +28,14 @@ export default function FilterElement({
   return (
     <>
       <div>
-        <div className="relative z-50 mb-4 flex flex-wrap items-center justify-between gap-2.5 @container">
-          <Title as="h5" className="-order-6 basis-2/5 @xl:basis-auto">
-            All Taxes
-          </Title>
-
-          <Input
+        <div className="relative mb-4 flex items-center justify-between whitespace-nowrap gap-2.5">
+          <ModalButton
+            label="Add New Tax"
+            view={<CreateTax fetchTaxes={fetchTaxes} />}
+            customSize="600px"
+            className="mt-0 bg-[#a5a234]"
+          />
+          {/* <Input
             type="text"
             placeholder="Filter by Name"
             value={filters['name'] || ''}
@@ -58,16 +60,7 @@ export default function FilterElement({
             onChange={(event) => updateFilter('destination', event.target.value)}
             rounded="lg"
             className="w-full @4xl:w-auto order-3"
-          />
-
-          <div className="flex basis-auto justify-end order-4">
-            <ModalButton
-              label="Add New Tax"
-              view={<CreateTax fetchTaxes={fetchTaxes} />}
-              customSize="600px"
-              className="mt-0"
-            />
-          </div>
+          /> */}
 
           {isFiltered && (
             <Button

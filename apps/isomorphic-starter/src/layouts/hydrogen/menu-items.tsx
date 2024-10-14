@@ -65,8 +65,8 @@ export const menuItems = [
     icon: <PiCalendarDuotone />,
   },
   {
-    name: 'Executive',
-    href: routes.executive.dashboard,
+    name: 'Orders',
+    href: routes.orders,
     icon: <PiBriefcaseDuotone />,
   },
   {

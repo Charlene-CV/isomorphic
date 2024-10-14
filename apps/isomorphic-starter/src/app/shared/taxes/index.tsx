@@ -10,9 +10,13 @@ import ControlledTable from '../controlled-table';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 // @ts-ignore
 import Cookies from 'js-cookie';
-import { TaxFormInput } from '@/validators/taxes-schema';
+import { TaxFormInput } from '@/validators/taxes.schema';
 import { useModal } from '../modal-views/use-modal';
 import EditTax from './edit-tax';
+import { Controller, useForm } from 'react-hook-form';
+import FormGroup from '../form-group';
+import { Checkbox } from '@nextui-org/checkbox';
+import { Button } from 'rizzui';
 
 const FilterElement = dynamic(
   () => import('@/app/shared/taxes/filter-element'),
@@ -26,12 +30,31 @@ const filterState = {
 };
 
 export default function TaxesTable({ taxes, fetchTaxes }: any) {
+  const { control } = useForm();
   const [pageSize, setPageSize] = useState(5);
   const [editTax, setEditTax] = useState<TaxFormInput | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { openModal, closeModal } = useModal();
   const [filteredTaxes, setFilteredTaxes] = useState<TaxFormInput[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>([
+    'name',
+    'origin',
+    'destination',
+    'tax',
+    'createdAt'
+  ]);
+
+  const toggleColumn = (columnKey: string) => {
+    if (columnKey !== 'action') {
+      setVisibleColumns((prevColumns) =>
+        prevColumns.includes(columnKey)
+          ? prevColumns.filter((col) => col !== columnKey)
+          : [...prevColumns, columnKey]
+      );
+    }
+  };
 
   const handleEditClick = async (uuid: string) => {
     const tax = await fetchTax(uuid);
@@ -78,7 +101,7 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
 
   useEffect(() => {
     console.log('Search term changed:', searchTerm);
-  }, [searchTerm]); 
+  }, [searchTerm]);
 
   const getTax = async (uuid: string): Promise<TaxFormInput | null> => {
     try {
@@ -175,15 +198,69 @@ export default function TaxesTable({ taxes, fetchTaxes }: any) {
 
   return (
     <div className="mt-14">
-      <FilterElement
-        isFiltered={isFiltered}
-        filters={filters}
-        updateFilter={updateFilter}
-        handleReset={handleReset}
-        onSearch={handleSearching}
-        searchTerm={searchTerm}
-        fetchTaxes={fetchTaxes}
-      />
+      {isColumnModalOpen && (
+        <div className="bg-white p-6 rounded shadow-md w-1/3 z-60 relative">
+          <form className="grid gap-6 p-6">
+            <>
+              <FormGroup title="Select Columns to Display">
+                <div className="grid grid-cols-2 gap-4">
+                  {columns
+                    .filter((column) => column.key !== 'action')
+                    .map((column) => (
+                      <Controller
+                        key={column.key}
+                        name={`visibleColumns.${column.key}`}
+                        control={control}
+                        render={({ field }) => (
+                          <Checkbox
+                            isSelected={field.value}
+                            onChange={() => toggleColumn(column.key as string)}
+                            defaultSelected={visibleColumns.includes(column.key as string)}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={visibleColumns.includes(column.key as string)}
+                              onChange={() => toggleColumn(column.key as string)}
+                              style={{
+                                outline: '0.5px solid #d1d5db',
+                                borderRadius: '0.25rem',
+                                padding: '4px',
+                                marginRight: '10px',
+                                marginBottom: '4px',
+                              }}
+                            />
+                            {column.title}
+                          </Checkbox>
+                        )}
+                      />
+                    ))}
+
+                </div>
+              </FormGroup>
+            </>
+          </form>
+          <div className="mt-4 flex justify-end">
+            <Button onClick={() => setIsColumnModalOpen(false)} className="w-full md:w-auto bg-[#a5a234]">
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <div className='flex flex-row justify-between'>
+        <Button onClick={() => setIsColumnModalOpen(true)} className="self-start w-auto mb-2 mt-2 bg-[#a5a234]">
+          Select Columns
+        </Button>
+        <FilterElement
+          isFiltered={isFiltered}
+          filters={filters}
+          updateFilter={updateFilter}
+          handleReset={handleReset}
+          onSearch={handleSearching}
+          searchTerm={searchTerm}
+          fetchTaxes={fetchTaxes}
+        />
+      </div>
       <ControlledTable
         variant="modern"
         data={filteredTaxes.length > 0 ? filteredTaxes : taxes}

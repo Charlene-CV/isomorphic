@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input, Button, ActionIcon, Title, Text, Modal } from 'rizzui';
-import { TaxFormInput, taxFormSchema } from '@/validators/taxes-schema';
+import { TaxFormInput, taxFormSchema } from '@/validators/taxes.schema';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import axios from 'axios';
 import { baseUrl } from '@/config/url';

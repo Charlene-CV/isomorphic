@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
 import { Input, Button, ActionIcon, Title, Text, Select } from 'rizzui';
-import { EquipFormInput, equipFormSchema } from '@/validators/equipment-schema';
+import { EquipFormInput, equipFormSchema } from '@/validators/equipment.schema';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import axios from 'axios';
@@ -15,8 +15,8 @@ import { toast } from 'react-hot-toast';
 import FormGroup from '../form-group';
 import { Checkbox } from "@nextui-org/checkbox";
 import { UserFormInput } from '@/validators/create-user.schema';
-import { EquipTypeFormInput } from '@/validators/equipmenttype-schema';
-import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype-schema';
+import { EquipTypeFormInput } from '@/validators/equipmenttype.schema';
+import { EquipSubTypeFormInput } from '@/validators/equipmentsubtype.schema';
 
 export default function EditEquip({ fetchEquipments, equipData }: any) {
   const { closeModal } = useModal();
