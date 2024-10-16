@@ -13,6 +13,7 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import Cookies from 'js-cookie';
 import { Accessorial } from '../accessorials';
 import { Customer } from '../customers';
+import { CwtRange } from './cwtRange';
 
 const FilterElement = dynamic(
   () => import('@/app/shared/tariffs/filter-element'),
@@ -40,7 +41,7 @@ export interface Tariffs {
   isImporting: boolean;
   customer: Customer;
   accessorials: Accessorial[] | null;
-  // cwtRanges?: CwtRanges[] | [];
+  cwtRanges?: CwtRange[] | [];
   // cwtLanes?: CwtLanes[] | [];
 }
 

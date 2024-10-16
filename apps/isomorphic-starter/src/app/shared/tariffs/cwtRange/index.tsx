@@ -1,36 +1,69 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { Tariffs } from '..';
 
-const CwtRangeComponent = () => {
-  const [pcfMultiplier, setPcfMultiplier] = useState<string>('10');
-  const [ranges, setRanges] = useState<{ min: string; max: string }[]>([
-    { min: '10000', max: '48000' },
-  ]);
+export interface CwtRange {
+  uuid: string;
+  minRange?: number | null;
+  maxRange?: number | null;
+  tariff: Tariffs;
+}
 
+interface CwtRangeProps {
+  tariff: Tariffs;
+  cwtRanges: CwtRange[];
+  setCwtRanges: React.Dispatch<React.SetStateAction<CwtRange[]>>;
+  pcfMultiplier: number;
+  setPcfMultiplier: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const CwtRangeComponent: React.FC<CwtRangeProps> = ({
+  tariff,
+  cwtRanges,
+  setCwtRanges,
+  pcfMultiplier,
+  setPcfMultiplier,
+}) => {
   const handlePcfMultiplierChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setPcfMultiplier(e.target.value);
+    const value = parseFloat(e.target.value);
+    setPcfMultiplier(isNaN(value) ? 0 : value);
   };
 
   const handleRangeChange = (
-    index: number,
-    field: 'min' | 'max',
+    uuid: string,
+    field: 'minRange' | 'maxRange',
     value: string
   ) => {
-    const newRanges = [...ranges];
-    newRanges[index][field] = value;
-    setRanges(newRanges);
+    const numericValue = value === '' ? null : parseFloat(value);
+    setCwtRanges((prevRanges) =>
+      prevRanges.map((range) =>
+        range.uuid === uuid ? { ...range, [field]: numericValue } : range
+      )
+    );
   };
 
   const addRange = () => {
-    setRanges([...ranges, { min: '', max: '' }]);
+    const newRange: CwtRange = {
+      uuid: `new-${Date.now()}`,
+      minRange: null,
+      maxRange: null,
+      tariff: tariff,
+    };
+    setCwtRanges([...cwtRanges, newRange]);
   };
 
-  const removeRange = (index: number) => {
-    const newRanges = ranges.filter((_, i) => i !== index);
-    setRanges(newRanges);
+  const removeRange = (uuid: string) => {
+    setCwtRanges(cwtRanges.filter((range) => range.uuid !== uuid));
   };
+
+  // Sort ranges in ascending order by minRange (fallback to maxRange if minRange is null)
+  const sortedRanges = [...cwtRanges].sort((a, b) => {
+    const minA = a.minRange ?? Number.MAX_SAFE_INTEGER;
+    const minB = b.minRange ?? Number.MAX_SAFE_INTEGER;
+    return minA - minB;
+  });
 
   return (
     <div className="col-span-full border border-gray-300 rounded-lg p-4">
@@ -40,42 +73,51 @@ const CwtRangeComponent = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 p-4">
-        <p className="text-sm text-gray-600">
-          <b>Set PCF Multiplier</b> PCF Multiplier (Standard is 10)
-        </p>
-        <input
-          type="number"
-          value={pcfMultiplier}
-          onChange={handlePcfMultiplierChange}
-          className="mt-2 w-full border rounded-md p-2"
-        />
+        <div className="flex-2">
+          <p className="text-sm text-gray-600">
+            <b>Set PCF Multiplier</b> PCF Multiplier (Standard is 10)
+          </p>
+          <input
+            type="number"
+            value={pcfMultiplier}
+            onChange={handlePcfMultiplierChange}
+            className="mt-2 w-full border rounded-md p-2"
+            min="0"
+          />
+        </div>
 
         {/* CWT Range Inputs */}
         <div className="col-span-2 grid grid-cols-2 gap-4 border-b py-2">
           <span className="font-semibold">Min CWT Range</span>
           <span className="font-semibold">Max CWT Range</span>
         </div>
-        {ranges.map((range, index) => (
-          <React.Fragment key={index}>
+
+        {sortedRanges.map((range) => (
+          <React.Fragment key={range.uuid}>
             <input
               type="number"
-              value={range.min}
-              onChange={(e) => handleRangeChange(index, 'min', e.target.value)}
+              value={range.minRange ?? ''}
+              onChange={(e) =>
+                handleRangeChange(range.uuid, 'minRange', e.target.value)
+              }
               className="border rounded-md p-2"
               placeholder="Min CWT Range"
+              min="0"
             />
             <div className="flex items-center">
               <input
                 type="number"
-                value={range.max}
+                value={range.maxRange ?? ''}
                 onChange={(e) =>
-                  handleRangeChange(index, 'max', e.target.value)
+                  handleRangeChange(range.uuid, 'maxRange', e.target.value)
                 }
                 className="border rounded-md p-2 flex-grow"
                 placeholder="Max CWT Range"
+                min="0"
               />
               <button
-                onClick={() => removeRange(index)}
+                type="button"
+                onClick={() => removeRange(range.uuid)}
                 className="ml-2 text-red-500 hover:text-red-700"
               >
                 <FaTrash />
@@ -88,6 +130,7 @@ const CwtRangeComponent = () => {
       {/* Add additional ranges button */}
       <div className="p-4">
         <button
+          type="button"
           onClick={addRange}
           className="text-blue-600 hover:text-blue-800 font-semibold"
         >
