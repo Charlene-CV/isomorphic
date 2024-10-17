@@ -17,7 +17,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CwtRangeComponent, { CwtRange } from './cwtRange';
 import CwtLanesComponent, { CwtLanes } from './cwtLane';
-import CommodityForm from './commodities';
+// import CommodityForm, { Commodities, CommodityType } from './commodities';
 
 interface EditTariffProps {
   tariffUuid: string;
@@ -36,6 +36,10 @@ export default function EditTariff({ tariffUuid }: EditTariffProps) {
 
   const [originalLanes, setOriginalLanes] = useState<CwtLanes[]>([]);
   const [lanes, setLanes] = useState<CwtLanes[]>([]);
+
+  // const [commodityTypes, setCommodityTypes] = useState<CommodityType[]>([]);
+  // const [commodities, setCommodities] = useState<Commodities[]>([]);
+  // const [originalCommodities, setOriginalCommodities] = useState<Commodities[]>([]);
 
   const {
     control,
@@ -68,6 +72,26 @@ export default function EditTariff({ tariffUuid }: EditTariffProps) {
       console.error('Error fetching tariff:', error);
     }
   };
+
+  // const fetchCommodityTypes = async () => {
+  //   const user: any = JSON.parse(Cookies.get('user'));
+  //   const token = user.token;
+  //   try {
+  //     const response = await axios.get(
+  //       `${baseUrl}/api/v1/commodity-types/all`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     setCommodityTypes(response.data.data);
+  //   } catch (err) {
+  //     console.error('Error fetching commodity types', err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const setFormValues = (tariff: any) => {
     setTariffName(tariff?.name || '');
@@ -193,6 +217,27 @@ export default function EditTariff({ tariffUuid }: EditTariffProps) {
     }
   };
 
+  // const fetchCommodities = async () => {
+  //   const user: any = JSON.parse(Cookies.get('user'));
+  //   const token = user.token;
+  //   try {
+  //     const orderUuid = 'fbdbd91d-6229-4f85-9953-2f3ad30483f1';
+  //     const response = await axios.get<{ data: Commodities[] }>(
+  //       `${baseUrl}/api/v1/commodities/order/${orderUuid}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log('response', response?.data?.data);
+  //     setCommodities(response?.data?.data);
+  //     setOriginalCommodities(response?.data?.data);
+  //   } catch (error) {
+  //     console.error('Error fetching commodities:', error);
+  //   }
+  // };
+
   useEffect(() => {
     fetchCustomers();
     fetchAccessorials();
@@ -200,6 +245,9 @@ export default function EditTariff({ tariffUuid }: EditTariffProps) {
     fetchFuel();
     fetchCwtRanges();
     fetchCwtLanes();
+    // Commodities
+    // fetchCommodityTypes();
+    // fetchCommodities();
   }, []);
 
   const onSubmit: SubmitHandler<UpdateTariffInput> = async (data) => {
@@ -450,6 +498,123 @@ export default function EditTariff({ tariffUuid }: EditTariffProps) {
           );
         }
       }
+      // console.log('commodities', commodities);
+      // // Handle commodities
+      // const commoditiesToCreate = commodities.filter(
+      //   (commodity) =>
+      //     !originalCommodities.some((orig) => orig.uuid === commodity.uuid)
+      // );
+      // const commoditiesToUpdate = commodities.filter((commodity) =>
+      //   originalCommodities.some((orig) => orig.uuid === commodity.uuid)
+      // );
+      // const commoditiesToDelete = originalCommodities.filter(
+      //   (orig) => !commodities.some((commodity) => commodity.uuid === orig.uuid)
+      // );
+
+      // for (const commodity of commoditiesToCreate) {
+      //   try {
+      //     await axios.post(
+      //       `${baseUrl}/api/v1/commodities/create`,
+      //       {
+      //         descriptions: commodity.descriptions,
+      //         quantity: commodity.quantity,
+      //         length: commodity.length,
+      //         width: commodity.width,
+      //         height: commodity.height,
+      //         pieces: commodity.pieces,
+      //         lf: commodity.lf,
+      //         weight: commodity.weight,
+      //         dim: commodity.dim,
+      //         class: commodity.class,
+      //         typeUuid: commodity.typeUuid || commodity.type.uuid,
+      //         orderUuid: commodity.orderUuid,
+      //       },
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${token}`,
+      //         },
+      //       }
+      //     );
+      //   } catch (error) {
+      //     console.error(`Error creating commodity:`, error);
+      //     toast.error(`Error creating commodity: ${commodity.descriptions}`, {
+      //       position: 'top-right',
+      //       autoClose: 3000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: false,
+      //       draggable: false,
+      //       progress: undefined,
+      //     });
+      //   }
+      // }
+
+      // for (const commodity of commoditiesToUpdate) {
+      //   try {
+      //     await axios.put(
+      //       `${baseUrl}/api/v1/commodities/update/${commodity.uuid}`,
+      //       {
+      //         descriptions: commodity.descriptions,
+      //         quantity: commodity.quantity,
+      //         length: commodity.length,
+      //         width: commodity.width,
+      //         height: commodity.height,
+      //         pieces: commodity.pieces,
+      //         lf: commodity.lf,
+      //         weight: commodity.weight,
+      //         dim: commodity.dim,
+      //         class: commodity.class,
+      //         typeUuid: commodity.type.uuid,
+      //         orderUuid:
+      //           commodity.orderUuid || 'fbdbd91d-6229-4f85-9953-2f3ad30483f1',
+      //       },
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${token}`,
+      //         },
+      //       }
+      //     );
+      //   } catch (error) {
+      //     console.error(
+      //       `Error updating commodity with uuid ${commodity.uuid}:`,
+      //       error
+      //     );
+      //     toast.error(`Error updating commodity: ${commodity.descriptions}`, {
+      //       position: 'top-right',
+      //       autoClose: 3000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: false,
+      //       draggable: false,
+      //       progress: undefined,
+      //     });
+      //   }
+      // }
+
+      // for (const commodity of commoditiesToDelete) {
+      //   try {
+      //     await axios.delete(`${baseUrl}/api/v1/commodities/delete`, {
+      //       headers: {
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //       data: { uuids: [commodity.uuid] },
+      //     });
+      //   } catch (error) {
+      //     console.error(
+      //       `Error deleting commodity with uuid ${commodity.uuid}:`,
+      //       error
+      //     );
+      //     toast.error(`Error deleting commodity: ${commodity.descriptions}`, {
+      //       position: 'top-right',
+      //       autoClose: 3000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: false,
+      //       draggable: false,
+      //       progress: undefined,
+      //     });
+      //   }
+      // }
 
       // If everything succeeds, show the success toast
       if (response.status === 200) {
@@ -763,6 +928,12 @@ export default function EditTariff({ tariffUuid }: EditTariffProps) {
             cwtLanes={lanes}
             setCwtLanes={setLanes}
           />
+          {/* 
+          <CommodityForm
+            types={commodityTypes}
+            commodities={commodities}
+            setCommodities={setCommodities}
+          /> */}
 
           <div className="col-span-full border border-gray-300 rounded-lg p-4">
             <Controller

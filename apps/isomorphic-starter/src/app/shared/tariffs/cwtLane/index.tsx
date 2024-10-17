@@ -281,10 +281,10 @@ const CwtLanesComponent = ({
           <h3 className="font-semibold text-lg mt-4">
             Price per CWT by CWT range
           </h3>
-          <div className="grid grid-cols-4 gap-2 mt-2">
+          <div className="grid grid-cols-5 gap-2 mt-2">
             {lane.priceRange?.map((priceRange, priceIndex) => (
               <React.Fragment key={priceIndex}>
-                <input
+                {/* <input
                   type="text"
                   value={priceRange.range.minRange || 0}
                   className="border rounded-md p-2"
@@ -295,22 +295,25 @@ const CwtLanesComponent = ({
                   value={priceRange.range.maxRange || 0}
                   className="border rounded-md p-2"
                   placeholder="Max Range"
-                />
-                <input
-                  type="number"
-                  value={priceRange.price || ''}
-                  onChange={(e) =>
-                    handlePriceRangeChange(
-                      laneIndex,
-                      priceIndex,
-                      'price',
-                      e.target.value
-                    )
-                  }
-                  className="border rounded-md p-2"
-                  placeholder="Price per CWT"
-                />
-                <div className="flex items-center">
+                /> */}
+                <div>
+                  <p>
+                    {priceRange.range.minRange}-{priceRange.range.maxRange}
+                  </p>
+                  <input
+                    type="number"
+                    value={priceRange.price || ''}
+                    onChange={(e) =>
+                      handlePriceRangeChange(
+                        laneIndex,
+                        priceIndex,
+                        'price',
+                        e.target.value
+                      )
+                    }
+                    className="border rounded-md p-2"
+                    placeholder="Price per CWT"
+                  />
                   <button
                     onClick={() => removePriceRange(laneIndex, priceIndex)}
                     className="text-red-500 hover:text-red-700"
